@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@200..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Oswald:wght@200..700&display=swap');
+
+body {
+    font-size: 16px;
+    color: #fff;
+    background-color: #000000;
+    font-family: "Montserrat", sans-serif;
+}
+
+/* Header */
+#header-nav {  
+    background: linear-gradient(180deg, #0071D9 0%, #00B2FF 100%);
+    border-radius: 0px 0px 16px 16px;
+    border: 0;
+    margin: 0 15%;
+}
+
+/* Logo image */
+#logo-img {
+    width: 45.35px;
+    height: 37px;
+    margin: 15px 15px 10px 0;
+}
+
+/* Logo text */
+.navbar-brand h1 {
+    font-family: "Oswald", sans-serif;
+    font-weight: bold;
+    color: #FFFFFF;
+    text-shadow: 1px 1px 10px #222;
+    margin: 0 -10px;
+}
+
+/* Logo text decorations */
+.navbar-brand a:hover, .navbar-brand a:focus {
+    text-decoration: none;
+}
+
+.nav-item{
+    font-weight: 500;
+}
+
+.nav-item__img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 50%;
+}
+
+.nav-item__img-drop {
+    display: none;
+}
+
+.nav-link {
+    font-family: "Lora", serif;
+    font-weight: bold;
+    color: #FFFFFF;
+    margin-top: -10px;
+}
+
+@media (max-width: 1199px) {
+    .nav-item__img {
+        display: none;
+    }
+    .nav-item__img-drop {
+        display: inline;
+        padding-right: 2%;
+    }
+    .nav-link {
+        margin-top: 0;
+    }
+    .navbar-brand h1 {
+        margin-left: 0;
+    }
+}
