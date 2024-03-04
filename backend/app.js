@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 
-const db = require('../models');
+const db = require('./models');
 
 const PORT = 3000;
 
