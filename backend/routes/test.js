@@ -6,5 +6,6 @@ users.sync({ force: true });
 //     username: "test_username",
 //     password: "test_hashedPassword",
 //     email: "test_email",
-//     university: "test_university"
+//     university: "test_university",
+//     is_verified: "false"
 //   });
