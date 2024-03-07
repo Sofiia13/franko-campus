@@ -1,23 +1,23 @@
 {
     "development": {
-      "username": "postgres",
-      "password": "0789",
-      "database": "campus-db",
-      "host": "localhost",
+      "username": "postgres.tmgzyqbynitvxdqmbyoz",
+      "password": "pftr8374tyue",
+      "database": "postgres",
+      "host": "aws-0-eu-central-1.pooler.supabase.com",
       "dialect": "postgres"
     },
     "test": {
       "username": "postgres",
-      "password": "0789",
-      "database": "campus-db",
-      "host": "localhost",
+      "password": "pftr8374tyue",
+      "database": "postgres",
+      "host": "aws-0-eu-central-1.pooler.supabase.com",
       "dialect": "postgres"
     },
     "production": {
-      "username": "postgres",
-      "password": "0789",
-      "database": "campus-db",
-      "host": "localhost",
+      "username": "postgres.tmgzyqbynitvxdqmbyoz",
+      "password": "pftr8374tyue",
+      "database": "postgres",
+      "host": "aws-0-eu-central-1.pooler.supabase.com",
       "dialect": "postgres"
     }
   }
