@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { users } = require("../../models");
+const { users } = require("../models");
 
 const bcrypt = require("bcrypt");
 
-const { activationMiddleware, isCodeValid, generateActivationCode, sendActivationEmail } = require('../middleware/MailMiddleware');
+const { activationMiddleware, isCodeValid, generateActivationCode, sendActivationEmail } = require('../middleware/mailMiddleware');
 
 router.post("/register", activationMiddleware, async (req, res) => {
     const { reqUsername, reqPassword, reqEmail, reqUniversity } = req.body;
