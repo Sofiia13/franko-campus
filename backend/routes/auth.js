@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { users } = require("../models");
+const { users, verificationCodes } = require("../models");
 
 const bcrypt = require("bcrypt");
 
-const { activationMiddleware, isCodeValid, generateActivationCode, sendActivationEmail } = require('../middleware/mailMiddleware');
+const { storeActivationCode, generateActivationCode, sendActivationEmail } = require('../services/activationMailService');
 
-router.post("/register", activationMiddleware, async (req, res) => {
+router.post("/register", async (req, res) => {
     const { reqUsername, reqPassword, reqEmail, reqUniversity } = req.body;
   
     try {
@@ -27,13 +27,24 @@ router.post("/register", activationMiddleware, async (req, res) => {
         university: reqUniversity,
         is_verified: false
       });
+
+      createdUser = await users.findOne({ where: { username: reqUsername } });
+
+      if (!createdUser) {
+        return res
+          .status(500)
+          .json({ error: "Внутрішня помилка сервера під час роботи з БД." });
+      }
+
+      const activationCode = generateActivationCode();
+
+      await storeActivationCode(createdUser.id, activationCode);
   
-      sendActivationEmail(email, generateActivationCode());
+      sendActivationEmail(createdUser.email, activationCode);
   
       return res
         .status(200)
         .json({ success: true });
-        //
         //після успішного виконання цього запиту користувача потрібно перекинути на сторінку "валідація"
         //
 
@@ -45,42 +56,62 @@ router.post("/register", activationMiddleware, async (req, res) => {
     }
   });
   
-  router.post("/validate", activationMiddleware, async (req, res) => {
+  router.post("/validate", async (req, res) => {
     const { reqUsername, reqCode } = req.body;
-  
     const intCode = parseInt(reqCode);
   
-    //debug features
-    //
-    //console.log(isCodeValid(intCode));
-    //console.log(intCode);
-  
     try {
-      if (isCodeValid(intCode)) {    
-        await users.update({ is_verified: true}, {
-          where: {
-            username: reqUsername,
-          },
-        });
+      const user = await users.findOne({ where: { username: reqUsername } });
   
-        res
-          .status(200)
-          .json({success: true})
-          //
-          //після успішного виконання цього запиту користувача потрібно перекинути на сторінку "успіх" (або головну)
-          //
-      } else {
-        res
+      if (!user) {
+        return res
           .status(400)
-          .json({ error: "Код неправильний." });      
+          .json({ error: "Користувач не знайдений." });
       }
+
+      if (user.is_verified == true) {
+        return res
+          .status(409)
+          .json({ info: "Користувач вже верифікований." });
+      }
+  
+      const storedCode = await verificationCodes.findOne({
+        where: { user_id: user.id, code: intCode },
+      });
+  
+      if (!storedCode) {
+        return res
+          .status(400)
+          .json({ error: "Код неправильний." });
+      }
+
+      await users.update({ is_verified: true }, {
+        where: {
+          username: reqUsername,
+        },
+      });
+      
+      //видалення вериф. коду з бд
+      await verificationCodes.destroy({
+        where: {
+          code: reqCode
+        },
+      })
+
+      return res
+        .status(200)
+        .json({ success: true });
+        //
+        //після успішного виконання цього запиту користувача потрібно перекинути на сторінку "успіх" (або головну)
+        //
     } catch (error) {
       console.error("Виникла помилка під час валідації:", error);
       return res
-        .status(500)
-        .json({ error: "Внутрішня помилка сервера." });
+          .status(500)
+          .json({ error: "Внутрішня помилка сервера." });
     }
-  })
+  });
+  
   
   router.post("/login", async (req, res) => {
     try {
@@ -122,3 +153,5 @@ router.post("/register", activationMiddleware, async (req, res) => {
         .json({ error: "Внутрішня помилка сервера." });
     }
   });
+
+  module.exports = router;

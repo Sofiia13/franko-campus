@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const { users, verificationCodes } = require("../models");
 
 const generateActivationCode = () => {
   //
@@ -15,6 +16,13 @@ const storeActivationCode = async (userId, code) => {
     });
   } catch (error) {
     console.error("Виникла помилка під час зберігання коду верифікації:", error);
+
+    //видалити також запис про користувача, якщо сталась помилка з кодом активації
+    users.destroy({
+      where: {
+        id: user_id,
+      },
+    });
     throw error;
   }
 };
