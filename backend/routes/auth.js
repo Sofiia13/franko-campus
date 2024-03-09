@@ -74,7 +74,7 @@ router.post("/register", async (req, res) => {
           .status(409)
           .json({ info: "Користувач вже верифікований." });
       }
-  
+
       const storedCode = await verificationCodes.findOne({
         where: { user_id: user.id, code: intCode },
       });
@@ -90,7 +90,7 @@ router.post("/register", async (req, res) => {
           username: reqUsername,
         },
       });
-      
+
       //видалення вериф. коду з бд
       await verificationCodes.destroy({
         where: {
@@ -124,6 +124,12 @@ router.post("/register", async (req, res) => {
           .status(404)
           .json({ error: "Такого користувача не існує." });
       }
+
+      if (user.is_verified == false) {
+        return res
+        .status(401)
+        .json({ error: "Користувач не верифікований." });
+      }
   
       const passwordMatch = await bcrypt.compare(reqPassword, user.password);
   
@@ -143,6 +149,7 @@ router.post("/register", async (req, res) => {
   
       return res
         .status(200)
+        .json({ success: true })
         //
         // .json({ token: accessToken, username: user.username, id: user.id });
         //
