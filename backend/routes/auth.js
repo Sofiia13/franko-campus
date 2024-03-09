@@ -120,7 +120,7 @@ router.post("/login", jsonParser, async (req, res) => {
     //   );
     //
 
-    return res.status(200);
+    return res.status(200).json({ success: true });
     //
     // .json({ token: accessToken, username: user.username, id: user.id });
     //
