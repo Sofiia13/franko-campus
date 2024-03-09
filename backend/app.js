@@ -10,6 +10,10 @@ const authRouter = require("./routes/auth"); // Import the router
 app.use("/", authRouter); // Use the router
 
 
+const authRouter = require("./routes/auth"); 
+
+app.use("/", authRouter); 
+
 const PORT = 3000;
 
 db.sequelize.sync().then(() => {

@@ -23,5 +23,15 @@ module.exports = (sequelize, DataTypes) => {
         }}, {
             timestamps: false
         });
+
+
+        users.associate = (models) => {
+            users.hasMany(models.verificationCodes, {
+                foreignKey: 'user_id', 
+                onDelete: 'CASCADE', 
+            });
+        };
+
+        
     return users;
 };
