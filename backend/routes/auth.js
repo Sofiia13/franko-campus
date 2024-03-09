@@ -1,8 +1,12 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 const router = express.Router();
 const { users, verificationCodes } = require("../models");
 
 const bcrypt = require("bcrypt");
+
+// // create application/json parser
+// const jsonParser = bodyParser.json();
 
 const { storeActivationCode, generateActivationCode, sendActivationEmail } = require('../services/activationMailService');
 
@@ -139,26 +143,24 @@ router.post("/register", async (req, res) => {
           .json({ error: "Неправильне ім'я користувача або пароль." });
       }
 
+
     //  jwt token
-    //  
+    //
     //   const accessToken = sign(
     //     { username: user.username, id: user.id },
     //     "importantsecret"
     //   );
     //
-  
-      return res
-        .status(200)
-        .json({ success: true })
-        //
-        // .json({ token: accessToken, username: user.username, id: user.id });
-        //
-    } catch (error) {
-      console.error("Виникла помилка під час логіну:", error);
-      return res
-        .status(500)
-        .json({ error: "Внутрішня помилка сервера." });
-    }
-  });
 
-  module.exports = router;
+
+    return res.status(200).json({ success: true });
+    //
+    // .json({ token: accessToken, username: user.username, id: user.id });
+    //
+  } catch (error) {
+    console.error("Виникла помилка під час логіну:", error);
+    return res.status(500).json({ error: "Внутрішня помилка сервера." });
+  }
+});
+
+module.exports = router;
