@@ -3,12 +3,7 @@ const app = express();
 app.use(express.json());
 
 
-const db = require("../models");
-
-const authRouter = require("./routes/auth"); // Import the router
-
-app.use("/", authRouter); // Use the router
-
+const db = require("./models");
 
 const authRouter = require("./routes/auth"); 
 
