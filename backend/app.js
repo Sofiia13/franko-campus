@@ -7,7 +7,7 @@ const db = require("./models");
 
 const authRouter = require("./routes/auth"); 
 
-app.use("/", authRouter); 
+app.use("/auth", authRouter); 
 
 const PORT = 3000;
 
