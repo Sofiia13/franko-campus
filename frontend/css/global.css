@@ -3,6 +3,7 @@
 @import url(global.css);
 @import url(header.css);
 @import url(form.css);
+@import url(cards.css);
 
 body {
     font-size: 18px;
