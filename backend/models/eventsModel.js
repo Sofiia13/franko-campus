@@ -11,9 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         description: {
             type: DataTypes.TEXT,
             allowNull: false,
-        }}, {
-            timestamps: false
-        });
+        }});
 
     return events;
 };
