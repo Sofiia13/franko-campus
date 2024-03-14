@@ -32,7 +32,7 @@ const storeActivationCode = async (userId, code) => {
 
 // перевірка чи в користувача правильно записана пошта
 function validateEmail(email) {
-  const validDomain = ["gmail.com", "lnu.edu.ua"];
+  const validDomain = ["gmail.com", "lnu.edu.ua", "cazlp.com"];
   for (let i = 0; i < validDomain.length; i++) {
     if (email.endsWith(validDomain[i])) {
       return true;

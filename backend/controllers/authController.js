@@ -1,4 +1,6 @@
 const { users, verificationCodes } = require("../models");
+const { generateAccessToken } = require("../services/jwt");
+
 const bcrypt = require("bcrypt");
 const {
     storeActivationCode,
@@ -128,18 +130,15 @@ const login = async (req, res) => {
                 .json({ error: "Неправильне ім'я користувача або пароль." });
         }
 
-        //  jwt token
-        //
-        //   const accessToken = sign(
-        //     { username: user.username, id: user.id },
-        //     "importantsecret"
-        //   );
-        //
+        const accessToken = generateAccessToken(user);
+        res.cookie("access-token", accessToken, {
+            httpOnly: true,
+            sameSite: "strict",
+            expires: "7d"
+        });
 
         return res.status(200).json({ success: true });
-        //
-        // .json({ token: accessToken, username: user.username, id: user.id });
-        //
+       
     } catch (error) {
         console.error("Виникла помилка під час логіну:", error);
         return res.status(500).json({ error: "Внутрішня помилка сервера." });
