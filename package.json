@@ -4,7 +4,7 @@
   "description": "very strong project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "apitest": "cd backend && node app.js"
   },
   "keywords": [],
   "author": "",
