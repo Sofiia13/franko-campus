@@ -1,8 +1,17 @@
-const { users } = require("../models");
-const {verificationCodes} = require("../models")
+const { users, verificationCodes, profiles, events } = require("../models");
 
-//users.sync({ force: true });
-verificationCodes.sync({ force: true });
+async function syncModels() {
+    try {
+        await users.sync({ force: true });
+        await verificationCodes.sync({ force: true });
+        await profiles.sync({ force: true });
+        await events.sync({ force: true });
+    } catch (error) {
+        console.error("Error syncing models:", error);
+    }
+}
+
+syncModels(); 
 
 
 // users.create({
