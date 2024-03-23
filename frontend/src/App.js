@@ -18,7 +18,6 @@ import './css/cards.css';
 import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
 
 
-
 function App() {
   return (
     <div className="App">
@@ -26,7 +25,7 @@ function App() {
         <nav id="header-nav" className="navbar">
           <div className="container-fluid">
             {/* Logo image */}
-            <a href="index.html" className="float-start d-none d-sm-block">
+            <a href="/" className="float-start d-none d-sm-block">
               <div>
                 <img id="logo-img" src={logo} alt="Logo image"></img>
               </div>
@@ -34,7 +33,7 @@ function App() {
 
             {/* Logo text */}
             <div className="navbar-brand">
-              <a href="index.html">
+              <a href="/">
                 <h1>Franko Campus</h1>
               </a>
             </div>
@@ -82,7 +81,6 @@ function App() {
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/validation" element={<ValidationPage />} />
           <Route path="/login" element={<LoginPage />} />
-
         </Routes>
       </BrowserRouter>
 
