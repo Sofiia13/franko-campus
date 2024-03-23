@@ -10,7 +10,7 @@ const eventsRouter = require("./routes/events");
 app.use("/auth", authRouter);
 app.use("/events", eventsRouter);
 
-const PORT = 3000;
+const PORT = 3001;
 
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => {

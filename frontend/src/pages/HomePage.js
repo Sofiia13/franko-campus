@@ -1,10 +1,15 @@
+import React from 'react';
+
+const HomePage = () => {
+    return (
+        <body>
 <div class="main-card-img">
-    <img src="..." class="main-img" alt="...">
-    <div class="main-card-text">
-        <h3>Franko Campus</h3>
-        <p>соціальний проект, що дозволяє студентам знаходити нові можливості в університетському середовищі</p>
+        <img src="..." class="main-img" alt="..." />
+        <div class="main-card-text">
+            <h3>Franko Campus</h3>
+            <p>соціальний проект, що дозволяє студентам знаходити нові можливості в університетському середовищі</p>
+        </div>
     </div>
-</div>
 
 <section class="content">
     <h2 class="section-title">Нещодавно опубліковані події</h2>
@@ -65,3 +70,8 @@
         </div>
     </div>
 </section>
+        </body>
+    );
+};
+
+export default HomePage;
