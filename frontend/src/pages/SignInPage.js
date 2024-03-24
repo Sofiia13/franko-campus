@@ -38,15 +38,15 @@ const SignInPage = () => {
     return (
         <body>
             <div className="form-area">
-                <h3 className="login-title">Зареєструватись<br /> у Franko Campus</h3>
-                <form onSubmit={handleSubmit}>
+                <h2 className="login-title">Зареєструватись<br /> у Franko Campus</h2>
+                <form className='form-content' onSubmit={handleSubmit}>
                     <input className="input-wrapper" type="text" id="username" name="reqUsername" placeholder="Ваш юзернейм" value={formData.reqUsername} onChange={handleChange} required />
                     <input className="input-wrapper" type="email" id="email" name="reqEmail" placeholder="Пошта" value={formData.reqEmail} onChange={handleChange} required />
                     <input className="input-wrapper" type="text" id="university" name="reqUniversity" placeholder="Назва університету" value={formData.reqUniversity} onChange={handleChange} required />
                     <input className="input-wrapper" type="password" id="password" name="reqPassword" placeholder="Пароль" value={formData.reqPassword} onChange={handleChange} required />
-                    <button className="submit-button" type="submit" id="registerButton">Зареєструватись</button>
-                    <p className="text-link">Вже маєте акаунт? <a href="login" className="link">Увійти</a></p>
+                    <button className="submit-button" type="submit" id="registerButton">Зареєструватись</button>  
                 </form>
+                <p className="text-link">Вже маєте акаунт? <a href="login" className="link">Увійти</a></p>
             </div>
         </body>
     );

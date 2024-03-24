@@ -1,4 +1,9 @@
-import logo from './img/logo_img.png';
+import logo from './img/logo.svg';
+import search from './img/search.svg';
+import mode from './img/mode.svg';
+import catalog from './img/catalog.svg';
+import profile from './img/profile.svg';
+import menu from './img/menu.svg';
 import achievements from './img/achievements.svg';
 import friends from './img/friends.svg';
 import help from './img/help.svg';
@@ -11,70 +16,76 @@ import HomePage from './pages/HomePage';
 import ValidationPage from './pages/ValidationPage';
 
 import './App.css';
-import './css/header.css';
-import './css/form.css';
-import './css/cards.css';
 
 import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
-
+import { toggleDropdown } from './js/animation.js';
 
 function App() {
   return (
     <div className="App">
       <header className="header">
-        <nav id="header-nav" className="navbar">
-          <div className="container-fluid">
-            {/* Logo image */}
-            <a href="/" className="float-start d-none d-sm-block">
-              <div>
-                <img id="logo-img" src={logo} alt="Logo image"></img>
-              </div>
-            </a>
+         {/* Logo */}
+        <div className='logo'>
+          <a href="/">
+            <img className="logo-img" src={logo} alt="Logo"></img>
+          </a>  
+          <a href="/">
+            <h2 className='logo-text'>Franko Campus</h2>
+          </a>
+        </div>
+        {/* Search */}
+        <form className="search" role="search">
+          <input className="search-input" type="search" placeholder="Пошук"/>
+          <button className="search-button" type="submit">
+            <img className="search-img" src={search} alt="Search"></img>
+          </button>
+        </form>
 
-            {/* Logo text */}
-            <div className="navbar-brand">
-              <a href="/">
-                <h1>Franko Campus</h1>
-              </a>
-            </div>
-
-            {/* Search */}
-            <form className="d-flex" role="search">
-              <input className="form-control me-2 nav-item__search" type="search" placeholder="Пошук" aria-label="Search" />
-              <button className="btn btn-outline-success nav-item__search" type="submit">Пошук</button>
-            </form>
-
-            {/* Menu button */}
-            <button className="navbar-toggler float-end" type="button" data-bs-toggle="collapse" data-bs-target="#collapsable-nav"
-              aria-expanded="false" aria-label="Toggle navigation">
-              <span className="navbar-toggler-icon"></span>
+        {/* Icons */}
+        <div className='icons-bar'>
+          <div className='icon'>
+            <button className="icon-button">
+              <img className="icon-img" src={mode} alt="Mode"></img>
             </button>
-            <div className="collapse navbar-collapse" id="collapsable-nav">
-              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                <li className="nav-item">
-                  <a className="nav-link" href="#">Налаштування</a><img className="nav-item__img-drop" src={settings} alt="Settings image"></img>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#">Друзі</a><img className="nav-item__img-drop" src={friends} alt="Friends image"></img>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#">Досягнення</a><img className="nav-item__img-drop" src={achievements} alt="Achievements image"></img>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#">Сповіщення</a><img className="nav-item__img-drop" src={notifications} alt="Notifications image"></img>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#">Допомога</a><img className="nav-item__img-drop" src={help} alt="Help image"></img>
-                </li>
-              </ul>
-              <form className="d-flex" role="search">
-                <input className="form-control me-2 nav-item__search-drop" type="search" placeholder="Пошук" aria-label="Search"></input>
-                <button className="btn btn-outline-success nav-item__search-drop" type="submit">Пошук</button>
-              </form>
-            </div>
           </div>
-        </nav>
+          <div className='icon'>
+            <a className="icon-link" href="#">
+              <img className="icon-img" src={catalog} alt="Catalog"></img>
+            </a>
+          </div>
+          <div className='icon'>
+            <a className="icon-link" href="#">
+              <img className="icon-img" src={profile} alt="Profile"></img>
+            </a>
+          </div>
+          {/* Dropdown menu */}
+          <div className='icon'>
+            <div className='dropdown'>
+                <button className="icon-button dropdown-button" onclick="toggleDropdown()">
+                  <img className="icon-img" src={menu} alt="Menu"></img>
+                </button>
+                  <div className="dropdown-content" id='dropdown'>
+                    <div className="dropdown-list-item">
+                      <a className="icon-link" href="#">Налаштування</a><img className="icon-img" src={settings} alt="Settings"></img>
+                    </div>
+                    <div className="dropdown-list-item">
+                      <a className="icon-link" href="#">Друзі</a><img className="icon-img" src={friends} alt="Friends"></img>
+                    </div>
+                    <div className="dropdown-list-item">
+                      <a className="icon-link" href="#">Досягнення</a><img className="icon-img" src={achievements} alt="Achievements"></img>
+                    </div>
+                    <div className="dropdown-list-item">
+                      <a className="icon-link" href="#">Сповіщення</a><img className="icon-img" src={notifications} alt="Notifications"></img>
+                    </div>
+                    <div className="dropdown-list-item">
+                      <a className="icon-link" href="#">Допомога</a><img className="icon-img" src={help} alt="Help"></img>
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
       </header>
+     
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />          
