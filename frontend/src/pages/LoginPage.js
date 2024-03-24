@@ -5,7 +5,7 @@ function loginPage() {
         <body>
             <div className="form-area">
                 <h3 className="login-title">Увійти <br/> у Franko Campus</h3>
-                <form action="submit_form" method="post">
+                <form className='form-content' action="submit_form" method="post">
                     <input className="input-wrapper" type="email" id="email" name="email" placeholder="Ваш юзернейм чи пошта" required/>
                     <input className="input-wrapper" type="password" id="password" name="password" placeholder="Ваш пароль" required/>
                     <button className="submit-button" type="submit" id="loginButton">Увійти</button>
