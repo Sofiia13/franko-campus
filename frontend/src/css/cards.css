@@ -1,0 +1,110 @@
+.main-card-img {
+    background: image();
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    align-items: start;
+    max-width: 944px;
+    max-height: 444px;
+    color: #fff;
+    letter-spacing: 0.5px;
+    padding: 30px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid #ccc;
+}
+.main-card-text {
+    background: linear-gradient(180deg, #0071D9 0%, #00B2FF 100%);
+    border-radius: 16px;
+    padding: 24px;
+    object-fit: cover;
+    object-position: center;
+    max-width: 432px;
+    margin-top: 161px;
+}
+.content {
+    max-width: 944px;
+    margin-left: auto;
+    margin-right: auto; 
+}
+.cards-gallery {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: stretch;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+.card {
+    border-radius: 16px;
+    border: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    max-width: 288px;
+    max-height: 472px;
+    margin: 12px;
+
+}
+.card:hover {
+    border: 1px solid #777;
+}
+.card-img{
+    min-height: 360px;
+    border-radius: 16px 16px 0px 0px;
+    background: linear-gradient(180deg, #0071D9 0%, #00B2FF 100%);
+}
+.card-desc {
+    padding: 16px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+.card-title {
+    padding: 0px;
+    margin: 0px;
+}
+.card-text {
+    padding: 0px;
+    margin-top: 8px;
+}
+
+@media (max-width: 600px) {
+    .main-card-img {
+        border-radius: 16px;
+        max-width: 312px;
+        max-height: 70px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .main-card-text {
+        display: none;
+    }
+    .section-title {
+        font-size: 16px;
+    }
+    .content {
+        max-width: 944px;
+        margin-left: auto;
+        margin-right: auto; 
+    }
+    .card {
+        max-width: 136px;
+        max-height: 226px;
+        margin: 2px;
+    }
+    .card-img{
+        min-height: 136px;
+    }
+    .card-desc {
+        padding: 8px;
+        overflow: hidden;
+        margin-bottom: 8px;
+        font-size: 12px;
+    }
+    .card-text {
+        margin-top: 8px;
+    }
+}
