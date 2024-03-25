@@ -55,7 +55,7 @@ function App() {
             </a>
           </div>
           <div className='icon'>
-            <a className="icon-link" href="#">
+            <a className="icon-link" href="/profile">
               <img className="icon-img" src={profile} alt="Profile"></img>
             </a>
           </div>
