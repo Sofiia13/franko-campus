@@ -10,7 +10,7 @@ import help from './img/help.svg';
 import notifications from './img/notifications.svg';
 import settings from './img/settings.svg';
 
-import LoginPage from './pages/LoginPage';
+import LoginPage from './pages/LoginPage.js';
 import SignInPage from './pages/SignInPage';
 import HomePage from './pages/HomePage';
 import ValidationPage from './pages/ValidationPage';

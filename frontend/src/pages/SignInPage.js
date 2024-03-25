@@ -25,13 +25,19 @@ const SignInPage = () => {
         try {
             const response = await axios.post('http://localhost:3001/auth/register', formData);
             console.log('Response:', response.data);
-            if (response.data.success == true) {
+            if (response.data.success === true) {
+                // ендпойнт успішної реєстрації
                 navigate("/validation"); 
             } else {
-                // дописати обробку помилок
+                // якщо з сервера прийшла помилка
+                //placeholder
+                alert('Помилка під час реєстрації')
             }
         } catch (error) {
+            // якщо помилка на клієнті
+
             console.error('Error:', error);
+            alert('Помилка: ' + error.message)
         }
     };
 
