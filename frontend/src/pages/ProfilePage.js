@@ -34,7 +34,7 @@ function ProfilePage() {
                 </div>
             </div>
             <div className='section-title'>
-                <h2 className="section-title">Закладинки</h2>
+                <h2 className="section-title">Закладки</h2>
                 <img className='section-icon' src={bookmark} alt="Bookmark" />
             </div>
             <div className="cards-gallery">
