@@ -146,6 +146,7 @@ const login = async (req, res) => {
   }
 };
 
+// profiles.sync({ force: true });
 const profileInfo = async (req, res) => {
   const { reqUsername, reqFirstName, reqLastName, reqStatus } = req.body;
   try {
@@ -163,6 +164,20 @@ const profileInfo = async (req, res) => {
     // пізніше замість цього буде перевірка чи цей користувач залогінився
     if (user.is_verified == false) {
       return res.status(409).json({ info: "Користувач не верифікований." });
+    }
+
+    const userProfile = await profiles.findOne({
+      where: { user_id: user.id },
+    });
+
+    if (userProfile) {
+      return res
+        .status(400)
+        .json({ error: "Профіль цього користувача вже заповнений" });
+    }
+
+    if (!reqFirstName.trim() || !reqLastName.trim() || !reqStatus.trim()) {
+      return res.status(400).json({ error: "Заповни всі поля" });
     }
 
     await profiles.create({
