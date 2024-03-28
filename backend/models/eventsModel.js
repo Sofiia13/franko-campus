@@ -13,5 +13,9 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         }});
 
+        events.associate = (models) => {
+            events.belongsToMany(models.eventImages, { through: 'juncEventImages' });
+        };
+
     return events;
 };
