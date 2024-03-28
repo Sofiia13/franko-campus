@@ -14,7 +14,10 @@ module.exports = (sequelize, DataTypes) => {
         }});
 
         events.associate = (models) => {
-            events.belongsToMany(models.eventImages, { through: 'juncEventImages' });
+            events.hasMany(models.eventImages, {
+                foreignKey: 'user_id', 
+                onDelete: 'CASCADE', 
+            });
         };
 
     return events;

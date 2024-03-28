@@ -4,7 +4,16 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.BLOB,
             allowNull: false,
         },
+    }, {
+        timestamps: false
     });
+
+    eventImages.associate = (models) => {
+        eventImages.belongsTo(models.events, {
+            foreignKey: 'user_id', 
+            onDelete: 'CASCADE', 
+        });
+    };
 
     return eventImages;
 };
