@@ -15,6 +15,7 @@ import SignInPage from './pages/SignInPage';
 import HomePage from './pages/HomePage';
 import ValidationPage from './pages/ValidationPage';
 import ProfilePage from './pages/ProfilePage';
+import AddIventPage from './pages/AddIventPage';
 
 import './App.css';
 
@@ -94,6 +95,7 @@ function App() {
           <Route path="/validation" element={<ValidationPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/addevent" element={<AddIventPage />} />
         </Routes>
       </BrowserRouter>
 
