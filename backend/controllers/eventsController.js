@@ -26,16 +26,6 @@ const eventRegistration = async (req, res) => {
       description: reqDescription,
     });
 
-    //to be fixed
-    //events_id = events.id
-    //зазвичай база даних після .create() повертає створений запис, але в даному випадку це не так
-    //тому використовуємо findOne() для пошуку створеного запису
-
-    // await events.findOne({
-    //   where: { name: reqName }, 
-    // });
-
-
     for (let i = 0; i < reqImageBase64.length; i++) {
       await eventImages.create({
         data: reqImageBase64[i],
