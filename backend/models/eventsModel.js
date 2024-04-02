@@ -13,12 +13,12 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         }});
 
-        events.associate = (models) => {
-            events.hasMany(models.eventImages, {
-                foreignKey: 'user_id', 
-                onDelete: 'CASCADE', 
-            });
-        };
+    events.associate = (models) => {
+        events.hasMany(models.eventImages, {
+            foreignKey: 'event_id',  
+            onDelete: 'CASCADE', 
+        });
+    };
 
     return events;
 };
