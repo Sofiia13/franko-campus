@@ -36,18 +36,18 @@ function AddIventPage() {
   }
 
   function onDragOver(event) {
-    event.preventDefadivt();
+    event.preventDefault();
     setIsDragging(true);
     event.dataTransfer.dropEffect = "copy";
   }
 
   function onDragLeave(event) {
-    event.preventDefadivt();
+    event.preventDefault();
     setIsDragging(false);
   }
 
   function onDrop(event) {
-    event.preventDefadivt();
+    event.preventDefault();
     setIsDragging(false);
     const files = event.dataTransfer.files;
     for (let i = 0; i < files.length; i++) {
