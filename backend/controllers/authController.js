@@ -8,7 +8,9 @@ const {
 } = require("../services/activationMailService");
 
 const register = async (req, res) => {
+
   const { reqUsername, reqPassword, reqEmail, reqUniversity } = req.body;
+
 
   try {
     const existingUser = await users.findOne({
@@ -33,6 +35,7 @@ const register = async (req, res) => {
       university: reqUniversity,
       is_verified: false,
     });
+
 
     createdUser = await users.findOne({ where: { username: reqUsername } });
 
