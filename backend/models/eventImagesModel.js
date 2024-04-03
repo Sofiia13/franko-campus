@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
 
     eventImages.associate = (models) => {
         eventImages.belongsTo(models.events, {
-            foreignKey: 'user_id', 
+            foreignKey: 'event_id', 
             onDelete: 'CASCADE', 
         });
     };

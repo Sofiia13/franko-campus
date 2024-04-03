@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useRef } from 'react'
 
 
-function AddIventPage() {
+function AddEventPage() {
 
   const [images, setImages] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -71,15 +71,15 @@ function AddIventPage() {
   return (
     <body>
         <section className="content">
-          <form className='Add-ivent-form'>
+          <form className='Add-event-form'>
             <h1 className="page-title">Створіть подію</h1>
             <div className='form-item'>
               <h3 className='category-title'>Назва події:</h3>
-              <input className="ivent-input" type="text" id="IventName" name="IventName" placeholder="Назва вошої події" required />
+              <input className="event-input" type="text" id="eventName" name="eventName" placeholder="Назва вошої події" required />
             </div>
             <div className='form-item'>
               <h3 className='category-title'>Опис події:</h3>
-              <textarea className="ivent-input" type="text" id="IventDesc" name="IventDesc" placeholder="Опис вошої події" required></textarea>
+              <textarea className="event-input" type="text" id="eventDesc" name="eventDesc" placeholder="Опис вошої події" required></textarea>
             </div>
             <div className='form-item'>
               <h3 className='category-title'>Постер події:</h3>
@@ -162,4 +162,4 @@ function AddIventPage() {
   )
 }
 
-export default AddIventPage
+export default AddEventPage

@@ -1,4 +1,4 @@
-.Add-ivent-form {
+.Add-event-form {
     margin: auto;
     align-items: center;
 }
@@ -19,7 +19,7 @@
     margin-right: 40px;
 }
 
-.ivent-input {
+.event-input {
     width: 100%;
     font-size: 18px;
     border-radius: 16px;
@@ -31,7 +31,7 @@
     border: 1px solid transparent;
     border-color: #00B2FF; 
   }
-  .ivent-input:focus-visible {
+  .event-input:focus-visible {
     outline: none;
   }
 
@@ -139,7 +139,7 @@
 }
 
 /*----------------------*/
-.Add-ivent-form .submit-button {
+.Add-event-form .submit-button {
     width: 100%;
     margin-bottom: 36px;
 }
