@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const cors = require('cors');
 const cookieParser = require("cookie-parser");
 
 const { verifyToken } = require("./services/jwt");
@@ -7,14 +8,17 @@ const { verifyToken } = require("./services/jwt");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(cors());
 
 const db = require("./models");
 
 const authRouter = require("./routes/auth");
+const eventsRouter = require("./routes/events");
 
 app.use("/auth", authRouter);
+app.use("/events", eventsRouter);
 
-const PORT = 3000;
+const PORT = 3001;
 
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => {
