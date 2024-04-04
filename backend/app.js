@@ -1,12 +1,11 @@
 const express = require("express");
 const cors = require('cors');
-var getRawBody = require('raw-body')
 
 const app = express();
 
-app.use(express.json({limit: 4000000}));
+app.use(express.json({}));
 app.use(cors());
-app.use(express.urlencoded({limit: 2000000, extended: false}));
+//app.use(express.urlencoded({limit: 2000000, extended: false}));
 
 const db = require("./models");
 
@@ -15,6 +14,7 @@ const eventsRouter = require("./routes/events");
 
 app.use("/auth", authRouter);
 app.use("/events", eventsRouter);
+
 
 const PORT = 3001;
 

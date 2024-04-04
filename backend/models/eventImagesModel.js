@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
     const eventImages = sequelize.define("eventImages", {
         data: {
-            type: DataTypes.BLOB,
+            type: DataTypes.STRING,
             allowNull: false,
         },
     }, {
