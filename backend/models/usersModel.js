@@ -33,6 +33,11 @@ module.exports = (sequelize, DataTypes) => {
             users.hasOne(models.profiles, {
                 foreignKey: 'user_id', 
                 onDelete: 'CASCADE', 
+            }),
+            users.belongsToMany(models.eventParticipants, { 
+                through: 'eventParticipant' ,
+                foreignKey: 'user_id',
+                otherKey: 'event_id' 
             });
         };
 

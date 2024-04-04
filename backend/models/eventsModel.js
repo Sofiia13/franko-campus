@@ -17,6 +17,11 @@ module.exports = (sequelize, DataTypes) => {
         events.hasMany(models.eventImages, {
             foreignKey: 'event_id',  
             onDelete: 'CASCADE', 
+        }),
+        events.belongsToMany(models.eventParticipants, { 
+            through: 'eventParticipant',
+            foreignKey: 'event_id',
+            otherKey: 'user_id' 
         });
     };
 
