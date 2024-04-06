@@ -1,9 +1,10 @@
 const {users , profiles} = require('../models');
+const bcrypt = require('bcrypt');
 
 const getProfileInfo = async(req, res) =>{
     const {userId} = req.body;
     try{
-        const user = await users.findByPk(1);
+        const user = await users.findByPk(userId);
         const userProfile = await profiles.findOne({
             where: {user_id: userId}
     });
@@ -16,9 +17,10 @@ const getProfileInfo = async(req, res) =>{
         first_name : userProfile.first_name,
         last_name : userProfile.last_name,
         status : userProfile.status,
-        universiry : user.university,
+        university : user.university,
         /* faculty : user.faculty */
     }
+    console.log(user.university);
    return res.status(200).send(userData);
 
     }catch(error){
@@ -30,8 +32,9 @@ const getProfileInfo = async(req, res) =>{
 const editProfileInfo = async(req, res) =>{
     const {userId} = req.body;
     const newUserData = req.body;
+    const updateData = {};
     try{
-        const user = await users.findByPk(1);
+        const user = await users.findByPk(userId);
         const userProfile = await profiles.findOne({
             where: {user_id: userId}
         });
@@ -40,22 +43,60 @@ const editProfileInfo = async(req, res) =>{
             return res.status(404).json({error : "Профіль не знайдено"});
          }
 
-        await users.update(newUserData, {
+         for (const key in newUserData) {
+            if (newUserData[key] && (newUserData[key].trimLeft() == newUserData[key] && newUserData[key].trimRight() == newUserData[key])) {
+                updateData[key] = newUserData[key];
+            }
+        }
+
+        await users.update(updateData, {
             where: {id: userId}
         });
 
-        await profiles.update(newUserData, {
+        await profiles.update(updateData, {
             where: {user_id: userId}
         });
 
-        return res.status(204).json({success: true});
+        return res.status(200).json(updateData);
 
     }catch(error){
         return res.status(500).json({error: 'Внутрішня помилка сервера'});
     }
 };
 
+
+const deleteUser = async(req, res) =>{
+    const {userId} = req.body;
+    const {reqPassword} = req.body;
+
+    const user = await users.findByPk(userId);
+    const profile = await profiles.findOne({
+        where: {user_id : userId}
+    });
+    if(!user || !profile){
+        return res.status(404).json({error: 'Користувача не знайдено'});
+    }
+
+    try {
+       const result =  await bcrypt.compare(reqPassword, user.password);
+       console.log(result);
+       if(result){
+            await user.destroy();
+            await profile.destroy();
+            return res.status(200).json({status:'success'});
+       }
+       else{
+        return res.status(400).json({error: 'Паролі не співпадають'});
+       }
+    } catch (error) {
+        return res.status(500).json({error: 'Внутрішня помилка сервера'});
+    }
+    
+};
+
 module.exports = {
     getProfileInfo,
-    editProfileInfo
+    editProfileInfo,
+    deleteUser
 };
+
