@@ -14,11 +14,13 @@ const storage = multer.diskStorage({
   
 const upload = multer({ storage: storage })
 
-//const upload = multer({ dest: 'uploads/' });
-
 const eventsController = require("../controllers/eventsController");
 
-router.post("/event-registration", eventsController.eventRegistration);
+router.post("/create-event", eventsController.createEvent);
+
+router.post("/delete-event/:id", eventsController.deleteEvent);
+
+router.post("/edit-event/:id", eventsController.editEvent);
 
 router.post("/upload-image/:id", upload.array('files'), eventsController.uploadImage);
 

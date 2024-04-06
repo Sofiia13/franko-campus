@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const eventParticipants = sequelize.define("eventParticipants", {
+    const userBookmarks = sequelize.define("userBookmarks", {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -9,16 +9,16 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: false
     });
 
-    eventParticipants.associate = (models) => {
-        models.eventParticipants.belongsTo(models.events, {
+    userBookmarks.associate = (models) => {
+        models.userBookmarks.belongsTo(models.events, {
             foreignKey: 'event_id',
             onDelete: 'CASCADE',
         });
-        models.eventParticipants.belongsTo(models.users, {
+        models.userBookmarks.belongsTo(models.users, {
             foreignKey: 'user_id',
             onDelete: 'CASCADE',
         });
     };
 
-    return eventParticipants;
+    return userBookmarks;
 };

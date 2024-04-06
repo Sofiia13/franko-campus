@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     const eventImages = sequelize.define("eventImages", {
-        data: {
+        url: {
             type: DataTypes.STRING,
             allowNull: false,
         },
