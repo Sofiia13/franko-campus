@@ -143,62 +143,48 @@ function AddEventPage() {
           </div>
           <div className='form-item'>
             <h3 className='category-title'>Формат:</h3>
-            <ul>
-              <li className='list-item'>
-                <input type="radio" value="Онлайн" className='check-input' />
-                <p>Онлайн</p>
-              </li>
-              <li className='list-item'>
-                <input type="radio" value="Офлайн" className='check-input' />
-                <p>Офлайн</p>
-              </li>
-              <li className='list-item'>
-                <input type="radio" value="Змішано" className='check-input' />
-                <p>Змішано</p>
-              </li>
-            </ul>
+            <div>
+              <input type="radio" name='format' value="Online" id='Online' className='check-input' />
+              <label for="Online">Онлайн</label><br />
+
+              <input type="radio" name='format' value="Offline" id='Offline' className='check-input' />
+              <label for="Offline">Офлайн</label><br />
+
+              <input type="radio" name='format' value="Mixed" id='Mixed' className='check-input' />
+              <label for="Mixed">Змішано</label><br />
+            </div>
           </div>
           <div className='form-item'>
             <h3 className='category-title'>Оплата:</h3>
-            <ul>
-              <li className='list-item'>
-                <input type="radio" value="Платно" className='check-input' />
-                <p>Платно</p>
-              </li>
-              <li className='list-item'>
-                <input type="radio" value="Безплатно" className='check-input' />
-                <p>Безплатно</p>
-              </li>
-            </ul>
+            <div>
+              <input type="radio" name='payment' value="Paid" id='Paid' className='check-input' />
+              <label for="Paid">Платно</label><br />
+
+              <input type="radio" name='payment' value="Free" id='Free' className='check-input' />
+              <label for="Free">Безкоштовно</label><br />
+            </div>
           </div>
           <div className='form-item'>
             <h3 className='category-title'>Тип:</h3>
-            <ul>
-              <li className='list-item'>
-                <input type="checkbox" value="Вебінар" className='check-input' />
-                <p>Вебінар</p>
-              </li>
-              <li className='list-item'>
-                <input type="checkbox" value="Змагання" className='check-input' />
-                <p>Змагання</p>
-              </li>
-              <li className='list-item'>
-                <input type="checkbox" value="Факультатив" className='check-input' />
-                <p>Факультатив</p>
-              </li>
-              <li className='list-item'>
-                <input type="checkbox" value="Дискусія" className='check-input' />
-                <p>Дискусія</p>
-              </li>
-              <li className='list-item'>
-                <input type="checkbox" value="Гурток" className='check-input' />
-                <p>Гурток</p>
-              </li>
-              <li className='list-item'>
-                <input type="checkbox" value="Інше" className='check-input' />
-                <p>Інше</p>
-              </li>
-            </ul>
+            <div>
+              <input type="checkbox" name='type' value="Webinar" id='Webinar' className='check-input' />
+              <label for="Webinar">Вебінар</label><br />
+
+              <input type="checkbox" name='type' value="Competition" id='Competition' className='check-input' />
+              <label for="Competition">Змагання</label><br />
+
+              <input type="checkbox" name='type' value="Optional" id='Optional' className='check-input' />
+              <label for="Optional">Факультатив</label><br />
+
+              <input type="checkbox" name='type' value="Discussion" id='Discussion' className='check-input' />
+              <label for="Discussion">Дискусія</label><br />
+
+              <input type="checkbox" name='type' value="Circle" id='Circle' className='check-input' />
+              <label for="Circle">Гурток</label><br />
+
+              <input type="checkbox" name='type' value="Other" id='Other' className='check-input' />
+              <label for="Other">Інше</label><br />
+            </div>
           </div>
           <button className='submit-button' onClick={createEvent}>Створити подію</button>
         </div>
