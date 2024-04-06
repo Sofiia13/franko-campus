@@ -120,10 +120,10 @@ function AddEventPage() {
             <div className='down-img-area'>
               <div className='drag-area' onDragOver={onDragOver} onDragLeave={onDragLeave} onDrop={onDrop}>
                 {isDragging ? (
-                  <span className='select'> Перетягніит зображення сюди</span>
+                  <span className='select'> Перетягніть зображення сюди</span>
                 ) : (
                   <>
-                    Перетягніит зображення сюди або {" "}
+                    Перетягніть зображення сюди або {" "}
                     <span className='select' role='button' onClick={selectFile}>
                       Завантажте
                     </span>
