@@ -1,5 +1,5 @@
 const { users, verificationCodes } = require("../models");
-const { generateAccessToken } = require("../services/jwt");
+const { generateToken } = require("../services/jwt");
 
 const bcrypt = require("bcrypt");
 const {
@@ -111,41 +111,51 @@ const validate = async (req, res) => {
   }
 };
 
+// const login = async (req, res) => {
+//   try {
+//     const { reqUsername, reqPassword } = req.body;
+
+//     const user = await users.findOne({ where: { username: reqUsername } });
+
+//     if (!user) {
+//         return res.status(404).json({ error: "Такого користувача не існує." });
+//     }
+
+//     if (user.is_verified == false) {
+//         return res.status(401).json({ error: "Користувач не верифікований." });
+//     }
+
+//     const passwordMatch = await bcrypt.compare(reqPassword, user.password);
+
+//     if (!passwordMatch) {
+//         return res
+//             .status(400)
+//             .json({ error: "Неправильне ім'я користувача або пароль." });
+//     }
+
+//     const accessToken = generateToken(user);
+//     const expiresDate = new Date();
+//     expiresDate.setDate(expiresDate.getDate() + 7); // додаємо 7 днів до поточної дати
+
+//     res.cookie("access-token", accessToken, {
+//         httpOnly: true,
+//         sameSite: "strict",
+//         expires: expiresDate // передаємо об'єкт дати
+//     });
+
+//     return res.status(200).json({ success: true });
+//   } catch (error) {
+//     console.error("Виникла помилка під час логіну:", error);
+//     return res.status(500).json({ error: "Внутрішня помилка сервера." });
+//   }
+// };
+
 const login = async (req, res) => {
-  try {
-    const { reqUsername, reqPassword } = req.body;
+  console.log("login");
+  res.cookie("access-token", "test123", { httpOnly: true, sameSite: "strict", expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) });
+  return res.status(200).json({ success: true });
+}
 
-    const user = await users.findOne({ where: { username: reqUsername } });
-
-    if (!user) {
-        return res.status(404).json({ error: "Такого користувача не існує." });
-    }
-
-    if (user.is_verified == false) {
-        return res.status(401).json({ error: "Користувач не верифікований." });
-    }
-
-    const passwordMatch = await bcrypt.compare(reqPassword, user.password);
-
-    if (!passwordMatch) {
-        return res
-            .status(400)
-            .json({ error: "Неправильне ім'я користувача або пароль." });
-    }
-
-    const accessToken = generateAccessToken(user);
-    res.cookie("access-token", accessToken, {
-        httpOnly: true,
-        sameSite: "strict",
-        expires: "7d"
-    });
-
-    return res.status(200).json({ success: true });
-  } catch (error) {
-    console.error("Виникла помилка під час логіну:", error);
-    return res.status(500).json({ error: "Внутрішня помилка сервера." });
-  }
-};
 
 
 // profiles.sync({ force: true });
