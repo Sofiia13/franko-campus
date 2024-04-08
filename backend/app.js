@@ -8,7 +8,10 @@ const { verifyToken } = require("./services/jwt");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000', // Replace with your frontend URL
+  credentials: true,
+}));
 
 const db = require("./models");
 
@@ -30,3 +33,7 @@ app.get("/", verifyToken, (req, res) => {
   res.redirect("/feed");
 });
 
+app.get("/test123", (req, res) => {
+  console.log("Cookies: ");
+  res.cookie("testCookie", "testValue", { httpOnly: true }).send("Cookie set");
+});

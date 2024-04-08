@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate  } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -21,7 +21,7 @@ const LoginPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3001/auth/login', formData);
+            const response = await axios.post('http://localhost:3001/auth/login', formData, { credentials: 'include', withCredentials: true });
             console.log('Response:', response.data);
             if (response.data.success === true) {
                 // ендпойнт успішої авторизації
@@ -43,7 +43,7 @@ const LoginPage = () => {
     return (
         <body>
             <div className="form-area">
-                <h3 className="login-title">Увійти <br/> у Franko Campus</h3>
+                <h3 className="login-title">Увійти <br /> у Franko Campus</h3>
                 <form className='form-content' onSubmit={handleSubmit}>
                     <input className="input-wrapper" type="text" id="username" name="reqUsername" placeholder="Ваш юзернейм чи пошта (поки лише юзернейм)" value={formData.reqUsername} onChange={handleChange} required />
                     <input className="input-wrapper" type="password" id="password" name="reqPassword" placeholder="Ваш пароль" value={formData.reqPassword} onChange={handleChange} required />

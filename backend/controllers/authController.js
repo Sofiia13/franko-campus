@@ -151,10 +151,10 @@ const validate = async (req, res) => {
 // };
 
 const login = async (req, res) => {
-  console.log("login");
-  res.cookie("access-token", "test123", { httpOnly: true, sameSite: "strict", expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) });
+  res.cookie('test-cookie', 'test-value', { maxAge: 900000, httpOnly: true });
   return res.status(200).json({ success: true });
 }
+
 
 
 
