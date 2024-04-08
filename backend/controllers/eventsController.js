@@ -13,6 +13,7 @@ const fs = require("fs");
 // events.sync({ force: true });
 
 // реєстрація нової події
+
 const createEvent = async (req, res) => {
   try {
     const { reqName, reqOrganizer, reqDescription } = req.body;
@@ -116,7 +117,6 @@ const uploadImage = async (req, res) => {
       .json({ error: "Помилка сервера під час завантаження зображення. Запис про подію видалено." });
   }
 };
-
 
 
 const deleteEvent = async (req, res) => {
@@ -225,7 +225,6 @@ const initialListOfEvents = async (req, res) => {
     return res.status(500).json({ error: "Внутрішня помилка сервера." });
   }
 };
-
 
 
 const extendedListOfEvents = async (req, res) => {
