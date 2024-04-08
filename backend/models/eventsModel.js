@@ -13,5 +13,22 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         }});
 
+    events.associate = (models) => {
+        events.hasMany(models.eventImages, {
+            foreignKey: 'event_id',  
+            onDelete: 'CASCADE', 
+        }),
+        events.belongsToMany(models.eventParticipants, { 
+            through: 'eventParticipant',
+            foreignKey: 'event_id',
+            otherKey: 'user_id' 
+        }),
+        events.belongsToMany(models.userBookmarks, { 
+            through: 'userBookmark',
+            foreignKey: 'event_id',
+            otherKey: 'user_id' 
+        });
+    };
+
     return events;
 };

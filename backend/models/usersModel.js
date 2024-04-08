@@ -30,16 +30,26 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  users.associate = (models) => {
-    users.hasMany(models.verificationCodes, {
-      foreignKey: "user_id",
-      onDelete: "CASCADE",
-    }),
-      users.hasOne(models.profiles, {
-        foreignKey: "user_id",
-        onDelete: "CASCADE",
-      });
-  };
+        users.associate = (models) => {
+            users.hasMany(models.verificationCodes, {
+                foreignKey: 'user_id', 
+                onDelete: 'CASCADE', 
+            }),
+            users.hasOne(models.profiles, {
+                foreignKey: 'user_id', 
+                onDelete: 'CASCADE', 
+            }),
+            users.belongsToMany(models.eventParticipants, { 
+                through: 'eventParticipant' ,
+                foreignKey: 'user_id',
+                otherKey: 'event_id' 
+            }),
+            users.belongsToMany(models.userBookmarks, { 
+                through: 'userBookmark',
+                foreignKey: 'user_id',
+                otherKey: 'event_id' 
+            });
+        };
 
   return users;
 };
