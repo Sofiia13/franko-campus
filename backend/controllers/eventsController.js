@@ -18,6 +18,7 @@ const fs = require("fs");
 const createEvent = async (req, res) => {
   try {
     const { reqName, reqOrganizer, reqDescription } = req.body;
+    const newEventData = req.body;
 
     const existingEvent = await events.findOne({
       where: { name: reqName },
@@ -36,9 +37,16 @@ const createEvent = async (req, res) => {
     }
 
     const createdEvent = await events.create({
-      name: reqName,
-      organizer: reqOrganizer,
-      description: reqDescription,
+      name: newEventData.reqName,
+      organizer: newEventData.reqOrganizer,
+      description: newEventData.reqDescription,
+
+      date : newEventData.reqDate,
+      time : newEventData.reqTime,
+      
+      format : newEventData.reqFormat,
+      cost : newEventData.reqCost,
+      type : newEventData.reqType
     });
 
     return res
