@@ -1,5 +1,6 @@
 const { events, eventImages } = require("../models");
 const moment = require("moment-timezone");
+const fuzzysort = require("fuzzysort"); // library for searching with typos
 
 let SUPABASE_URL = "https://tmgzyqbynitvxdqmbyoz.supabase.co"
 let SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRtZ3p5cWJ5bml0dnhkcW1ieW96Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk4NDY5NzEsImV4cCI6MjAyNTQyMjk3MX0.H74l6_Rf0u0PBS5VxMM9gae1naZxXpU8Hehm5P7IwI8"
@@ -256,6 +257,29 @@ const extendedListOfEvents = async (req, res) => {
   }
 };
 
+const searchEvent = async (req, res) => {
+  try {
+    let searchingQuery = req.params.key;
+
+    const allEvents = await events.findAll({
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+    });
+
+    const searchResults = allEvents.filter((event) => {
+      return ["name", "organizer", "description"].some((field) => {
+        let fieldValue = event[field] || "";
+        return fuzzysort.single(searchingQuery, fieldValue) !== null;
+      });
+    });
+
+    console.log(searchResults);
+    return res.json(searchResults);
+  } catch (error) {
+    console.error("Виникла помилка під час пошуку подій:", error);
+    return res.status(500).json({ error: "Внутрішня помилка сервера." });
+  }
+};
+
 module.exports = {
   createEvent,
   deleteEvent,
@@ -263,4 +287,5 @@ module.exports = {
   uploadImage,
   initialListOfEvents,
   extendedListOfEvents,
+  searchEvent,
 };
