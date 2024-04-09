@@ -1,4 +1,4 @@
-const { events } = require("../models");
+const { events, eventImages } = require("../models");
 const moment = require("moment-timezone");
 
 // events.sync({ force: true });
@@ -6,7 +6,7 @@ const moment = require("moment-timezone");
 // реєстрація нової події
 const eventRegistration = async (req, res) => {
   try {
-    const { reqName, reqOrganizer, reqDescription } = req.body;
+    const { reqName, reqOrganizer, reqDescription, reqImageBase64 } = req.body;
 
     const existingEvent = await events.findOne({
       where: { name: reqName },
@@ -21,10 +21,19 @@ const eventRegistration = async (req, res) => {
     }
 
     await events.create({
+
       name: reqName,
       organizer: reqOrganizer,
       description: reqDescription,
     });
+
+    for (let i = 0; i < reqImageBase64.length; i++) {
+      await eventImages.create({
+        data: reqImageBase64[i],
+        event_id: createdEvent.id, 
+      });
+    }
+    //let events.id
 
     return res.status(200).json({ success: true });
   } catch (error) {
@@ -94,3 +103,4 @@ module.exports = {
   initialListOfEvents,
   extendedListOfEvents,
 };
+
