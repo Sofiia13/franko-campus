@@ -14,6 +14,7 @@
     "bootstrap": "^5.3.3",
     "cors": "^2.8.5",
     "express": "^4.18.3",
+    "fuzzysort": "^2.0.4",
     "nodemailer": "^6.9.11",
     "nodemon": "^3.1.0",
     "pg": "^8.11.3",
