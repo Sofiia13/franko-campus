@@ -16,6 +16,7 @@ import HomePage from './pages/HomePage';
 import ValidationPage from './pages/ValidationPage';
 import ProfilePage from './pages/ProfilePage';
 import AddEventPage from './pages/AddEventPage';
+import EventPage from './pages/EventPage';
 
 import './App.css';
 
@@ -96,6 +97,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/addevent" element={<AddEventPage />} />
+          <Route path="/event" element={<EventPage />} />
         </Routes>
       </BrowserRouter>
 

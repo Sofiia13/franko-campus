@@ -10,6 +10,7 @@
     position: relative;
     align-items: center;
     justify-content:space-around;
+    margin: -8px;
 }
 /* Logo text and icon */
 .logo {

@@ -1,7 +1,6 @@
 import React from 'react'
 import { useState, useRef } from 'react'
 
-
 function AddEventPage() {
 
   const [images, setImages] = useState([]);
@@ -106,7 +105,7 @@ function AddEventPage() {
                   ))}  
                 </div>
                 <button type='button' className='down-button' onClick={uploadImage}>
-                  Завантажити
+                  Підтвердити
                 </button>
               </div> 
             </div>
