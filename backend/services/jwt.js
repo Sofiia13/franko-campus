@@ -4,7 +4,7 @@ const cookieParser = require("cookie-parser");
 
 const generateToken = (user) => {
     user = user.toJSON();
-    return jwt.sign(user, process.env.TOKEN_SECRET, {
+    return jwt.sign(user, `${process.env.TOKEN_SECRET}`, {
         expiresIn: "7d",
     });
 }

@@ -137,13 +137,16 @@ const login = async (req, res) => {
     const expiresDate = new Date();
     expiresDate.setDate(expiresDate.getDate() + 7); // додаємо 7 днів до поточної дати
 
-    res.cookie("access-token", accessToken, {
-        httpOnly: true,
-        sameSite: "strict",
-        expires: expiresDate // передаємо об'єкт дати
-    });
+    return res
+      .cookie("access-token", accessToken, {
+          httpOnly: true,
+          sameSite: "strict",
+          expires: expiresDate // передаємо об'єкт дати
+      })
+      .status(200)
+      .json({ success: true });
 
-    return res.status(200).json({ success: true });
+    //return res.status(200).json({ success: true });
   } catch (error) {
     console.error("Виникла помилка під час логіну:", error);
     return res.status(500).json({ error: "Внутрішня помилка сервера." });
