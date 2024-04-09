@@ -1,3 +1,9 @@
+const { validate } = require("../controllers/authController");
+
+const formats = ["Онлайн", "Офлайн", "Змішано"];
+const cost = ["Безкоштовно", "Платно"];
+const types = ["Вебінар", "Змагання", "Факультатив", "Дискусія", "Гурток"];
+
 module.exports = (sequelize, DataTypes) => {
     const events = sequelize.define("events", {
         name: {
@@ -23,14 +29,23 @@ module.exports = (sequelize, DataTypes) => {
         format: {
             type: DataTypes.STRING,
             allowNull: true,
+            validate: {
+                isIn: [formats]
+            }
         },
         cost: {
             type: DataTypes.INTEGER,
             allowNull: true,
+            validate: {
+                isIn: [cost]
+            }
         }, 
         type: {
             type: DataTypes.STRING,
             allowNull: true,
+            validate: {
+                isIn: [types]
+            }
         }
 
         //!!
