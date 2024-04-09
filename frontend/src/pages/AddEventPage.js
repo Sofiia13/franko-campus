@@ -70,12 +70,12 @@ function AddEventPage() {
   async function createEvent() {
     try {
       const eventData = {
-        reqName: eventName,
-        reqDescription: eventDesc,
-        reqOrganizer: 'HardcodedOrganizer', // Hardcoded organizer
-        reqFormat: document.querySelector('input[name="format"]:checked').value,
-        reqCost: document.querySelector('input[name="payment"]:checked').value,
-        reqType: document.querySelector('input[name="type"]:checked').value,
+        name: eventName,
+        description: eventDesc,
+        organizer: 'HardcodedOrganizer', // Hardcoded organizer
+        format: document.querySelector('input[name="format"]:checked').value,
+        cost: document.querySelector('input[name="payment"]:checked').value,
+        type: document.querySelector('input[name="type"]:checked').value,
       };
 
       const eventResponse = await axios.post('http://localhost:3001/events/create-event', eventData, {
