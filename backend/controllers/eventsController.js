@@ -20,7 +20,8 @@ const eventRegistration = async (req, res) => {
       return res.status(400).json({ error: "Заповни всі поля" });
     }
 
-    createdEvent = await events.create({
+    await events.create({
+
       name: reqName,
       organizer: reqOrganizer,
       description: reqDescription,
@@ -102,3 +103,4 @@ module.exports = {
   initialListOfEvents,
   extendedListOfEvents,
 };
+
