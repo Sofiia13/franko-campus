@@ -181,13 +181,14 @@ const editEvent = async (req, res) => {
     }
 
     //
-    //перевірка, чи немає пустих полів
-    //загалом з фронтенду мають приходити усі поля, проте якщо це чомусь не сталось, то
+    //перевірка, чи немає пустих полів або полів з пробілами/відступами
+    //загалом з фронтенду мають приходити усі поля, проте якщо чомусь прийшли не всі,
+    //або є пробіли/відступи, то
     //замінюємо їх на вже існуючі поля
     //
     for (field in newEventData) {
       if (!newEventData.field || !newEventData.field.trim()) {
-        newEventData.field = existingEvent.field;
+        newEventData[field] = existingEvent[field];
       }
     }
     
