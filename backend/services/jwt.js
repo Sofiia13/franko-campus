@@ -24,6 +24,16 @@ const verifyToken = (req, res, next) => {
     });
 };
 
+const authCheck = (req, res, next) => {
+    const token = req.cookies["access-token"];
+    if (!token) {
+      next();
+    }
+    else {
+      res.sendStatus(403);
+    }
+  }
 
 
-module.exports = { generateToken, verifyToken };
+
+module.exports = { generateToken, verifyToken, authCheck };
