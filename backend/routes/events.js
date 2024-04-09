@@ -8,4 +8,6 @@ router.get("/events-list", eventsController.initialListOfEvents);
 
 router.get("/events-list-extended", eventsController.extendedListOfEvents);
 
+router.get("/search-event/:key", eventsController.searchEvent);
+
 module.exports = router;

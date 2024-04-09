@@ -1,5 +1,6 @@
 const { events } = require("../models");
 const moment = require("moment-timezone");
+const fuzzysort = require("fuzzysort"); // library for searching with typos
 
 // events.sync({ force: true });
 
@@ -89,8 +90,32 @@ const extendedListOfEvents = async (req, res) => {
   }
 };
 
+const searchEvent = async (req, res) => {
+  try {
+    let searchingQuery = req.params.key;
+
+    const allEvents = await events.findAll({
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+    });
+
+    const searchResults = allEvents.filter((event) => {
+      return ["name", "organizer", "description"].some((field) => {
+        let fieldValue = event[field] || "";
+        return fuzzysort.single(searchingQuery, fieldValue) !== null;
+      });
+    });
+
+    console.log(searchResults);
+    return res.json(searchResults);
+  } catch (error) {
+    console.error("Виникла помилка під час пошуку подій:", error);
+    return res.status(500).json({ error: "Внутрішня помилка сервера." });
+  }
+};
+
 module.exports = {
   eventRegistration,
   initialListOfEvents,
   extendedListOfEvents,
+  searchEvent,
 };
