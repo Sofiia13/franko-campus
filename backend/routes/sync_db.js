@@ -2,13 +2,13 @@ const { users, verificationCodes, profiles, events, eventImages, eventParticipan
 
 async function syncModels() {
     try {
-        await users.sync({ force: true });
-        await verificationCodes.sync({ force: true });
-        await profiles.sync({ force: true });
+        // await users.sync({ force: true });
+        // await verificationCodes.sync({ force: true });
+        // await profiles.sync({ force: true });
         await events.sync({ force: true });
-        await eventImages.sync( { force: true })
-        await eventParticipants.sync( { force: true })
-        await userBookmarks.sync({ force: true });
+        // await eventImages.sync( { force: true })
+        // await eventParticipants.sync( { force: true })
+        // await userBookmarks.sync({ force: true });
     } catch (error) {
         console.error("Error syncing models:", error);
     }
