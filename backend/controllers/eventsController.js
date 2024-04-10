@@ -1,4 +1,4 @@
-const { events, eventImages } = require("../models");
+const { events, eventImages , eventParticipants, users, /* eventParticipant */} = require("../models");
 const moment = require("moment-timezone");
 const fuzzysort = require("fuzzysort"); // library for searching with typos
 
@@ -9,6 +9,7 @@ const { createClient } = require('@supabase/supabase-js');
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const fs = require("fs");
+const { json } = require("sequelize");
 
 
 // events.sync({ force: true });
@@ -280,6 +281,107 @@ const searchEvent = async (req, res) => {
   }
 };
 
+const signupToEvent = async (req, res) => {
+  const { userId } = req.body;
+  const eventId = req.params.id;
+  try {
+    if(!await events.findOne({where:{id: eventId}})){
+      return res.status(400).json({error: "Некоректне id події"});
+    }
+    const existingParticipant = await eventParticipants.findOne({
+      where: { user_id: userId, event_id: eventId },
+    });
+    if (existingParticipant) {
+      return res.status(400).json({ error: "Користувач вже записаний на цю подію" });
+    }
+    await eventParticipants.create({
+      event_id: eventId,
+      user_id: userId
+    });
+/*     await eventParticipant.create({
+      event_id: eventId,
+      user_id: userId
+    });
+ */
+    return res.status(201).json({ success: true });
+
+  } catch (error) {
+    return res.status(500).json({ Error: error });
+  }
+};
+
+const cancelEventRegistration = async (req, res) => {
+  const { userId } = req.body;
+  const eventId = req.params.id;
+  const existingParticipant = await eventParticipants.findOne({
+    where: { user_id: userId, event_id: eventId },
+  });
+
+  if (!existingParticipant) {
+    return res.status(400).json({ error: "Користувач не записаний на цю подію" });
+  }
+  try {
+    await eventParticipants.destroy({where:{event_id: eventId, user_id: userId}});
+
+/*     await eventParticipant.destroy({where:{event_id: eventId, user_id: userId}}); */
+
+    res.status(200).json({success: true});
+  } catch (error) {
+     return res.status(500).json({ Error: error });
+  }
+};
+
+const getEventsForUser = async(req, res)=>{
+  const { limit } = req.query;
+  const { userId } = req.body;
+  try {
+    if(!await users.findOne({where:{id: userId}})){
+      return res.status(400).json({error: "Некоректний ID користувача"});
+    }
+    if(limit){
+      const events = await eventParticipants.findAll({
+        where:{user_id: userId},  
+        attributes: ['event_id'],
+        limit: limit
+    }); 
+      return res.status(200).send(events);
+    }
+
+    const events = await eventParticipants.findAll({
+      where:{user_id: userId},  attributes: ['event_id']
+  });
+    return res.status(200).send(events);
+  } catch (error) {
+    return res.status(500).json({ Error: error });
+  }
+ 
+};
+
+const getUsersForEvent = async(req, res)=>{
+  const { limit } = req.query;
+  const { eventId } = req.body;
+  try {
+    if(limit){
+      const users = await eventParticipants.findAll({
+        where:{event_id: eventId},  
+        attributes: ['user_id'],
+        limit: limit
+    }); 
+      return res.status(200).send(users);
+    }
+
+    const users = await eventParticipants.findAll({
+      where:{event_id: eventId},  
+      attributes: ['user_id']
+  }); 
+    return res.status(200).send(users);
+  } catch (error) {
+    return res.status(500).json({ Error: error });
+  }
+ 
+};
+
+
 module.exports = {
   createEvent,
   deleteEvent,
@@ -288,4 +390,8 @@ module.exports = {
   initialListOfEvents,
   extendedListOfEvents,
   searchEvent,
+  signupToEvent,
+  cancelEventRegistration,
+  getEventsForUser,
+  getUsersForEvent
 };

@@ -24,10 +24,18 @@ router.post("/edit-event/:id", eventsController.editEvent);
 
 router.post("/upload-image/:id", upload.array('files'), eventsController.uploadImage);
 
+router.post("/signup-to-event/:id", eventsController.signupToEvent);
+
+router.post("/cancel-event-reg/:id", eventsController.cancelEventRegistration);
+
 router.get("/events-list", eventsController.initialListOfEvents);
 
 router.get("/events-list-extended", eventsController.extendedListOfEvents);
 
 router.get("/search-event/:key", eventsController.searchEvent);
+
+router.get("/event-list-for-user", eventsController.getEventsForUser)
+
+router.get("/user-list-for-event", eventsController.getUsersForEvent)
 
 module.exports = router;
