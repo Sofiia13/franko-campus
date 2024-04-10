@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+
 axios.defaults.withCredentials = true;
 
 const LoginPage = () => {
@@ -10,6 +12,30 @@ const LoginPage = () => {
         reqUsername: '',
         reqPassword: ''
     });
+
+    useEffect(() => {
+        const handleCheckToken = async () => {
+          try {
+            const response = await axios.get('http://localhost:3001/auth/check-token', {
+              withCredentials: true
+            });
+            console.log('Response:', response.data);
+          } catch (error) {
+            if (error.response && error.response.status === 403) {
+                alert('Ви вже авторизовані! Перескерування...');
+                console.error('Unauthorized (403):', error);
+              //navigate('/'); // перескерувати на "/" при помилці 403
+            } else {
+              console.error('Error:', error); // інші помилки
+            }
+          }
+        };
+      
+        handleCheckToken();
+      }, []);
+
+
+    
 
     const handleChange = (e) => {
         const { name, value } = e.target;

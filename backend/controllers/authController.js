@@ -1,5 +1,5 @@
 const { users, verificationCodes } = require("../models");
-const { generateToken } = require("../services/jwt");
+const { generateToken, authCheck } = require("../services/jwt");
 
 const bcrypt = require("bcrypt");
 const {
@@ -8,6 +8,10 @@ const {
   sendActivationEmail,
   validateEmail,
 } = require("../services/activationMailService");
+
+const checkToken = (req, res) => {
+  return res.status(200).json({ success: true });
+};
 
 const register = async (req, res) => {
 
@@ -208,4 +212,11 @@ const profileInfo = async (req, res) => {
   }
 };
 
-module.exports = { register, validate, login, profileInfo, logout };
+module.exports = { 
+  checkToken, 
+  register, 
+  validate, 
+  login, 
+  profileInfo, 
+  logout 
+};

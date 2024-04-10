@@ -22,6 +22,7 @@ import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
 import { toggleDropdown } from './js/animation.js';
 
 function App() {
+
   return (
     <div className="App">
       <header className="header">

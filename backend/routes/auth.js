@@ -10,6 +10,8 @@ router.use((req, res, next) => {
     authCheck(req, res, next);
 });
 
+router.get("/check-token", authCheck, authController.checkToken);
+
 router.post("/register", authController.register);
 
 router.post("/validate", authController.validate);
