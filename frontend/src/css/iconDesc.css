@@ -1,0 +1,12 @@
+.icon-description {
+    position: absolute;
+    bottom: calc(100% + -96px); /* розмістити знизу від курсору */
+    right: 5px; /* розмістити зправа від курсору */
+    background-color: #ffffff; /* колір фону */
+    border: 1px solid #ccc; /* рамка */
+    padding: 16px; /* відступи */
+    border-radius: 5px; /* закругленість куточків */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* тінь */
+    z-index: 999; /* забезпечити, що він буде поверх інших елементів */
+    text-align: center;
+}

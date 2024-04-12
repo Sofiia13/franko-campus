@@ -129,28 +129,28 @@ function AddEventPage() {
                   <label for="Paid">Платно</label><br/> 
                   
                   <input type="radio" name='payment' value="Free" id='Free' className='check-input' /> 
-                  <label for="Free">Безалатно</label><br/> 
+                  <label for="Free">Безплатно</label><br/> 
               </div> 
             </div>
             <div className='form-item'>
               <h3 className='category-title'>Тип:</h3>
               <div>
-                  <input type="checkbox" name='type' value="Webinar" id='Webinar' className='check-input' /> 
+                  <input type="radio" name='type' value="Webinar" id='Webinar' className='check-input' /> 
                   <label for="Webinar">Вебінар</label><br/>
 
-                  <input type="checkbox" name='type' value="Competition" id='Competition' className='check-input' /> 
+                  <input type="radio" name='type' value="Competition" id='Competition' className='check-input' /> 
                   <label for="Competition">Змагання</label><br/>
 
-                  <input type="checkbox" name='type' value="Optional" id='Optional' className='check-input' /> 
+                  <input type="radio" name='type' value="Optional" id='Optional' className='check-input' /> 
                   <label for="Optional">Факультатив</label><br/>
 
-                  <input type="checkbox" name='type' value="Discussion" id='Discussion' className='check-input' /> 
+                  <input type="radio" name='type' value="Discussion" id='Discussion' className='check-input' /> 
                   <label for="Discussion">Дискусія</label><br/>
 
-                  <input type="checkbox" name='type' value="Circle" id='Circle' className='check-input' /> 
+                  <input type="radio" name='type' value="Circle" id='Circle' className='check-input' /> 
                   <label for="Circle">Гурток</label><br/>
 
-                  <input type="checkbox" name='type' value="Other" id='Other' className='check-input' /> 
+                  <input type="radio" name='type' value="Other" id='Other' className='check-input' /> 
                   <label for="Other">Інше</label><br/>
               </div>
             </div>
