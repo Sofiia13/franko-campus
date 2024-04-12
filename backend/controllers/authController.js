@@ -17,7 +17,7 @@ const register = async (req, res) => {
       !reqUsername.trim() || whitespaceSym.test(reqUsername) ||
       !reqPassword.trim() || whitespaceSym.test(reqPassword) ||
       !reqEmail.trim() || whitespaceSym.test(reqEmail) ||
-      !reqUniversity.trim() || whitespaceSym.test(reqUniversity)
+      !reqUniversity.trim()
     ) {
       return res.status(400).json({ error: "Заповни всі поля або прибери пробіли з полів" });
     }
