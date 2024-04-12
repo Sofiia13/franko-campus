@@ -70,9 +70,12 @@ function AddEventPage() {
   async function createEvent() {
     try {
       const eventData = {
-        reqName: eventName,
-        reqDescription: eventDesc,
-        reqOrganizer: 'HardcodedOrganizer', // Hardcoded organizer
+        name: eventName,
+        description: eventDesc,
+        organizer: 'HardcodedOrganizer', // Hardcoded organizer
+        format: document.querySelector('input[name="format"]:checked').value,
+        cost: document.querySelector('input[name="payment"]:checked').value,
+        type: document.querySelector('input[name="type"]:checked').value,
       };
 
       const eventResponse = await axios.post('http://localhost:3001/events/create-event', eventData, {
@@ -144,45 +147,45 @@ function AddEventPage() {
           <div className='form-item'>
             <h3 className='category-title'>Формат:</h3>
             <div>
-              <input type="radio" name='format' value="Online" id='Online' className='check-input' />
+              <input type="radio" name='format' value="Онлайн" id='Online' className='check-input' />
               <label for="Online">Онлайн</label><br />
 
-              <input type="radio" name='format' value="Offline" id='Offline' className='check-input' />
+              <input type="radio" name='format' value="Офлайн" id='Offline' className='check-input' />
               <label for="Offline">Офлайн</label><br />
 
-              <input type="radio" name='format' value="Mixed" id='Mixed' className='check-input' />
+              <input type="radio" name='format' value="Змішано" id='Mixed' className='check-input' />
               <label for="Mixed">Змішано</label><br />
             </div>
           </div>
           <div className='form-item'>
             <h3 className='category-title'>Оплата:</h3>
             <div>
-              <input type="radio" name='payment' value="Paid" id='Paid' className='check-input' />
+              <input type="radio" name='payment' value="Платно" id='Paid' className='check-input' />
               <label for="Paid">Платно</label><br />
 
-              <input type="radio" name='payment' value="Free" id='Free' className='check-input' />
+              <input type="radio" name='payment' value="Безкоштовно" id='Free' className='check-input' />
               <label for="Free">Безкоштовно</label><br />
             </div>
           </div>
           <div className='form-item'>
             <h3 className='category-title'>Тип:</h3>
             <div>
-              <input type="checkbox" name='type' value="Webinar" id='Webinar' className='check-input' />
+              <input type="radio" name='type' value="Вебінар" id='Webinar' className='check-input' />
               <label for="Webinar">Вебінар</label><br />
 
-              <input type="checkbox" name='type' value="Competition" id='Competition' className='check-input' />
+              <input type="radio" name='type' value="Змагання" id='Competition' className='check-input' />
               <label for="Competition">Змагання</label><br />
 
-              <input type="checkbox" name='type' value="Optional" id='Optional' className='check-input' />
+              <input type="radio" name='type' value="Факультатив" id='Optional' className='check-input' />
               <label for="Optional">Факультатив</label><br />
 
-              <input type="checkbox" name='type' value="Discussion" id='Discussion' className='check-input' />
+              <input type="radio" name='type' value="Дискусія" id='Discussion' className='check-input' />
               <label for="Discussion">Дискусія</label><br />
 
-              <input type="checkbox" name='type' value="Circle" id='Circle' className='check-input' />
+              <input type="radio" name='type' value="Гурток" id='Circle' className='check-input' />
               <label for="Circle">Гурток</label><br />
 
-              <input type="checkbox" name='type' value="Other" id='Other' className='check-input' />
+              <input type="radio" name='type' value="Інше" id='Інше' className='check-input' />
               <label for="Other">Інше</label><br />
             </div>
           </div>

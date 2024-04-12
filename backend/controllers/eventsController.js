@@ -12,16 +12,14 @@ const fs = require("fs");
 const { json } = require("sequelize");
 
 
-// events.sync({ force: true });
-
 // реєстрація нової події
 
 const createEvent = async (req, res) => {
   try {
-    const { reqName, reqOrganizer, reqDescription } = req.body;
+    const newEventData = req.body;
 
     const existingEvent = await events.findOne({
-      where: { name: reqName },
+      where: { name: newEventData.name },
     });
 
     if (existingEvent) {
@@ -30,16 +28,26 @@ const createEvent = async (req, res) => {
         .json({ error: "Така подія вже існує." });
     }
 
-    if (!reqName.trim() || !reqOrganizer.trim() || !reqDescription.trim()) {
+    //
+    //перевірка, чи немає пустих полів
+    //
+    const isAnyFieldEmpty = Object.values(newEventData).some(value => !value || !value.trim());
+
+    if (isAnyFieldEmpty) {
       return res
         .status(400)
-        .json({ error: "Необхідно заповнити усі поля." });
+        .json({ error: "Необхідно заповнити всі поля." });
     }
 
     const createdEvent = await events.create({
-      name: reqName,
-      organizer: reqOrganizer,
-      description: reqDescription,
+      name: newEventData.name,
+      organizer: newEventData.organizer,
+      description: newEventData.description,
+      date: newEventData.date,
+      time: newEventData.time,
+      format: newEventData.format,
+      cost: newEventData.cost,
+      type: newEventData.type
     });
 
     return res
@@ -54,6 +62,7 @@ const createEvent = async (req, res) => {
       .json({ error: "Внутрішня помилка сервера." });
   }
 };
+
 
 
 
@@ -120,7 +129,8 @@ const uploadImage = async (req, res) => {
   }
 };
 
-
+//
+//TODO: додати видалення зображень з bucket'а
 const deleteEvent = async (req, res) => {
   try {
     const { id } = req.params;
@@ -159,7 +169,7 @@ const deleteEvent = async (req, res) => {
 const editEvent = async (req, res) => {
   try {
     const { id } = req.params;
-    const { reqName, reqOrganizer, reqDescription } = req.body;
+    const newEventData = req.body;
 
     const existingEvent = await events.findOne({
       where: { id },
@@ -171,17 +181,41 @@ const editEvent = async (req, res) => {
         .json({ error: "Такої події не знайдено." });
     }
 
-    if (!reqName.trim() || !reqOrganizer.trim() || !reqDescription.trim()) {
+    const existingName = await events.findOne({
+      where: { name: newEventData.name },
+    });
+
+    if (existingName) {
       return res
         .status(400)
-        .json({ error: "Необхідно заповнити усі поля." });
+        .json({ error: "Подія з такою назвою вже існує." });
     }
+
+    //
+    //перевірка, чи немає пустих полів або полів з пробілами/відступами
+    //загалом з фронтенду мають приходити усі поля, проте якщо чомусь прийшли не всі,
+    //або є пробіли/відступи, то
+    //замінюємо їх на вже існуючі поля
+    //
+    for (field in newEventData) {
+      if (!newEventData[field] || !newEventData[field].trim()) {
+        newEventData[field] = existingEvent[field];
+      }
+    }
+    
 
     await events.update(
       {
-        name: reqName,
-        organizer: reqOrganizer,
-        description: reqDescription,
+        name: newEventData.name,
+        organizer: newEventData.organizer,
+        description: newEventData.description,
+
+        date : newEventData.date,
+        time : newEventData.time,
+
+        format : newEventData.format,
+        cost : newEventData.cost,
+        type : newEventData.type
       },
       {
         where: { id },
