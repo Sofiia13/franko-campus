@@ -62,12 +62,14 @@ module.exports = (sequelize, DataTypes) => {
             onDelete: 'CASCADE',
         }),
             events.belongsToMany(models.eventParticipants, {
-                through: 'eventParticipant',
+                as: 'participants',
+                through: 'eventParticipants',
                 foreignKey: 'event_id',
                 otherKey: 'user_id'
             }),
             events.belongsToMany(models.userBookmarks, {
-                through: 'userBookmark',
+                as: 'bookmarks',
+                through: 'userBookmarks',
                 foreignKey: 'event_id',
                 otherKey: 'user_id'
             });
