@@ -288,9 +288,15 @@ const signupToEvent = async (req, res) => {
     if(!await events.findOne({where:{id: eventId}})){
       return res.status(400).json({error: "Некоректне id події"});
     }
+
+    if(!await users.findOne({where:{id: userId}})){
+      return res.status(400).json({error: "Некоректний ID користувача"});
+    }
+
     const existingParticipant = await eventParticipants.findOne({
       where: { user_id: userId, event_id: eventId },
     });
+
     if (existingParticipant) {
       return res.status(400).json({ error: "Користувач вже записаний на цю подію" });
     }
@@ -318,7 +324,7 @@ const cancelEventRegistration = async (req, res) => {
   });
 
   if (!existingParticipant) {
-    return res.status(400).json({ error: "Користувач не записаний на цю подію" });
+    return res.status(400).json({ error: "Користувач не записаний на цю подію, або не існує користувача/події." });
   }
   try {
     await eventParticipants.destroy({where:{event_id: eventId, user_id: userId}});
@@ -351,6 +357,11 @@ const getEventsForUser = async(req, res)=>{
       where:{user_id: userId},  attributes: ['event_id']
   });
     return res.status(200).send(events);
+    //
+    //залишу тут цю записку як нагадування, що в майбутньому варто розглянути варіант того,
+    //щоб відправлялось не тільки ID подій, але й їхні назви, організатори, описи, дати тощо,
+    //проте це залежатиме від фронтенду, як він буде використовувати ці дані
+    //
   } catch (error) {
     return res.status(500).json({ Error: error });
   }
@@ -375,6 +386,9 @@ const getUsersForEvent = async(req, res)=>{
       attributes: ['user_id']
   }); 
     return res.status(200).send(users);
+    //
+    //аналогічна ситуація як і в минулій замітці до функції.
+    //
   } catch (error) {
     return res.status(500).json({ Error: error });
   }
