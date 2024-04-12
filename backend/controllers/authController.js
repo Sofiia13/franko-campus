@@ -11,14 +11,18 @@ const register = async (req, res) => {
   const { reqUsername, reqPassword, reqEmail, reqUniversity } = req.body;
 
   try {
+    const whitespaceSym = /\s/;
+
     if (
-      !reqUsername.trim() ||
-      !reqPassword.trim() ||
-      !reqEmail.trim() ||
-      !reqUniversity.trim()
+      !reqUsername.trim() || whitespaceSym.test(reqUsername) ||
+      !reqPassword.trim() || whitespaceSym.test(reqPassword) ||
+      !reqEmail.trim() || whitespaceSym.test(reqEmail) ||
+      !reqUniversity.trim() || whitespaceSym.test(reqUniversity)
     ) {
-      return res.status(400).json({ error: "Заповни всі поля" });
+      return res.status(400).json({ error: "Заповни всі поля або прибери пробіли з полів" });
     }
+
+
 
     const existingUser = await users.findOne({
       where: { username: reqUsername.trim() },
@@ -73,7 +77,12 @@ const validate = async (req, res) => {
   const intCode = parseInt(reqCode);
 
   try {
-    if (!reqUsername.trim() || !reqCode.trim()) {
+    const whitespaceSym = /\s/;
+
+    if (
+      !reqUsername.trim() || whitespaceSym.test(reqUsername) ||
+      !reqCode.trim() || whitespaceSym.test(reqCode)
+    ) {
       return res.status(400).json({ error: "Заповни всі поля" });
     }
     const user = await users.findOne({
@@ -125,7 +134,13 @@ const validate = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { reqUsername, reqPassword } = req.body;
-    if (!reqUsername.trim() || !reqPassword.trim()) {
+
+    const whitespaceSym = /\s/;
+
+    if (
+      !reqUsername.trim() || whitespaceSym.test(reqUsername) ||
+      !reqPassword.trim() || whitespaceSym.test(reqPassword)
+    ) {
       return res.status(400).json({ error: "Заповни всі поля" });
     }
 
@@ -200,7 +215,13 @@ const profileInfo = async (req, res) => {
         .json({ error: "Профіль цього користувача вже заповнений" });
     }
 
-    if (!reqFirstName.trim() || !reqLastName.trim() || !reqStatus.trim()) {
+    const whitespaceSym = /\s/;
+
+    if (
+      !reqFirstName.trim() || whitespaceSym.test(reqFirstName) ||
+      !reqLastName.trim() || whitespaceSym.test(reqLastName) ||
+      !reqStatus.trim() || whitespaceSym.test(reqStatus)
+    ) {
       return res.status(400).json({ error: "Заповни всі поля" });
     }
 
