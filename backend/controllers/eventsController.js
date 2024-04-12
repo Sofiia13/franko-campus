@@ -180,6 +180,16 @@ const editEvent = async (req, res) => {
         .json({ error: "Такої події не знайдено." });
     }
 
+    const existingName = await events.findOne({
+      where: { name: newEventData.name },
+    });
+
+    if (existingName) {
+      return res
+        .status(400)
+        .json({ error: "Подія з такою назвою вже існує." });
+    }
+
     //
     //перевірка, чи немає пустих полів або полів з пробілами/відступами
     //загалом з фронтенду мають приходити усі поля, проте якщо чомусь прийшли не всі,
@@ -187,7 +197,7 @@ const editEvent = async (req, res) => {
     //замінюємо їх на вже існуючі поля
     //
     for (field in newEventData) {
-      if (!newEventData.field || !newEventData.field.trim()) {
+      if (!newEventData[field] || !newEventData[field].trim()) {
         newEventData[field] = existingEvent[field];
       }
     }
