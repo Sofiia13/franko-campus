@@ -129,7 +129,7 @@ function AddEventPage() {
                   <label for="Paid">Платно</label><br/> 
                   
                   <input type="radio" name='payment' value="Free" id='Free' className='check-input' /> 
-                  <label for="Free">Безалатно</label><br/> 
+                  <label for="Free">Безплатно</label><br/> 
               </div> 
             </div>
             <div className='form-item'>
