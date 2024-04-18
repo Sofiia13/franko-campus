@@ -26,7 +26,7 @@ const ValidationPage = () => {
             console.log('Response:', response.data);
             if (response.data.success === true) {
                 // ендпойнт успішної валідації
-                navigate("/login"); 
+                navigate("/auth/login"); 
             } else {
                 // якщо з сервера прийшла помилка
                 //placeholder

@@ -22,7 +22,7 @@ const LoginPage = () => {
             console.log('Response:', response.data);
           } catch (error) {
             if (error.response && error.response.status === 403) {
-                alert('Ви вже авторизовані! Перескерування...');
+                alert('Ви вже авторизовані!');
                 console.error('Unauthorized (403):', error);
               //navigate('/'); // перескерувати на "/" при помилці 403
             } else {
@@ -53,7 +53,7 @@ const LoginPage = () => {
             if (response.data.success === true) {
                 // ендпойнт успішої авторизації
                 // JWT
-                alert('Успішний вхід');
+                alert('Успішний вхід!');
                 navigate('/');
             } else {
                 // якщо з сервера прийшла помилка

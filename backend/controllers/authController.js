@@ -55,7 +55,7 @@ const register = async (req, res) => {
 
     await storeActivationCode(createdUser.id, activationCode);
 
-    sendActivationEmail(createdUser.email, activationCode);
+    sendActivationEmail(createdUser.email, createdUser.username, activationCode);
 
     return res.status(200).json({ success: true });
     //після успішного виконання цього запиту користувача потрібно перекинути на сторінку "валідація"

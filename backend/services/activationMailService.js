@@ -42,7 +42,7 @@ function validateEmail(email) {
   return false;
 }
 
-function sendActivationEmail(email, activationCode) {
+function sendActivationEmail(email, username, activationCode) {
   const transporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {
@@ -56,7 +56,8 @@ function sendActivationEmail(email, activationCode) {
     from: "Franko Campus Helpcenter",
     to: email,
     subject: "Activation Code for Your Franko Campus Account",
-    text: `Your activation code is: ${activationCode}`,
+    text: `Hello, ${username}! 
+    Your activation code is: ${activationCode}`,
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
