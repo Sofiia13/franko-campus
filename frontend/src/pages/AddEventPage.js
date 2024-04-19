@@ -1,5 +1,7 @@
 import React from 'react'
 import { useState, useRef } from 'react'
+import axios from 'axios'
+import TextareaAutosize from 'react-textarea-autosize';
 
 function AddEventPage() {
 
@@ -13,19 +15,15 @@ function AddEventPage() {
 
   function onFileSelect(event) {
     const files = event.target.files;
-    if (files.lenght === 0) return;
-    for (let i = 0; i < files.length; i++) {
-      if (files[i].type.split("/")[0] !== "image") continue;
-      if (!images.some( (e) => e.anme === files[i].name)) {
-        setImages((prevImages) => [
-          ...prevImages,
-          {
-            name: files[i].name,
-            url: URL.createObjectURL(files[i]),
-          },
-        ]);
-      }
-    }
+    if (files.length === 0) return;
+
+    const fileArray = Array.from(files).map((file) => ({
+      name: file.name,
+      url: URL.createObjectURL(file),
+      data: file,
+    }));
+
+    setImages([...images, ...fileArray]);
   }
 
   function deleteImage(index) {
@@ -51,7 +49,7 @@ function AddEventPage() {
     const files = event.dataTransfer.files;
     for (let i = 0; i < files.length; i++) {
       if (files[i].type.split("/")[0] !== "image") continue;
-      if (!images.some( (e) => e.anme === files[i].name)) {
+      if (!images.some((e) => e.anme === files[i].name)) {
         setImages((prevImages) => [
           ...prevImages,
           {
@@ -63,9 +61,43 @@ function AddEventPage() {
     }
   }
 
-  function uploadImage() {
-    console.log("Images:", images);
+  async function createEvent() {
+    try {
+      const eventData = {
+        name: eventName,
+        description: eventDesc,
+        organizer: 'HardcodedOrganizer', // Hardcoded organizer
+        format: document.querySelector('input[name="format"]:checked').value,
+        cost: document.querySelector('input[name="payment"]:checked').value,
+        type: document.querySelector('input[name="type"]:checked').value,
+      };
+
+      const eventResponse = await axios.post('http://localhost:3001/events/create-event', eventData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const event_id = eventResponse.data.id;
+
+      const formData = new FormData();
+      images.forEach((image) => {
+        formData.append('files', image.data, image.name);
+      });
+
+      await axios.post(`http://localhost:3001/events/upload-image/${event_id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+    } catch (error) {
+      console.error('Error creating or uploading event:', error);
+    }
   }
+
+
+
 
   return (
     <body>
@@ -78,7 +110,7 @@ function AddEventPage() {
             </div>
             <div className='form-item'>
               <h3 className='category-title'>Опис події:</h3>
-              <textarea className="event-input" type="text" id="eventDesc" name="eventDesc" placeholder="Опис вошої події" required></textarea>
+              <TextareaAutosize className="Event-input" value={eventDesc} minRows="10" onChange={(e) => setEventDesc(e.target.value)} placeholder="Опис вашої події" required />
             </div>
             <div className='form-item'>
               <h3 className='category-title'>Постер події:</h3>
