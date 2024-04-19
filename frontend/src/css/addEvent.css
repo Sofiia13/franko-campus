@@ -19,7 +19,7 @@
     margin-right: 40px;
 }
 
-.Event-input {
+.event-input {
     width: 100%;
     font-size: 18px;
     border-radius: 16px;
@@ -31,7 +31,7 @@
     border: 1px solid transparent;
     border-color: #00B2FF; 
   }
-  .Event-input:focus-visible {
+  .event-input:focus-visible {
     outline: none;
   }
 
@@ -134,29 +134,12 @@
 }
 
 /*---------------*/
-
-ul {
-    list-style-type: none;
-}
-
-li {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-.list-item {
-    line-height: 0em;
-}
-
 .check-input {
     margin-right: 6px;
-    border: 1px solid transparent;
-    border-color: #00B2FF; 
 }
 
 /*----------------------*/
-.Add-Event-form .submit-button {
+.Add-event-form .submit-button {
     width: 100%;
     margin-bottom: 36px;
 }

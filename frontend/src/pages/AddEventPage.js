@@ -4,12 +4,10 @@ import axios from 'axios'
 import TextareaAutosize from 'react-textarea-autosize';
 
 function AddEventPage() {
-  const [eventName, setEventName] = useState('');
-  const [eventDesc, setEventDesc] = useState('');
+
   const [images, setImages] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
-
 
   function selectFile() {
     fileInputRef.current.click();
@@ -25,16 +23,13 @@ function AddEventPage() {
       data: file,
     }));
 
-
     setImages([...images, ...fileArray]);
   }
-
 
   function deleteImage(index) {
     setImages((prevImages) =>
       prevImages.filter((_, i) => i !== index)
     );
-
   }
 
   function onDragOver(event) {
@@ -65,7 +60,6 @@ function AddEventPage() {
       }
     }
   }
-
 
   async function createEvent() {
     try {
@@ -107,91 +101,94 @@ function AddEventPage() {
 
   return (
     <body>
-      <section className="content">
-        <div className='Add-Event-form'>
-          <h1 className="page-title">Створіть подію</h1>
-          <div className='form-item'>
-            <h3 className='category-title'>Назва події:</h3>
-            <input className="Event-input" type="text" value={eventName} onChange={(e) => setEventName(e.target.value)} placeholder="Назва вашої події" required />
-          </div>
-          <div className='form-item'>
-            <h3 className='category-title'>Опис події:</h3>
-            <TextareaAutosize className="Event-input" value={eventDesc} minRows="10" onChange={(e) => setEventDesc(e.target.value)} placeholder="Опис вашої події" required />
-          </div>
-          <div className='form-item'>
-            <h3 className='category-title'>Постер події:</h3>
-            <div className='down-img-area'>
-              <div className='drag-area' onDragOver={onDragOver} onDragLeave={onDragLeave} onDrop={onDrop}>
-                {isDragging ? (
-                  <span className='select'> Перетягніть зображення сюди</span>
-                ) : (
-                  <>
-                    Перетягніть зображення сюди або {" "}
+        <section className="content">
+          <form className='Add-event-form'>
+            <h1 className="page-title">Створіть подію</h1>
+            <div className='form-item'>
+              <h3 className='category-title'>Назва події:</h3>
+              <input className="event-input" type="text" id="eventName" name="eventName" placeholder="Назва вошої події" required />
+            </div>
+            <div className='form-item'>
+              <h3 className='category-title'>Опис події:</h3>
+              <TextareaAutosize className="Event-input" value={eventDesc} minRows="10" onChange={(e) => setEventDesc(e.target.value)} placeholder="Опис вашої події" required />
+            </div>
+            <div className='form-item'>
+              <h3 className='category-title'>Постер події:</h3>
+              <div className='down-img-area'>
+                <div className='drag-area' onDragOver={onDragOver} onDragLeave={onDragLeave} onDrop={onDrop}>
+                  {isDragging ? (
+                    <span className='select'> Перетягніит зображення сюди</span>
+                  ) : (
+                    <>
+                    Перетягніит зображення сюди або {" "}
                     <span className='select' role='button' onClick={selectFile}>
                       Завантажте
                     </span>
-                  </>
-                )}
-                <input type="file" name="files" accept="image/*" className='file-input' ref={fileInputRef} onChange={onFileSelect} required />
+                    </>
+                  )}
+                  <input type="file" accept="image/*" className='file-input' ref={fileInputRef} onChange={onFileSelect} required/>
+                </div>
+                <div className='container'>
+                  {images.map ((images, index) => (
+                    <div className='image' key={index}>
+                      <span className='delete' onClick={() => deleteImage(index)}>&times;</span>
+                      <img src={images.url} alt={images.name} />
+                    </div>
+                  ))}  
+                </div>
+                <button type='button' className='down-button' onClick={uploadImage}>
+                  Підтвердити
+                </button>
+              </div> 
+            </div>
+            <div className='form-item'>
+              <h3 className='category-title'>Формат:</h3>
+              <div>
+                  <input type="radio" name='format' value="Online" id='Online' className='check-input' /> 
+                  <label for="Online">Онлайн</label><br/>
+                  
+                  <input type="radio" name='format' value="Offline" id='Offline' className='check-input' /> 
+                  <label for="Offline">Офлайн</label><br/>
+                  
+                  <input type="radio" name='format' value="Mixed" id='Mixed' className='check-input' /> 
+                  <label for="Mixed">Змішано</label><br/>     
+              </div> 
+            </div>
+            <div className='form-item'>
+              <h3 className='category-title'>Оплата:</h3>
+              <div>
+                  <input type="radio" name='payment' value="Paid" id='Paid' className='check-input' /> 
+                  <label for="Paid">Платно</label><br/> 
+                  
+                  <input type="radio" name='payment' value="Free" id='Free' className='check-input' /> 
+                  <label for="Free">Безплатно</label><br/> 
+              </div> 
+            </div>
+            <div className='form-item'>
+              <h3 className='category-title'>Тип:</h3>
+              <div>
+                  <input type="radio" name='type' value="Webinar" id='Webinar' className='check-input' /> 
+                  <label for="Webinar">Вебінар</label><br/>
+
+                  <input type="radio" name='type' value="Competition" id='Competition' className='check-input' /> 
+                  <label for="Competition">Змагання</label><br/>
+
+                  <input type="radio" name='type' value="Optional" id='Optional' className='check-input' /> 
+                  <label for="Optional">Факультатив</label><br/>
+
+                  <input type="radio" name='type' value="Discussion" id='Discussion' className='check-input' /> 
+                  <label for="Discussion">Дискусія</label><br/>
+
+                  <input type="radio" name='type' value="Circle" id='Circle' className='check-input' /> 
+                  <label for="Circle">Гурток</label><br/>
+
+                  <input type="radio" name='type' value="Other" id='Other' className='check-input' /> 
+                  <label for="Other">Інше</label><br/>
               </div>
-              <div className='container'>
-                {images.map((images, index) => (
-                  <div className='image' key={index}>
-                    <span className='delete' onClick={() => deleteImage(index)}>&times;</span>
-                    <img src={images.url} alt={images.name} />
-                  </div>
-                ))}
-              </div>
             </div>
-          </div>
-          <div className='form-item'>
-            <h3 className='category-title'>Формат:</h3>
-            <div>
-              <input type="radio" name='format' value="Онлайн" id='Online' className='check-input' />
-              <label for="Online">Онлайн</label><br />
-
-              <input type="radio" name='format' value="Офлайн" id='Offline' className='check-input' />
-              <label for="Offline">Офлайн</label><br />
-
-              <input type="radio" name='format' value="Змішано" id='Mixed' className='check-input' />
-              <label for="Mixed">Змішано</label><br />
-            </div>
-          </div>
-          <div className='form-item'>
-            <h3 className='category-title'>Оплата:</h3>
-            <div>
-              <input type="radio" name='payment' value="Платно" id='Paid' className='check-input' />
-              <label for="Paid">Платно</label><br />
-
-              <input type="radio" name='payment' value="Безкоштовно" id='Free' className='check-input' />
-              <label for="Free">Безкоштовно</label><br />
-            </div>
-          </div>
-          <div className='form-item'>
-            <h3 className='category-title'>Тип:</h3>
-            <div>
-              <input type="radio" name='type' value="Вебінар" id='Webinar' className='check-input' />
-              <label for="Webinar">Вебінар</label><br />
-
-              <input type="radio" name='type' value="Змагання" id='Competition' className='check-input' />
-              <label for="Competition">Змагання</label><br />
-
-              <input type="radio" name='type' value="Факультатив" id='Optional' className='check-input' />
-              <label for="Optional">Факультатив</label><br />
-
-              <input type="radio" name='type' value="Дискусія" id='Discussion' className='check-input' />
-              <label for="Discussion">Дискусія</label><br />
-
-              <input type="radio" name='type' value="Гурток" id='Circle' className='check-input' />
-              <label for="Circle">Гурток</label><br />
-
-              <input type="radio" name='type' value="Інше" id='Інше' className='check-input' />
-              <label for="Other">Інше</label><br />
-            </div>
-          </div>
-          <button className='submit-button' onClick={createEvent}>Створити подію</button>
-        </div>
-      </section>
+            <button className='submit-button'>Створити подію</button>
+          </form>
+        </section>
     </body>
   )
 }
