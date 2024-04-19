@@ -159,7 +159,7 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
   res.clearCookie("access-token");
-  return res.status(200).json({ success: true });
+  return res.status(204);
 };
 
 
