@@ -119,6 +119,48 @@ const uploadImage = async (req, res) => {
   }
 };
 
+const getEvent = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const existingEvent = await events.findOne({
+      where: { id },
+    });
+
+    if (!existingEvent) {
+      return res
+        .status(404)
+        .json({ error: "Такої події не знайдено" });
+    }
+
+    // const eventImagesList = await eventImages.findAll({
+    //   where: { event_id: id },
+    // });
+
+    //const images = eventImagesList.map((eventImage) => eventImage.url);
+
+    return res.status(200).json({
+      ...existingEvent.toJSON(),
+      createdAt: moment
+        .tz(existingEvent.createdAt, "UTC")
+        .tz("Europe/Kiev")
+        .format(),
+      updatedAt: moment
+        .tz(existingEvent.updatedAt, "UTC")
+        .tz("Europe/Kiev")
+        .format(),
+    });
+
+  } catch (error) {
+    console.error("Виникла помилка під час отримання події:", error);
+    return res
+      .status(500)
+      .json({ error: "Внутрішня помилка сервера." });
+  }
+}
+
+
+
 //
 //TODO: додати видалення зображень з bucket'а
 const deleteEvent = async (req, res) => {
@@ -439,6 +481,7 @@ const filterEvents = async (req, res) => {
 module.exports = {
   createEvent,
   deleteEvent,
+  getEvent,
   editEvent,
   uploadImage,
   initialListOfEvents,

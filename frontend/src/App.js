@@ -145,7 +145,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/addevent" element={<AddEventPage />} />
-          <Route path="/event" element={<EventPage />} />
+          <Route path="/event/:id" element={<EventPage />} />
         </Routes>
       </BrowserRouter>
 

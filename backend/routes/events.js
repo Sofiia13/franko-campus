@@ -17,6 +17,8 @@ const eventsController = require("../controllers/eventsController");
 
 router.post("/create-event", eventsController.createEvent);
 
+router.get("/event/:id", eventsController.getEvent);
+
 router.post("/delete-event/:id", eventsController.deleteEvent);
 
 router.post("/edit-event/:id", eventsController.editEvent);
