@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState, useRef } from 'react'
 import axios from 'axios'
-
+import TextareaAutosize from 'react-textarea-autosize';
 
 function AddEventPage() {
   const [eventName, setEventName] = useState('');
@@ -116,7 +116,7 @@ function AddEventPage() {
           </div>
           <div className='form-item'>
             <h3 className='category-title'>Опис події:</h3>
-            <textarea className="Event-input" value={eventDesc} onChange={(e) => setEventDesc(e.target.value)} placeholder="Опис вашої події" required></textarea>
+            <TextareaAutosize className="Event-input" value={eventDesc} minRows="10" onChange={(e) => setEventDesc(e.target.value)} placeholder="Опис вашої події" required />
           </div>
           <div className='form-item'>
             <h3 className='category-title'>Постер події:</h3>
