@@ -31,6 +31,8 @@ router.post(
 
 router.post("/signup-to-event/:id", eventsController.signupToEvent);
 
+router.get("/check-signup-to-event/:id", eventsController.checkSignupToEvent)
+
 router.post("/cancel-event-reg/:id", eventsController.cancelEventRegistration);
 
 router.get("/events-list", eventsController.initialListOfEvents);

@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
-import axios from 'axios'
-
+import axios from 'axios';
 
 function EventPage() {
-
     let navigate = useNavigate();
-    const [eventObject, setEventObject] = useState([]);
+    const [eventObject, setEventObject] = useState({});
+    const [registeredToEvent, setRegisteredToEvent] = useState(false);
     let { id } = useParams();
 
     useEffect(() => {
@@ -15,11 +14,9 @@ function EventPage() {
                 const response = await axios.get(
                     `http://localhost:3001/events/event/${id}`
                 );
-                console.log(id)
                 setEventObject(response.data);
             } catch (error) {
                 if (error.response && error.response.status === 404) {
-                    //navigate("/CardNotFound");
                     alert("Подія не знайдена");
                 } else {
                     alert("Сталася помилка під час отримання даних про подію");
@@ -30,27 +27,51 @@ function EventPage() {
         fetchData();
     }, [id, navigate]);
 
-    
+    useEffect(() => {
+        const checkIfRegistered = async () => {
+            try {
+                const response = await axios.get(
+                    `http://localhost:3001/events/check-signup-to-event/${id}`
+                );
+                setRegisteredToEvent(response.status !== 404);
+            } catch (error) {
+                console.log("Сталася помилка під час перевірки реєстрації на подію");
+            }
+        };
+        checkIfRegistered();
+    }, [id]);
 
     const signupToEvent = async () => {
         try {
-            const response = await axios.post(
+            await axios.post(
                 `http://localhost:3001/events/signup-to-event/${id}`
             );
+            setRegisteredToEvent(true);
             alert("Ви успішно записались на подію");
         } catch (error) {
             if (error.response && error.response.status === 404) {
-                alert("Подія не знайдена");
+                alert("Подія не знайдена, або некоректний ID користувача");
             } else {
                 alert("Сталася помилка під час запису на подію");
             }
         }
-    }
+    };
 
     const cancelEventRegistration = async () => {
-        return
-    }
-
+        try {
+            await axios.post(
+                `http://localhost:3001/events/cancel-event-reg/${id}`
+            );
+            setRegisteredToEvent(false);
+            alert("Ви успішно відмінили запис на подію");
+        } catch (error) {
+            if (error.response && error.response.status === 404) {
+                alert("Подія не знайдена, або некоректний ID користувача");
+            } else {
+                alert("Сталася помилка під час запису на подію");
+            }
+        }
+    };
 
     return (
         <body>
@@ -78,7 +99,9 @@ function EventPage() {
                     </p>
                 </div>
                 <div>
-                    <button className='submit-button' onClick={signupToEvent}>Записатися на подію</button>
+                    <button className='submit-button' onClick={registeredToEvent === false ? signupToEvent : cancelEventRegistration}>
+                        {registeredToEvent === false ? 'Записатися на подію' : 'Скасувати реєстрацію'}
+                    </button>
                 </div>
                 <div className='section-title'>
                     {/*<h2 className="section-title">Коментарі</h2>*/}
@@ -89,7 +112,7 @@ function EventPage() {
                 </div>
             </section>
         </body>
-    )
+    );
 }
 
-export default EventPage
+export default EventPage;

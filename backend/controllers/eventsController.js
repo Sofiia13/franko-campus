@@ -7,6 +7,8 @@ const {
 const moment = require("moment-timezone");
 const fuzzysort = require("fuzzysort"); // library for searching with typos
 
+const { returnUserId } = require("../services/jwt");
+
 let SUPABASE_URL = "https://tmgzyqbynitvxdqmbyoz.supabase.co";
 let SUPABASE_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRtZ3p5cWJ5bml0dnhkcW1ieW96Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk4NDY5NzEsImV4cCI6MjAyNTQyMjk3MX0.H74l6_Rf0u0PBS5VxMM9gae1naZxXpU8Hehm5P7IwI8";
@@ -330,15 +332,16 @@ const searchEvent = async (req, res) => {
 };
 
 const signupToEvent = async (req, res) => {
-  const { userId } = req.body;
+  const  userId  = returnUserId(req)
   const eventId = req.params.id;
+  console.log(userId, eventId)
   try {
     if (!(await events.findOne({ where: { id: eventId } }))) {
-      return res.status(400).json({ error: "Некоректне id події" });
+      return res.status(404).json({ error: "Некоректне id події" });
     }
 
     if (!(await users.findOne({ where: { id: userId } }))) {
-      return res.status(400).json({ error: "Некоректний ID користувача" });
+      return res.status(404).json({ error: "Некоректний ID користувача" });
     }
 
     const existingParticipant = await eventParticipants.findOne({
@@ -365,15 +368,28 @@ const signupToEvent = async (req, res) => {
   }
 };
 
+const checkSignupToEvent = async (req, res) => {
+  const userId = returnUserId(req);
+  const eventId = req.params.id;
+  try {
+    if (!(await eventParticipants.findOne({ where: { user_id: userId, event_id: eventId } }))) {
+      return res.status(404).json({ error: "Користувач не записаний на цю подію" });
+    }
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ Error: error });
+  }};
+
+
 const cancelEventRegistration = async (req, res) => {
-  const { userId } = req.body;
+  const userId  = returnUserId(req)
   const eventId = req.params.id;
   const existingParticipant = await eventParticipants.findOne({
     where: { user_id: userId, event_id: eventId },
   });
 
   if (!existingParticipant) {
-    return res.status(400).json({
+    return res.status(404).json({
       error:
         "Користувач не записаний на цю подію, або не існує користувача/події.",
     });
@@ -382,8 +398,6 @@ const cancelEventRegistration = async (req, res) => {
     await eventParticipants.destroy({
       where: { event_id: eventId, user_id: userId },
     });
-
-    /*     await eventParticipant.destroy({where:{event_id: eventId, user_id: userId}}); */
 
     res.status(200).json({ success: true });
   } catch (error) {
@@ -488,6 +502,7 @@ module.exports = {
   extendedListOfEvents,
   searchEvent,
   signupToEvent,
+  checkSignupToEvent,
   cancelEventRegistration,
   getEventsForUser,
   getUsersForEvent,
