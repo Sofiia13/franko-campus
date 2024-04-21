@@ -50,6 +50,23 @@ module.exports = (sequelize, DataTypes) => {
                 through: models.userBookmarks,
                 foreignKey: 'user_id',
                 otherKey: 'event_id' 
+            }),
+
+            users.hasMany(models.pendingFriendRequests, {
+                foreignKey: 'user_id_1',
+                onDelete: 'CASCADE',
+            }),
+            users.hasMany(models.pendingFriendRequests, {
+                foreignKey: 'user_id_2',
+                onDelete: 'CASCADE',
+            }),
+            users.hasMany(models.friends, {
+                foreignKey: 'user_id_1',
+                onDelete: 'CASCADE',
+            }),
+            users.hasMany(models.friends, {
+                foreignKey: 'user_id_2',
+                onDelete: 'CASCADE',
             });
         };
 
