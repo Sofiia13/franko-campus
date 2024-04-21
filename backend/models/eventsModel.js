@@ -1,5 +1,3 @@
-const { validate } = require("../controllers/authController");
-
 const formats = ["Онлайн", "Офлайн", "Змішано"];
 const cost = ["Безкоштовно", "Платно"];
 const types = ["Вебінар", "Змагання", "Факультатив", "Дискусія", "Гурток", "Інше"];

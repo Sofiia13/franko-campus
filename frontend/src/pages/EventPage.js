@@ -47,6 +47,10 @@ function EventPage() {
         }
     }
 
+    const cancelEventRegistration = async () => {
+        return
+    }
+
 
     return (
         <body>
