@@ -17,6 +17,8 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 const fs = require("fs");
 const { json } = require("sequelize");
 
+const {returnUserId} = require("../services/jwt");
+
 // реєстрація нової події
 
 const createEvent = async (req, res) => {
@@ -288,7 +290,7 @@ const searchEvent = async (req, res) => {
 };
 
 const signupToEvent = async (req, res) => {
-  const { userId } = req.body;
+  const userId = returnUserId(req);
   const eventId = req.params.id;
   try {
     if (!(await events.findOne({ where: { id: eventId } }))) {
@@ -312,11 +314,6 @@ const signupToEvent = async (req, res) => {
       event_id: eventId,
       user_id: userId,
     });
-    /*     await eventParticipant.create({
-      event_id: eventId,
-      user_id: userId
-    });
- */
     return res.status(201).json({ success: true });
   } catch (error) {
     return res.status(500).json({ Error: error });
@@ -324,7 +321,7 @@ const signupToEvent = async (req, res) => {
 };
 
 const cancelEventRegistration = async (req, res) => {
-  const { userId } = req.body;
+  const userId = returnUserId(req);
   const eventId = req.params.id;
   const existingParticipant = await eventParticipants.findOne({
     where: { user_id: userId, event_id: eventId },
@@ -351,7 +348,7 @@ const cancelEventRegistration = async (req, res) => {
 
 const getEventsForUser = async (req, res) => {
   const { limit } = req.query;
-  const { userId } = req.body;
+  const userId = returnUserId(req);
   try {
     if (!(await users.findOne({ where: { id: userId } }))) {
       return res.status(400).json({ error: "Некоректний ID користувача" });

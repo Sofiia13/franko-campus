@@ -1,8 +1,10 @@
 const {users , profiles} = require('../models');
 const bcrypt = require('bcrypt');
 
+const {returnUserId} = require("../services/jwt");
+
 const getProfileInfo = async(req, res) =>{
-    const {userId} = req.body;
+    const userId = returnUserId(req);
     try{
         const user = await users.findByPk(userId);
         const userProfile = await profiles.findOne({
@@ -30,7 +32,7 @@ const getProfileInfo = async(req, res) =>{
 };
 
 const editProfileInfo = async(req, res) =>{
-    const {userId} = req.body;
+    const userId = returnUserId(req);
     const newUserData = req.body;
     const updateData = {};
     try{
@@ -66,7 +68,7 @@ const editProfileInfo = async(req, res) =>{
 
 
 const deleteUser = async(req, res) =>{
-    const {userId} = req.body;
+    const userId = returnUserId(req);
     const {reqPassword} = req.body;
 
     const user = await users.findByPk(userId);

@@ -18,7 +18,7 @@ router.post("/validate", authController.validate);
 
 router.post("/login", authController.login);
 
-router.post("/profile", authController.profileInfo);
+router.post("/profile", authController.setProfileInfo);
 
 router.get("/logout", authController.logout);
 

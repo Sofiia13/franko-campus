@@ -4,7 +4,7 @@ const cors = require('cors');
 const cookieParser = require("cookie-parser");
 
 const { verifyToken } = require("./services/jwt");
-
+require('dotenv').config();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -4,8 +4,8 @@ const profileController = require("../controllers/profileController");
 
 router.get("/get-info", profileController.getProfileInfo);
 
-router.patch("/",profileController.editProfileInfo);
+router.patch("/edit-info",profileController.editProfileInfo);
 
-router.delete("/", profileController.deleteUser);
+router.delete("/delete", profileController.deleteUser);
 
 module.exports = router;
