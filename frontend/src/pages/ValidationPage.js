@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate  } from 'react-router-dom'; 
+axios.defaults.withCredentials = true;
 
 const ValidationPage = () => {
     const navigate = useNavigate();
@@ -25,7 +26,7 @@ const ValidationPage = () => {
             console.log('Response:', response.data);
             if (response.data.success === true) {
                 // ендпойнт успішної валідації
-                navigate("/login"); 
+                navigate("/auth/login"); 
             } else {
                 // якщо з сервера прийшла помилка
                 //placeholder

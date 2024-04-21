@@ -1,4 +1,6 @@
-const { users, verificationCodes, profiles } = require("../models");
+const { users, verificationCodes } = require("../models");
+const { generateToken, authCheck } = require("../services/jwt");
+
 const bcrypt = require("bcrypt");
 const {
   storeActivationCode,
@@ -6,6 +8,10 @@ const {
   sendActivationEmail,
   validateEmail,
 } = require("../services/activationMailService");
+
+const checkToken = (req, res) => {
+  return res.status(200).json({ success: true });
+};
 
 const register = async (req, res) => {
   const { reqUsername, reqPassword, reqEmail, reqUniversity } = req.body;
@@ -61,7 +67,7 @@ const register = async (req, res) => {
 
     await storeActivationCode(createdUser.id, activationCode);
 
-    sendActivationEmail(createdUser.email, activationCode);
+    sendActivationEmail(createdUser.email, createdUser.username, activationCode);
 
     return res.status(200).json({ success: true });
     //після успішного виконання цього запиту користувача потрібно перекинути на сторінку "валідація"
@@ -149,11 +155,11 @@ const login = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(404).json({ error: "Такого користувача не існує." });
+        return res.status(404).json({ error: "Такого користувача не існує." });
     }
 
     if (user.is_verified == false) {
-      return res.status(401).json({ error: "Користувач не верифікований." });
+        return res.status(401).json({ error: "Користувач не верифікований." });
     }
 
     const passwordMatch = await bcrypt.compare(
@@ -162,28 +168,37 @@ const login = async (req, res) => {
     );
 
     if (!passwordMatch) {
-      return res
-        .status(400)
-        .json({ error: "Неправильне ім'я користувача або пароль." });
+        return res
+            .status(400)
+            .json({ error: "Неправильне ім'я користувача або пароль." });
     }
 
-    //  jwt token
-    //
-    //   const accessToken = sign(
-    //     { username: user.username, id: user.id },
-    //     "importantsecret"
-    //   );
-    //
+    const accessToken = generateToken(user);
+    const expiresDate = new Date();
+    expiresDate.setDate(expiresDate.getDate() + 7); // додаємо 7 днів до поточної дати
 
-    return res.status(200).json({ success: true });
-    //
-    // .json({ token: accessToken, username: user.username, id: user.id });
-    //
+    return res
+      .cookie("access-token", accessToken, {
+          httpOnly: true,
+          sameSite: "strict",
+          expires: expiresDate // передаємо об'єкт дати
+      })
+      .status(200)
+      .json({ success: true });
+
+    //return res.status(200).json({ success: true });
   } catch (error) {
     console.error("Виникла помилка під час логіну:", error);
     return res.status(500).json({ error: "Внутрішня помилка сервера." });
   }
 };
+
+const logout = async (req, res) => {
+  res.clearCookie("access-token");
+  return res.status(204).json({ success: true });
+};
+
+
 
 // profiles.sync({ force: true });
 const profileInfo = async (req, res) => {
@@ -239,4 +254,11 @@ const profileInfo = async (req, res) => {
   }
 };
 
-module.exports = { register, validate, login, profileInfo };
+module.exports = { 
+  checkToken, 
+  register, 
+  validate, 
+  login, 
+  profileInfo, 
+  logout 
+};
