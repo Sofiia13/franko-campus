@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 
 const { verifyToken } = require("./services/jwt");
 
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -13,13 +14,17 @@ app.use(cors({
   credentials: true,
 }));
 
+
 const db = require("./models");
 
 const authRouter = require("./routes/auth");
 const eventsRouter = require("./routes/events");
+const profileRouter = require("./routes/profile");
 
 app.use("/auth", authRouter);
 app.use("/events", eventsRouter);
+app.use("/profile", profileRouter);
+
 
 const PORT = 3001;
 

@@ -14,13 +14,24 @@ const checkToken = (req, res) => {
 };
 
 const register = async (req, res) => {
-
   const { reqUsername, reqPassword, reqEmail, reqUniversity } = req.body;
 
-
   try {
+    const whitespaceSym = /\s/;
+
+    if (
+      !reqUsername.trim() || whitespaceSym.test(reqUsername) ||
+      !reqPassword.trim() || whitespaceSym.test(reqPassword) ||
+      !reqEmail.trim() || whitespaceSym.test(reqEmail) ||
+      !reqUniversity.trim()
+    ) {
+      return res.status(400).json({ error: "Заповни всі поля або прибери пробіли з полів" });
+    }
+
+
+
     const existingUser = await users.findOne({
-      where: { username: reqUsername },
+      where: { username: reqUsername.trim() },
     });
 
     if (existingUser) {
@@ -32,18 +43,19 @@ const register = async (req, res) => {
       return res.status(500).json({ error: "Неправильно введена пошта." });
     }
 
-    const hashedPassword = await bcrypt.hash(reqPassword, 10);
+    const hashedPassword = await bcrypt.hash(reqPassword.trim(), 10);
 
     await users.create({
-      username: reqUsername,
+      username: reqUsername.trim(),
       password: hashedPassword,
       email: reqEmail,
       university: reqUniversity,
       is_verified: false,
     });
 
-
-    createdUser = await users.findOne({ where: { username: reqUsername } });
+    createdUser = await users.findOne({
+      where: { username: reqUsername.trim() },
+    });
 
     if (!createdUser) {
       return res
@@ -71,7 +83,17 @@ const validate = async (req, res) => {
   const intCode = parseInt(reqCode);
 
   try {
-    const user = await users.findOne({ where: { username: reqUsername } });
+    const whitespaceSym = /\s/;
+
+    if (
+      !reqUsername.trim() || whitespaceSym.test(reqUsername) ||
+      !reqCode.trim() || whitespaceSym.test(reqCode)
+    ) {
+      return res.status(400).json({ error: "Заповни всі поля" });
+    }
+    const user = await users.findOne({
+      where: { username: reqUsername.trim() },
+    });
 
     if (!user) {
       return res.status(400).json({ error: "Користувач не знайдений." });
@@ -119,7 +141,18 @@ const login = async (req, res) => {
   try {
     const { reqUsername, reqPassword } = req.body;
 
-    const user = await users.findOne({ where: { username: reqUsername } });
+    const whitespaceSym = /\s/;
+
+    if (
+      !reqUsername.trim() || whitespaceSym.test(reqUsername) ||
+      !reqPassword.trim() || whitespaceSym.test(reqPassword)
+    ) {
+      return res.status(400).json({ error: "Заповни всі поля" });
+    }
+
+    const user = await users.findOne({
+      where: { username: reqUsername.trim() },
+    });
 
     if (!user) {
         return res.status(404).json({ error: "Такого користувача не існує." });
@@ -129,7 +162,10 @@ const login = async (req, res) => {
         return res.status(401).json({ error: "Користувач не верифікований." });
     }
 
-    const passwordMatch = await bcrypt.compare(reqPassword, user.password);
+    const passwordMatch = await bcrypt.compare(
+      reqPassword.trim(),
+      user.password
+    );
 
     if (!passwordMatch) {
         return res
@@ -194,7 +230,13 @@ const profileInfo = async (req, res) => {
         .json({ error: "Профіль цього користувача вже заповнений" });
     }
 
-    if (!reqFirstName.trim() || !reqLastName.trim() || !reqStatus.trim()) {
+    const whitespaceSym = /\s/;
+
+    if (
+      !reqFirstName.trim() || whitespaceSym.test(reqFirstName) ||
+      !reqLastName.trim() || whitespaceSym.test(reqLastName) ||
+      !reqStatus.trim() || whitespaceSym.test(reqStatus)
+    ) {
       return res.status(400).json({ error: "Заповни всі поля" });
     }
 

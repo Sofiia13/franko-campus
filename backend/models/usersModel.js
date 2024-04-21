@@ -30,16 +30,45 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  users.associate = (models) => {
-    users.hasMany(models.verificationCodes, {
-      foreignKey: "user_id",
-      onDelete: "CASCADE",
-    }),
-      users.hasOne(models.profiles, {
-        foreignKey: "user_id",
-        onDelete: "CASCADE",
-      });
-  };
+        users.associate = (models) => {
+            users.hasMany(models.verificationCodes, {
+                foreignKey: 'user_id', 
+                onDelete: 'CASCADE', 
+            }),
+            users.hasOne(models.profiles, {
+                foreignKey: 'user_id', 
+                onDelete: 'CASCADE', 
+            }),
+            users.belongsToMany(models.events, { 
+                as: 'participants',
+                through: models.eventParticipants,
+                foreignKey: 'user_id',
+                otherKey: 'event_id' 
+            }),
+            users.belongsToMany(models.events, { 
+                as: 'bookmarks',
+                through: models.userBookmarks,
+                foreignKey: 'user_id',
+                otherKey: 'event_id' 
+            }),
+
+            users.hasMany(models.pendingFriendRequests, {
+                foreignKey: 'user_id_1',
+                onDelete: 'CASCADE',
+            }),
+            users.hasMany(models.pendingFriendRequests, {
+                foreignKey: 'user_id_2',
+                onDelete: 'CASCADE',
+            }),
+            users.hasMany(models.friends, {
+                foreignKey: 'user_id_1',
+                onDelete: 'CASCADE',
+            }),
+            users.hasMany(models.friends, {
+                foreignKey: 'user_id_2',
+                onDelete: 'CASCADE',
+            });
+        };
 
   return users;
 };
