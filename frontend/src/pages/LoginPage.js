@@ -75,7 +75,7 @@ const LoginPage = () => {
                     <input className="input-wrapper" type="text" id="username" name="reqUsername" placeholder="Ваш юзернейм чи пошта (поки лише юзернейм)" value={formData.reqUsername} onChange={handleChange} required />
                     <input className="input-wrapper" type="password" id="password" name="reqPassword" placeholder="Ваш пароль" value={formData.reqPassword} onChange={handleChange} required />
                     <button className="submit-button" type="submit" id="loginButton">Увійти</button>
-                    <p className="text-link">Не маєте акаунту? <a href="signin" className="link">Зареєструватись</a></p>
+                    <p className="text-link">Не маєте акаунту? <a href="signup" className="link">Зареєструватись</a></p>
                 </form>
             </div>
         </body>
