@@ -162,12 +162,11 @@ const login = async (req, res) => {
         return res.status(401).json({ error: "Користувач не верифікований." });
     }
 
-    
     const passwordMatch = await bcrypt.compare(
       reqPassword.trim(),
       user.password
     );
-  
+
     if (!passwordMatch) {
         return res
             .status(400)
@@ -202,7 +201,7 @@ const logout = async (req, res) => {
 
 
 // profiles.sync({ force: true });
-const setProfileInfo = async (req, res) => {
+const profileInfo = async (req, res) => {
   const { reqUsername, reqFirstName, reqLastName, reqStatus } = req.body;
   try {
     const user = await users.findOne({ where: { username: reqUsername } });
@@ -260,6 +259,6 @@ module.exports = {
   register, 
   validate, 
   login, 
-  setProfileInfo, 
+  profileInfo, 
   logout 
 };
