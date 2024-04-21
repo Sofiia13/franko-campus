@@ -1,3 +1,5 @@
 node_modules/
 .idea
 backend/uploads/*
+package-lock.json
+frontend/package-lock.json

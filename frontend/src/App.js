@@ -12,7 +12,7 @@ import notifications from './img/notifications.svg';
 import settings from './img/settings.svg';
 
 import LoginPage from './pages/LoginPage.js';
-import SignInPage from './pages/SignInPage';
+import SignUpPage from './pages/SignUpPage.js';
 import HomePage from './pages/HomePage';
 import ValidationPage from './pages/ValidationPage';
 import ProfilePage from './pages/ProfilePage';
@@ -22,6 +22,7 @@ import EventPage from './pages/EventPage';
 import './App.css';
 
 import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
+
 
 function App() {
 
@@ -140,9 +141,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />          
-          <Route path="/signin" element={<SignInPage />} />
-          <Route path="/validation" element={<ValidationPage />} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/auth/signup" element={<SignUpPage />} />
+          <Route path="/auth/validation" element={<ValidationPage />} />
+          <Route path="/auth/login" element={<LoginPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/addevent" element={<AddEventPage />} />
           <Route path="/event/:id" element={<EventPage />} />
