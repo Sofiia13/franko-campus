@@ -1,17 +1,28 @@
 const {users , profiles} = require('../models');
 const bcrypt = require('bcrypt');
+const { returnUserId } = require('../services/jwt');
 
 const getProfileInfo = async(req, res) =>{
-    const {userId} = req.body;
+    const userId = returnUserId(req);
     try{
         const user = await users.findByPk(userId);
         const userProfile = await profiles.findOne({
             where: {user_id: userId}
     });
 
-    if(!user || !userProfile){
-       return res.status(404).json({error : "Профіль не знайдено"});
+    if(!userProfile){
+        const userData = {
+            username : user.username,
+            university : user.university,
+            /* faculty : user.faculty */
+        }
+        return res.status(200).send(userData);
+     }
+
+    if(!user && !userProfile){
+       return res.status(404).json({error : "Дані про користувача не знайдено"});
     }
+
     const userData = {
         username : user.username,
         first_name : userProfile.first_name,
