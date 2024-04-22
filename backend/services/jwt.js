@@ -37,6 +37,9 @@ const authCheck = (req, res, next) => {
 
 function returnUserId(req){
     const accessToken = req.cookies["access-token"];
+    if (!accessToken) {
+        return null;
+    }
     const decoded = jwt.verify(accessToken, process.env.TOKEN_SECRET);
     return decoded.id;
 };
