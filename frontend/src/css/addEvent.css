@@ -31,7 +31,29 @@
     border: 1px solid transparent;
     border-color: #00B2FF; 
   }
+
+  .event-input-desc {
+    min-height: 50px; /* Set a minimum height for the textarea */
+    max-height: 600px; /* Set a maximum height for the textarea */
+    height: auto; /* Allow the textarea to grow dynamically beyond the maximum height */
+
+    width: 100%;
+    font-size: 18px;
+    border-radius: 16px;
+    background-color: #fff;
+    justify-content: center;
+    align-items: start;
+    white-space: nowrap;
+    padding: 18px;
+    border: 1px solid transparent;
+    border-color: #00B2FF; 
+  }
+
   .event-input:focus-visible {
+    outline: none;
+  }
+
+  .event-input-desc:focus-visible {
     outline: none;
   }
 
