@@ -33,7 +33,7 @@ function ProfilePage() {
                     <img src="..." alt="..." />
                 </div>
                 <div className='user-info'>
-                    <h2 className="user-name">{userData.username}</h2>
+                    <h2 className="user-name">{userData.username === undefined ? "Отримання даних..." : userData.username}</h2>
                     <div className='user-text'>
                         <h3>Ім'я:</h3>
                         <p>{userData.first_name === undefined ? "Не заповнено" : userData.first_name}</p>
@@ -52,7 +52,7 @@ function ProfilePage() {
                     </div>
                     <div className='user-text'>
                         <h3>Факультет:</h3>
-                        <p>HardCodedFaculty</p>
+                        <p>{userData.faculty === undefined ? "Не заповнено" : userData.faculty}</p>
                     </div>
                 </div>
             </div>
