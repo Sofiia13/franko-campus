@@ -1,4 +1,4 @@
-const { users, verificationCodes, profiles, events, eventImages, eventParticipants, userBookmarks } = require("../models");
+const { users, verificationCodes, profiles, events, eventImages, eventParticipants, userBookmarks, pendingFriendRequests, friends } = require("../models");
 
 async function syncModels() {
     try {
@@ -9,6 +9,8 @@ async function syncModels() {
         await eventImages.sync( { force: true })
         await eventParticipants.sync( { force: true })
         await userBookmarks.sync({ force: true });
+        await pendingFriendRequests.sync({ force: true });
+        await friends.sync({ force: true });
     } catch (error) {
         console.error("Error syncing models:", error);
     }

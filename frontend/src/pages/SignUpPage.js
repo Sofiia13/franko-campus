@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate  } from 'react-router-dom'; 
+axios.defaults.withCredentials = true;
 
-const SignInPage = () => {
+const SignUpPage = () => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -27,7 +28,7 @@ const SignInPage = () => {
             console.log('Response:', response.data);
             if (response.data.success === true) {
                 // ендпойнт успішної реєстрації
-                navigate("/validation"); 
+                navigate("/auth/validation"); 
             } else {
                 // якщо з сервера прийшла помилка
                 //placeholder
@@ -58,4 +59,4 @@ const SignInPage = () => {
     );
 };
 
-export default SignInPage;
+export default SignUpPage;
