@@ -15,7 +15,9 @@ function ProfilePage() {
                 setUserData(response.data);
             } catch (error) {
                 if (error.response && error.response.status === 404) {
-                    console.log("Користувача або дані про профіль не знайдено");
+                    alert("Користувача або дані про профіль не знайдено");
+                } if (error.response && error.response.status === 403) {
+                    alert("Користувач не авторизований");
                 } else {
                     alert("Сталася помилка під час отримання даних про користувача");
                 }

@@ -5,6 +5,10 @@ const { returnUserId } = require('../services/jwt');
 const getProfileInfo = async(req, res) =>{
     const userId = returnUserId(req);
     try{
+        if (userId === null) {
+            return res.status(403).json({error: 'Користувач не авторизований'});
+        }
+        
         const user = await users.findByPk(userId);
         const userProfile = await profiles.findOne({
             where: {user_id: userId}
