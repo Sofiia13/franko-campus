@@ -19,6 +19,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const fs = require("fs");
 const { json } = require("sequelize");
+const userBookmarksModel = require("../models/userBookmarksModel");
 
 // реєстрація нової події
 
@@ -494,7 +495,7 @@ const addEventToBookmarks = async (req, res) =>{
     const userId = returnUserId(req);
     const eventId = req.params.id;
     try {
-      if(!events.findOne({where: {id: eventId}})){
+      if(!await events.findOne({where: {id: eventId}})){
         return res.status(404).json({error: "Події з таким ID немає"});
     }
 
@@ -511,6 +512,32 @@ const addEventToBookmarks = async (req, res) =>{
     }
 };
 
+const deleteEventFromBookmarks = async (req, res) =>{
+  const userId = returnUserId(req);
+  const eventId = req.params.id;
+  try {
+    if(!await events.findOne({where: {id: eventId}})){
+      return res.status(404).json({error: "Події з таким ID немає"});
+  }
+
+    if(!await userBookmarks.findOne({where: {event_id: eventId, user_id: userId}})){
+      return res.status(404).json({error: "Подія не в закладках"});
+    }
+
+  await userBookmarks.destroy({where: {
+      event_id: eventId,
+      user_id: userId
+  }});
+
+  return res.status(204).json({success: true});
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({error: "Помилка на сервері"});
+  }
+};
+
+
 module.exports = {
   createEvent,
   deleteEvent,
@@ -526,5 +553,6 @@ module.exports = {
   getEventsForUser,
   getUsersForEvent,
   filterEvents,
-  addEventToBookmarks
+  addEventToBookmarks,
+  deleteEventFromBookmarks
 };

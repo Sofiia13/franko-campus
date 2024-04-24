@@ -49,6 +49,8 @@ router.get("/user-list-for-event", eventsController.getUsersForEvent);
 
 router.get("/filter-events", eventsController.filterEvents);
 
+router.delete("/delete-bookmark/:id", eventsController.deleteEventFromBookmarks);
+
 
 
 module.exports = router;
