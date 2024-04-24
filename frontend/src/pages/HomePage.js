@@ -1,6 +1,31 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import axios from 'axios';
 
 const HomePage = () => {
+
+    const [loggedIn, setLoggedIn] = useState(false);
+
+    useEffect(() => {
+        const checkLogin = async () => {
+            try {
+                const response = await axios.get('http://localhost:3001/auth/conventional-check-token');
+                if (response.status === 200) {
+                    setLoggedIn(true);
+                    return
+                }
+                setLoggedIn(false);
+            } catch (error) {
+                setLoggedIn(false);
+            }
+        }
+        checkLogin();
+    }, [])
+
+    useEffect(() => {
+        console.log(loggedIn); // This will log the updated value of loggedIn whenever it changes
+    }, [loggedIn]);
+    
+
     return (
         <body>
             <div className="main-card-img">
