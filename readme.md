@@ -1,6 +1,5 @@
-im going mentally insane
+stay strong brothers
 
 
 
-
-![photo_2023-09-13_13-02-33](https://i.ibb.co/hgtxmnL/image.png)
+![GGskIizX0AAmSwp](https://github.com/someteamfranko/franko-campus/assets/114873264/63e5b05e-c32e-44a0-8853-02ba39173ed0)

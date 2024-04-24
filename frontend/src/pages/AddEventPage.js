@@ -1,6 +1,8 @@
 import React from 'react'
 import { useState, useRef } from 'react'
 import axios from 'axios'
+import TextareaAutosize from 'react-textarea-autosize'
+import FormRadioComponent from '../components/FormRadioComponent';
 
 
 function AddEventPage() {
@@ -116,7 +118,7 @@ function AddEventPage() {
           </div>
           <div className='form-item'>
             <h3 className='category-title'>Опис події:</h3>
-            <textarea className="event-input" value={eventDesc} onChange={(e) => setEventDesc(e.target.value)} placeholder="Опис вашої події" required></textarea>
+            <TextareaAutosize className="event-input-desc" value={eventDesc} minRows="10" onChange={(e) => setEventDesc(e.target.value)} placeholder="Опис вашої події" required />
           </div>
           <div className='form-item'>
             <h3 className='category-title'>Постер події:</h3>
@@ -144,51 +146,7 @@ function AddEventPage() {
               </div>
             </div>
           </div>
-          <div className='form-item'>
-            <h3 className='category-title'>Формат:</h3>
-            <div>
-              <input type="radio" name='format' value="Онлайн" id='Online' className='check-input' />
-              <label for="Online">Онлайн</label><br />
-
-              <input type="radio" name='format' value="Офлайн" id='Offline' className='check-input' />
-              <label for="Offline">Офлайн</label><br />
-
-              <input type="radio" name='format' value="Змішано" id='Mixed' className='check-input' />
-              <label for="Mixed">Змішано</label><br />
-            </div>
-          </div>
-          <div className='form-item'>
-            <h3 className='category-title'>Оплата:</h3>
-            <div>
-              <input type="radio" name='payment' value="Платно" id='Paid' className='check-input' />
-              <label for="Paid">Платно</label><br />
-
-              <input type="radio" name='payment' value="Безкоштовно" id='Free' className='check-input' />
-              <label for="Free">Безкоштовно</label><br />
-            </div>
-          </div>
-          <div className='form-item'>
-            <h3 className='category-title'>Тип:</h3>
-            <div>
-              <input type="radio" name='type' value="Вебінар" id='Webinar' className='check-input' />
-              <label for="Webinar">Вебінар</label><br />
-
-              <input type="radio" name='type' value="Змагання" id='Competition' className='check-input' />
-              <label for="Competition">Змагання</label><br />
-
-              <input type="radio" name='type' value="Факультатив" id='Optional' className='check-input' />
-              <label for="Optional">Факультатив</label><br />
-
-              <input type="radio" name='type' value="Дискусія" id='Discussion' className='check-input' />
-              <label for="Discussion">Дискусія</label><br />
-
-              <input type="radio" name='type' value="Гурток" id='Circle' className='check-input' />
-              <label for="Circle">Гурток</label><br />
-
-              <input type="radio" name='type' value="Інше" id='Інше' className='check-input' />
-              <label for="Other">Інше</label><br />
-            </div>
-          </div>
+          <FormRadioComponent />
           <button className='submit-button' onClick={createEvent}>Створити подію</button>
         </div>
       </section>
