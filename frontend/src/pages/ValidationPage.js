@@ -23,6 +23,12 @@ const ValidationPage = () => {
             ...prevState,
             [name]: value
         }));
+        
+        // Очистка повідомлення про помилку
+        setErrorMessages(prevState => ({
+            ...prevState,
+            [name]: ''
+        }));
     };
 
     const handleSubmit = async (e) => {
