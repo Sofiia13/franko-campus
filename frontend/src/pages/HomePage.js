@@ -8,21 +8,30 @@ const HomePage = () => {
     useEffect(() => {
         const checkLogin = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/auth/conventional-check-token');
+                const response = await axios.get('http://localhost:3001/auth/check-token');
                 if (response.status === 200) {
+                    setLoggedIn(false);
+                    return
+                }
+            } catch (error) {
+                if (error.response.status === 403) {
                     setLoggedIn(true);
                     return
                 }
-                setLoggedIn(false);
-            } catch (error) {
                 setLoggedIn(false);
             }
         }
         checkLogin();
     }, [])
+    //
+    //Богуславе, ігноруй цей код вище, бо це просто дно
+    //
 
+    //
+    //Це просто для дебагу, щоб кожного разу при зміні стану він виводився в консоль
+    //
     useEffect(() => {
-        console.log(loggedIn); // This will log the updated value of loggedIn whenever it changes
+        console.log(loggedIn); 
     }, [loggedIn]);
     
 

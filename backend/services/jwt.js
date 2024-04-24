@@ -34,15 +34,5 @@ const authCheck = (req, res, next) => {
     }
   }
 
-  const conventionalAuthCheck = (req, res, next) => {
-    const token = req.cookies["access-token"];
-    if (!token) {
-        res.sendStatus(401);
-    }
-    else {
-        next();
-    }
-  }
 
-
-module.exports = { generateToken, verifyToken, authCheck, conventionalAuthCheck };
+module.exports = { generateToken, verifyToken, authCheck };

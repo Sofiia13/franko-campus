@@ -13,11 +13,6 @@ const checkToken = (req, res) => {
   return res.status(200).json({ success: true });
 };
 
-const conventionalCheckToken = (req, res) => {
-  return res.status(200).json({ success: true });
-};
-
-
 const register = async (req, res) => {
   const { reqUsername, reqPassword, reqEmail, reqUniversity } = req.body;
 
@@ -261,7 +256,6 @@ const profileInfo = async (req, res) => {
 
 module.exports = { 
   checkToken, 
-  conventionalCheckToken,
   register, 
   validate, 
   login, 
