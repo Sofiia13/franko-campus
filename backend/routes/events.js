@@ -17,6 +17,8 @@ const eventsController = require("../controllers/eventsController");
 
 router.post("/create-event", eventsController.createEvent);
 
+router.get("/event/:id", eventsController.getEvent);
+
 router.post("/delete-event/:id", eventsController.deleteEvent);
 
 router.post("/edit-event/:id", eventsController.editEvent);
@@ -28,6 +30,8 @@ router.post(
 );
 
 router.post("/signup-to-event/:id", eventsController.signupToEvent);
+
+router.get("/check-signup-to-event/:id", eventsController.checkSignupToEvent)
 
 router.post("/cancel-event-reg/:id", eventsController.cancelEventRegistration);
 

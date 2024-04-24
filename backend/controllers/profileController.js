@@ -4,6 +4,9 @@ const bcrypt = require('bcrypt');
 const getProfileInfo = async(req, res) =>{
     const {userId} = req.body;
     try{
+        if (userId === null) {
+            return res.status(403).json({error: 'Користувач не авторизований'});
+        }
         const user = await users.findByPk(userId);
         const userProfile = await profiles.findOne({
             where: {user_id: userId}
