@@ -2,7 +2,8 @@ const {
   events,
   eventImages,
   eventParticipants,
-  users /* eventParticipant */,
+  users,
+  userBookmarks
 } = require("../models");
 const moment = require("moment-timezone");
 const fuzzysort = require("fuzzysort"); // library for searching with typos
@@ -357,11 +358,7 @@ const signupToEvent = async (req, res) => {
       event_id: eventId,
       user_id: userId,
     });
-    /*     await eventParticipant.create({
-      event_id: eventId,
-      user_id: userId
-    });
- */
+
     return res.status(201).json({ success: true });
   } catch (error) {
     return res.status(500).json({ Error: error });
@@ -407,7 +404,7 @@ const cancelEventRegistration = async (req, res) => {
 
 const getEventsForUser = async (req, res) => {
   const { limit } = req.query;
-  const { userId } = req.body;
+  const userId = returnUserId();
   try {
     if (!(await users.findOne({ where: { id: userId } }))) {
       return res.status(400).json({ error: "Некоректний ID користувача" });
@@ -492,6 +489,28 @@ const filterEvents = async (req, res) => {
   }
 };
 
+
+const addEventToBookmarks = async (req, res) =>{
+    const userId = returnUserId(req);
+    const eventId = req.params.id;
+    try {
+      if(!events.findOne({where: {id: eventId}})){
+        return res.status(404).json({error: "Події з таким ID немає"});
+    }
+
+    await userBookmarks.create({
+        event_id: eventId,
+        user_id: userId
+    });
+
+    return res.status(201).json({success: true});
+
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({error: "Помилка на сервері"});
+    }
+};
+
 module.exports = {
   createEvent,
   deleteEvent,
@@ -507,4 +526,5 @@ module.exports = {
   getEventsForUser,
   getUsersForEvent,
   filterEvents,
+  addEventToBookmarks
 };

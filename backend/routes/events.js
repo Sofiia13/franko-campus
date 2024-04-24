@@ -29,11 +29,13 @@ router.post(
   eventsController.uploadImage
 );
 
+router.post("/cancel-event-reg/:id", eventsController.cancelEventRegistration);
+
 router.post("/signup-to-event/:id", eventsController.signupToEvent);
 
-router.get("/check-signup-to-event/:id", eventsController.checkSignupToEvent)
+router.post("/bookmark-event/:id", eventsController.addEventToBookmarks);
 
-router.post("/cancel-event-reg/:id", eventsController.cancelEventRegistration);
+router.get("/check-signup-to-event/:id", eventsController.checkSignupToEvent)
 
 router.get("/events-list", eventsController.initialListOfEvents);
 
@@ -46,5 +48,7 @@ router.get("/event-list-for-user", eventsController.getEventsForUser);
 router.get("/user-list-for-event", eventsController.getUsersForEvent);
 
 router.get("/filter-events", eventsController.filterEvents);
+
+
 
 module.exports = router;
