@@ -11,11 +11,23 @@ const ValidationPage = () => {
         reqCode: ''
     });
 
+    const [errorMessages, setErrorMessages] = useState({
+        reqUsername: '',
+        reqCode: '',
+        general: ''
+    });
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevState => ({
             ...prevState,
             [name]: value
+        }));
+        
+        // Очистка повідомлення про помилку
+        setErrorMessages(prevState => ({
+            ...prevState,
+            [name]: ''
         }));
     };
 
@@ -29,13 +41,18 @@ const ValidationPage = () => {
                 navigate("/auth/login"); 
             } else {
                 // якщо з сервера прийшла помилка
-                //placeholder
-                alert('Помилка під час валідації')
+                setErrorMessages({
+                    ...errorMessages,
+                    general: 'Помилка під час валідації, спробуйте знову.'
+                });
             }
         } catch (error) {
             // якщо помилка на клієнті
             console.error('Error:', error);
-            alert('Помилка: ' + error.message)
+            setErrorMessages({
+                ...errorMessages,
+                general: 'Помилка: ' + error.message
+            });
         }
     };
 
@@ -46,6 +63,9 @@ const ValidationPage = () => {
                 <form className='form-content' onSubmit={handleSubmit}>
                     <input className="input-wrapper" type="name" id="username" name="reqUsername" placeholder="Ваш юзернейм чи пошта (поки лише юзернейм)" value={formData.reqUsername} onChange={handleChange} required/>
                     <input className="input-wrapper" type="text" id="validationCode" name="reqCode" placeholder="Ваш код" value={formData.reqCode} onChange={handleChange} required/>
+                    <div className='error-general'>
+                        {errorMessages.general && <div className="error-message">{errorMessages.general}</div>}
+                    </div>
                     <button className="submit-button" type="submit">Підтвердити</button>
                     <p className="text-link"><a href="" className="link">Надіслати код ще раз</a></p>
                 </form>
