@@ -3,6 +3,9 @@ import axios from 'axios';
 
 const HomePage = () => {
 
+    //!!!
+    //ось цей стейт використовуй для перевірки чи користувач залогінений
+    //!!!
     const [loggedIn, setLoggedIn] = useState(false);
 
     useEffect(() => {
