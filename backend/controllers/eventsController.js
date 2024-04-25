@@ -7,6 +7,8 @@ const {
 const moment = require("moment-timezone");
 const fuzzysort = require("fuzzysort"); // library for searching with typos
 
+const { returnUserId } = require("../services/jwt");
+
 let SUPABASE_URL = "https://tmgzyqbynitvxdqmbyoz.supabase.co";
 let SUPABASE_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRtZ3p5cWJ5bml0dnhkcW1ieW96Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk4NDY5NzEsImV4cCI6MjAyNTQyMjk3MX0.H74l6_Rf0u0PBS5VxMM9gae1naZxXpU8Hehm5P7IwI8";
@@ -118,6 +120,48 @@ const uploadImage = async (req, res) => {
     });
   }
 };
+
+const getEvent = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const existingEvent = await events.findOne({
+      where: { id },
+    });
+
+    if (!existingEvent) {
+      return res
+        .status(404)
+        .json({ error: "Такої події не знайдено" });
+    }
+
+    // const eventImagesList = await eventImages.findAll({
+    //   where: { event_id: id },
+    // });
+
+    //const images = eventImagesList.map((eventImage) => eventImage.url);
+
+    return res.status(200).json({
+      ...existingEvent.toJSON(),
+      createdAt: moment
+        .tz(existingEvent.createdAt, "UTC")
+        .tz("Europe/Kiev")
+        .format(),
+      updatedAt: moment
+        .tz(existingEvent.updatedAt, "UTC")
+        .tz("Europe/Kiev")
+        .format(),
+    });
+
+  } catch (error) {
+    console.error("Виникла помилка під час отримання події:", error);
+    return res
+      .status(500)
+      .json({ error: "Внутрішня помилка сервера." });
+  }
+}
+
+
 
 //
 //TODO: додати видалення зображень з bucket'а
@@ -288,15 +332,16 @@ const searchEvent = async (req, res) => {
 };
 
 const signupToEvent = async (req, res) => {
-  const { userId } = req.body;
+  const  userId  = returnUserId(req)
   const eventId = req.params.id;
+  console.log(userId, eventId)
   try {
     if (!(await events.findOne({ where: { id: eventId } }))) {
-      return res.status(400).json({ error: "Некоректне id події" });
+      return res.status(404).json({ error: "Некоректне id події" });
     }
 
     if (!(await users.findOne({ where: { id: userId } }))) {
-      return res.status(400).json({ error: "Некоректний ID користувача" });
+      return res.status(404).json({ error: "Некоректний ID користувача" });
     }
 
     const existingParticipant = await eventParticipants.findOne({
@@ -323,15 +368,28 @@ const signupToEvent = async (req, res) => {
   }
 };
 
+const checkSignupToEvent = async (req, res) => {
+  const userId = returnUserId(req);
+  const eventId = req.params.id;
+  try {
+    if (!(await eventParticipants.findOne({ where: { user_id: userId, event_id: eventId } }))) {
+      return res.status(404).json({ error: "Користувач не записаний на цю подію" });
+    }
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ Error: error });
+  }};
+
+
 const cancelEventRegistration = async (req, res) => {
-  const { userId } = req.body;
+  const userId  = returnUserId(req)
   const eventId = req.params.id;
   const existingParticipant = await eventParticipants.findOne({
     where: { user_id: userId, event_id: eventId },
   });
 
   if (!existingParticipant) {
-    return res.status(400).json({
+    return res.status(404).json({
       error:
         "Користувач не записаний на цю подію, або не існує користувача/події.",
     });
@@ -340,8 +398,6 @@ const cancelEventRegistration = async (req, res) => {
     await eventParticipants.destroy({
       where: { event_id: eventId, user_id: userId },
     });
-
-    /*     await eventParticipant.destroy({where:{event_id: eventId, user_id: userId}}); */
 
     res.status(200).json({ success: true });
   } catch (error) {
@@ -439,12 +495,14 @@ const filterEvents = async (req, res) => {
 module.exports = {
   createEvent,
   deleteEvent,
+  getEvent,
   editEvent,
   uploadImage,
   initialListOfEvents,
   extendedListOfEvents,
   searchEvent,
   signupToEvent,
+  checkSignupToEvent,
   cancelEventRegistration,
   getEventsForUser,
   getUsersForEvent,

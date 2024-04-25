@@ -13,11 +13,24 @@ const SignUpPage = () => {
         reqUniversity: ''
     });
 
+    const [errorMessages, setErrorMessages] = useState({
+        reqUsername: '',
+        reqPassword: '',
+        reqEmail: '',
+        reqUniversity: '',
+        general: ''
+    });
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevState => ({
             ...prevState,
             [name]: value
+        }));
+
+        setErrorMessages(prevState => ({
+            ...prevState,
+            [name]: ''
         }));
     };
 
@@ -31,14 +44,17 @@ const SignUpPage = () => {
                 navigate("/auth/validation"); 
             } else {
                 // якщо з сервера прийшла помилка
-                //placeholder
-                alert('Помилка під час реєстрації')
+                setErrorMessages({
+                    ...errorMessages,
+                    general: 'Помилка під час реєстрації, будь ласка, спробуйте знову.'
+                });
             }
         } catch (error) {
             // якщо помилка на клієнті
-
-            console.error('Error:', error);
-            alert('Помилка: ' + error.message)
+            setErrorMessages({
+                ...errorMessages,
+                general: 'Помилка: ' + error.message
+            });
         }
     };
 
@@ -51,6 +67,9 @@ const SignUpPage = () => {
                     <input className="input-wrapper" type="email" id="email" name="reqEmail" placeholder="Пошта" value={formData.reqEmail} onChange={handleChange} required />
                     <input className="input-wrapper" type="text" id="university" name="reqUniversity" placeholder="Назва університету" value={formData.reqUniversity} onChange={handleChange} required />
                     <input className="input-wrapper" type="password" id="password" name="reqPassword" placeholder="Пароль" value={formData.reqPassword} onChange={handleChange} required />
+                    <div className='error-general'>
+                        {errorMessages.general && <div className="error-message">{errorMessages.general}</div>}
+                    </div>
                     <button className="submit-button" type="submit" id="registerButton">Зареєструватись</button>  
                 </form>
                 <p className="text-link">Вже маєте акаунт? <a href="login" className="link">Увійти</a></p>
