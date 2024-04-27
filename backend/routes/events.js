@@ -39,12 +39,12 @@ router.get("/events-list", eventsController.initialListOfEvents);
 
 router.get("/events-list-extended", eventsController.extendedListOfEvents);
 
-router.get("/search-event/:key", eventsController.searchEvent);
-
 router.get("/event-list-for-user", eventsController.getEventsForUser);
 
 router.get("/user-list-for-event", eventsController.getUsersForEvent);
 
 router.get("/filter-events", eventsController.filterEvents);
+
+router.get("/search-events/:key", eventsController.filterSearchedEvents);
 
 module.exports = router;

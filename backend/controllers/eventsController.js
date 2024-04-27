@@ -308,29 +308,6 @@ const extendedListOfEvents = async (req, res) => {
   }
 };
 
-const searchEvent = async (req, res) => {
-  try {
-    let searchingQuery = req.params.key;
-
-    const allEvents = await events.findAll({
-      attributes: { exclude: ["createdAt", "updatedAt"] },
-    });
-
-    const searchResults = allEvents.filter((event) => {
-      return ["name", "organizer", "description"].some((field) => {
-        let fieldValue = event[field] || "";
-        return fuzzysort.single(searchingQuery, fieldValue) !== null;
-      });
-    });
-
-    console.log(searchResults);
-    return res.json(searchResults);
-  } catch (error) {
-    console.error("Виникла помилка під час пошуку подій:", error);
-    return res.status(500).json({ error: "Внутрішня помилка сервера." });
-  }
-};
-
 const signupToEvent = async (req, res) => {
   const  userId  = returnUserId(req)
   const eventId = req.params.id;
@@ -492,6 +469,48 @@ const filterEvents = async (req, res) => {
   }
 };
 
+const filterSearchedEvents = async (req, res) => {
+  try {
+    let searchingQuery = req.params.key;
+    const eventData = req.body;
+    const whereClause = {};
+
+    const allEvents = await events.findAll({
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+    });
+
+    const searchResults = allEvents.filter((event) => {
+      return ["name", "organizer", "description"].some((field) => {
+        let fieldValue = event[field] || "";
+        return fuzzysort.single(searchingQuery, fieldValue) !== null;
+      });
+    });
+
+    if (eventData.format) {
+      whereClause.format = eventData.format;
+    }
+    if (eventData.cost) {
+      whereClause.cost = eventData.cost;
+    }
+    if (eventData.type) {
+      whereClause.type = eventData.type;
+    }
+
+    const filteredData = searchResults.filter((event) => {
+      return (
+        (whereClause.format ? event.format === whereClause.format : true) &&
+        (whereClause.cost ? event.cost === whereClause.cost : true) &&
+        (whereClause.type ? event.type === whereClause.type : true)
+      );
+    });
+
+    return res.status(200).json(filteredData);
+  } catch (error) {
+    console.error("Виникла помилка під час сортування подій:", error);
+    return res.status(500).json({ error: "Внутрішня помилка сервера." });
+  }
+};
+
 module.exports = {
   createEvent,
   deleteEvent,
@@ -500,11 +519,11 @@ module.exports = {
   uploadImage,
   initialListOfEvents,
   extendedListOfEvents,
-  searchEvent,
   signupToEvent,
   checkSignupToEvent,
   cancelEventRegistration,
   getEventsForUser,
   getUsersForEvent,
   filterEvents,
+  filterSearchedEvents,
 };
