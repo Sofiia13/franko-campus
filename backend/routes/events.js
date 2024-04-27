@@ -14,6 +14,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 const eventsController = require("../controllers/eventsController");
+const { conventionalAuthCheck } = require("../services/jwt");
+
+router.get("/supabase-credentials", conventionalAuthCheck, eventsController.getSupabaseCredentials);
 
 router.post("/create-event", eventsController.createEvent);
 
