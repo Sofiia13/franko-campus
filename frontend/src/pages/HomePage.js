@@ -11,8 +11,8 @@ const HomePage = () => {
     useEffect(() => {
         const downloadImage = async () => {
             try {
-                const response = await axios.get("http://localhost:3001/events/supabase-credentials" )
-                const supabase = await createClient(response.data.SUPABASE_URL, response.data.SUPABASE_KEY);
+                const response = await axios.get("http://localhost:3001/events/supabase-credentials" )          //запит для отримання даних для доступу до supabase
+                const supabase = await createClient(response.data.SUPABASE_URL, response.data.SUPABASE_KEY);    //"підключення" до supabase
 
                 const { data, error } = await supabase
                     .storage
@@ -23,8 +23,8 @@ const HomePage = () => {
                     throw new Error('Error happened while downloading file');
                 }
     
-                const base64Image = URL.createObjectURL(data);
-                setMainPhoto(base64Image);
+                const base64Image = URL.createObjectURL(data);          //перетворення отриманого файлу в base64
+                setMainPhoto(base64Image);                              //збереження base64 в стейт
             } catch (error) {
                 console.error('Error downloading image:', error);
             }
