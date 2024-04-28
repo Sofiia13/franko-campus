@@ -35,18 +35,6 @@ const authCheck = (req, res, next) => {
     }
   }
 
-const conventionalAuthCheck = (req, res, next) => {
-    const token = req.cookies["access-token"];
-    if (!token) {
-        res.sendStatus(403);
-    }
-    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-        if (err) {
-            rres.sendStatus(403);
-        }
-        next();
-    });
-};
 
 function returnUserId(req){
     const accessToken = req.cookies["access-token"];
@@ -57,4 +45,4 @@ function returnUserId(req){
     return decoded.id;
 };
 
-module.exports = { generateToken, verifyToken, authCheck, conventionalAuthCheck, returnUserId };
+module.exports = { generateToken, verifyToken, authCheck, returnUserId };
