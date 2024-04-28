@@ -4,12 +4,12 @@ const HomePage = () => {
     return (
         <body>
             <div className="main-card-img">
-                    <img src="..." className="main-img" alt="..." />
-                    <div className="main-card-text">
-                        <h3>Franko Campus</h3>
-                        <p>соціальний проект, що дозволяє студентам знаходити нові можливості в університетському середовищі</p>
-                    </div>
+                <img src="..." className="main-img" alt="..." />
+                <div className="main-card-text">
+                    <h3>Franko Campus</h3>
+                    <p>соціальний проект, що дозволяє студентам знаходити нові можливості в університетському середовищі</p>
                 </div>
+            </div>
 
             <section className="content">
                 <h2 className="section-title">Нещодавно опубліковані події</h2>
