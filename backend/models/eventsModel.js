@@ -78,6 +78,11 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: 'event_id',
             onDelete: 'CASCADE',
         })
+
+        events.hasMany(models.ratings, {
+            foreignKey: 'event_id',
+            onDelete: 'CASCADE',
+        })
     };
 
     return events;
