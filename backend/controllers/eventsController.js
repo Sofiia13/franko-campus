@@ -19,7 +19,13 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 const fs = require("fs");
 const { json } = require("sequelize");
 
+
 // реєстрація нової події
+
+const getSupabaseCredentials = async (req, res) => {
+  return res.status(200).json({ SUPABASE_URL, SUPABASE_KEY });
+};
+  
 
 const createEvent = async (req, res) => {
   try {
@@ -512,6 +518,7 @@ const filterSearchedEvents = async (req, res) => {
 };
 
 module.exports = {
+  getSupabaseCredentials,
   createEvent,
   deleteEvent,
   getEvent,
