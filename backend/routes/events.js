@@ -15,6 +15,10 @@ const upload = multer({ storage: storage });
 
 const eventsController = require("../controllers/eventsController");
 
+
+//передавати на фронтенд дані про supabase не є безпечним, але це поки що зроблено для тесту.
+router.get("/supabase-credentials", eventsController.getSupabaseCredentials);
+
 router.post("/create-event", eventsController.createEvent);
 
 router.get("/event/:id", eventsController.getEvent);

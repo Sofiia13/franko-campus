@@ -35,6 +35,7 @@ const authCheck = (req, res, next) => {
     }
   }
 
+
 function returnUserId(req){
     const accessToken = req.cookies["access-token"];
     if (!accessToken) {
