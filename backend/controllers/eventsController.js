@@ -481,6 +481,10 @@ const addEventToBookmarks = async (req, res) =>{
         return res.status(404).json({error: "Події з таким ID немає"});
     }
 
+      if(await userBookmarks.findOne({where:{user_id: userId, event_id: eventId}})){
+        return res.status(400).json({error: "Подія вже в закладках"});
+      }
+
     await userBookmarks.create({
         event_id: eventId,
         user_id: userId
@@ -489,7 +493,6 @@ const addEventToBookmarks = async (req, res) =>{
     return res.status(201).json({success: true});
 
     } catch (error) {
-      console.log(error);
       return res.status(500).json({error: "Помилка на сервері"});
     }
 };
