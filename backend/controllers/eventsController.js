@@ -3,6 +3,7 @@ const {
   eventImages,
   eventParticipants,
   users /* eventParticipant */,
+  ratings
 } = require("../models");
 const moment = require("moment-timezone");
 const fuzzysort = require("fuzzysort"); // library for searching with typos
@@ -517,6 +518,68 @@ const filterSearchedEvents = async (req, res) => {
   }
 };
 
+const rateEvent = async (req, res) =>{
+  const userId = returnUserId(req);
+  const eventId = req.params.id;
+  const {rating} = req.body;
+
+  try {
+    if(!await events.findOne({where: {id: eventId}})){
+      return res.status(404).json({error: "Подію не знайдено"});
+    }
+
+    if(await ratings.findOne({where: {user_id: userId , event_id: eventId}})){
+      return res.status(418).json({error: "Користувач вже оцінив подію"});
+    }
+    
+    await ratings.create({
+      user_id: userId,
+      event_id: eventId,
+      rating: rating 
+    });
+
+    return res.status(201).json("success:true");
+
+  } catch (error) {
+    console.log(`${error}`);
+    return res.status(500).json({error:"Внутрішня помилка сервера"});
+  }
+  
+};
+
+const deleteRating = async (req, res) =>{
+  const userId = returnUserId(req);
+  const eventId = req.params.id;
+
+  try {
+    if(!await events.findOne({where: {id: eventId}})){
+      return res.status(404).json({error: "Подію не знайдено"});
+    }
+
+    if(!await ratings.findOne({where: {user_id: userId , event_id: eventId}})){
+      return res.status(418).json({error: "Користувач не оцінював подію"});
+    }
+    
+    await ratings.destroy({where: {
+      user_id: userId,
+      event_id: eventId
+    }});
+
+    return res.status(201).json("success:true");
+
+  } catch (error) {
+    console.log(`${error}`);
+    return res.status(500).json({error:"Внутрішня помилка сервера"});
+  }
+  
+};
+
+const getEventRating = async (req, res) =>{
+  
+};
+
+
+
 module.exports = {
   getSupabaseCredentials,
   createEvent,
@@ -533,4 +596,7 @@ module.exports = {
   getUsersForEvent,
   filterEvents,
   filterSearchedEvents,
+  rateEvent,
+  deleteRating,
+  getEventRating
 };

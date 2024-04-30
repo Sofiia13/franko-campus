@@ -17,15 +17,13 @@ const eventsController = require("../controllers/eventsController");
 
 
 //передавати на фронтенд дані про supabase не є безпечним, але це поки що зроблено для тесту.
-router.get("/supabase-credentials", eventsController.getSupabaseCredentials);
+
 
 router.post("/create-event", eventsController.createEvent);
 
-router.get("/event/:id", eventsController.getEvent);
+router.delete("/delete-event/:id", eventsController.deleteEvent);
 
-router.post("/delete-event/:id", eventsController.deleteEvent);
-
-router.post("/edit-event/:id", eventsController.editEvent);
+router.patch("/edit-event/:id", eventsController.editEvent);
 
 router.post(
   "/upload-image/:id",
@@ -33,11 +31,19 @@ router.post(
   eventsController.uploadImage
 );
 
+router.post("/cancel-event-reg/:id", eventsController.cancelEventRegistration);
+
 router.post("/signup-to-event/:id", eventsController.signupToEvent);
 
-router.get("/check-signup-to-event/:id", eventsController.checkSignupToEvent)
+router.post("/rate-event/:id", eventsController.rateEvent);
 
-router.post("/cancel-event-reg/:id", eventsController.cancelEventRegistration);
+router.delete("/delete-event-rating/:id", eventsController.deleteRating);
+
+router.get("/supabase-credentials", eventsController.getSupabaseCredentials);
+
+router.get("/event/:id", eventsController.getEvent);
+
+router.get("/check-signup-to-event/:id", eventsController.checkSignupToEvent)
 
 router.get("/events-list", eventsController.initialListOfEvents);
 
@@ -50,5 +56,7 @@ router.get("/user-list-for-event", eventsController.getUsersForEvent);
 router.get("/filter-events", eventsController.filterEvents);
 
 router.get("/search-events/:key", eventsController.filterSearchedEvents);
+
+router.get("/get-event-rating/:id", eventsController.getEventRating);
 
 module.exports = router;
