@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import bookmark from '../img/bookmark.svg';
 import axios from 'axios';
+import { useNavigate  } from 'react-router-dom'; 
 
 function ProfilePage() {
+    const navigate = useNavigate();
 
     const [userData, setUserData] = useState({});
 
@@ -17,7 +19,7 @@ function ProfilePage() {
                 if (error.response && error.response.status === 404) {
                     alert("Користувача або дані про профіль не знайдено");
                 } if (error.response && error.response.status === 403) {
-                    alert("Користувач не авторизований");
+                    navigate("/auth/login")
                 } else {
                     alert("Сталася помилка під час отримання даних про користувача");
                 }

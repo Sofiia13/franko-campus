@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 
 const HomePage = () => {
@@ -44,20 +44,19 @@ const HomePage = () => {
                     return
                 }
             } catch (error) {
-               
                 setLoggedIn(false);
             }
         }
         checkLogin();
     }, [])
-    useEffect(() => {
-        console.log(loggedIn); 
-    }, [loggedIn]);
-
-    
+   
 
     return (
         <body>
+            <div className='error-login'>
+                {!loggedIn && <div className="error-message">Схоже, що ви не залоговані. Увійдіть <a href="/auth/login">тут.</a></div>}
+            </div>
+
             <div className="main-card-img">
                 <img src={mainPhoto} className="main-img" alt="..." />
                 <div className="main-card-text">
