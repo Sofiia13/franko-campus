@@ -29,6 +29,15 @@ function ProfilePage() {
         fetchData();
     }, []);
 
+    const logout = async () => {
+        try {
+            await axios.get('http://localhost:3001/auth/logout');
+            navigate("/auth/login");
+        } catch (error) {
+            alert("Помилка при виході з облікового запису");
+        }
+    }
+
   return (
     <body>
         <section className="content">
@@ -58,6 +67,8 @@ function ProfilePage() {
                         <h3>Факультет:</h3>
                         <p>{userData.faculty === undefined ? "Не заповнено" : userData.faculty}</p>
                     </div>
+                    {/* Поки що я наклав на цю кнопку стиль submit-button, потрібно буде створити інший стиль */}
+                    <button className='submit-button' onClick={logout}>Вийти з облікового запису</button>
                 </div>
             </div>
             <div className='section-title'>
