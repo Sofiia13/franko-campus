@@ -2,40 +2,27 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 
 const HomePage = () => {
-
-    //!!!
-    //ось цей стейт використовуй для перевірки чи користувач залогінений
-    //!!!
     const [loggedIn, setLoggedIn] = useState(false);
 
     useEffect(() => {
         const checkLogin = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/auth/check-token');
+                const response = await axios.get('http://localhost:3001/auth/conventional-check-token'); 
                 if (response.status === 200) {
-                    setLoggedIn(false);
-                    return
-                }
-            } catch (error) {
-                if (error.response.status === 403) {
                     setLoggedIn(true);
                     return
                 }
+            } catch (error) {
+               
                 setLoggedIn(false);
             }
         }
         checkLogin();
     }, [])
-    //
-    //Богуславе, ігноруй цей код вище, бо це просто дно
-    //
-
-    //
-    //Це просто для дебагу, щоб кожного разу при зміні стану він виводився в консоль
-    //
     useEffect(() => {
         console.log(loggedIn); 
     }, [loggedIn]);
+
     
 
     return (
