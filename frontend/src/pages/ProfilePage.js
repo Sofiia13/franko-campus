@@ -1,7 +1,32 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import bookmark from '../img/bookmark.svg';
+import axios from 'axios';
 
 function ProfilePage() {
+
+    const [userData, setUserData] = useState({});
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(
+                    'http://localhost:3001/profile/get-profile-info/'
+                );
+                setUserData(response.data);
+            } catch (error) {
+                if (error.response && error.response.status === 404) {
+                    alert("Користувача або дані про профіль не знайдено");
+                } if (error.response && error.response.status === 403) {
+                    alert("Користувач не авторизований");
+                } else {
+                    alert("Сталася помилка під час отримання даних про користувача");
+                }
+            }
+        };
+
+        fetchData();
+    }, []);
+
   return (
     <body>
         <section className="content">
@@ -10,26 +35,26 @@ function ProfilePage() {
                     <img src="..." alt="..." />
                 </div>
                 <div className='user-info'>
-                    <h2 className="user-name">UserName</h2>
+                    <h2 className="user-name">{userData.username === undefined ? "Отримання даних..." : userData.username}</h2>
                     <div className='user-text'>
                         <h3>Ім'я:</h3>
-                        <p>Ім'я</p>
+                        <p>{userData.first_name === undefined ? "Не заповнено" : userData.first_name}</p>
                     </div>
                     <div className='user-text'>
                         <h3>Прізвище:</h3>
-                        <p>Прізвище</p>
+                        <p>{userData.last_name === undefined ? "Не заповнено" : userData.last_name}</p>
                     </div>
                     <div className='user-text'>
                         <h3>Статус:</h3>
-                        <p>Студент</p>
+                        <p>{userData.status === undefined ? "Не заповнено" : userData.status}</p>
                     </div>
                     <div className='user-text'>
                         <h3>Університет:</h3>
-                        <p>Університет</p>
+                        <p>{userData.university === undefined ? "Не заповнено" : userData.university}</p>
                     </div>
                     <div className='user-text'>
                         <h3>Факультет:</h3>
-                        <p>Факультет</p>
+                        <p>{userData.faculty === undefined ? "Не заповнено" : userData.faculty}</p>
                     </div>
                 </div>
             </div>
@@ -79,7 +104,7 @@ function ProfilePage() {
                 <div className="cards-gallery">
                     <p>
                     Ви не маєте опублікованих подій <br/>
-                    Щоб дізнатися як створити подію перейдіть за <a href=''>посиланням</a>
+                    Щоб дізнатися як, створити подію перейдіть за <a href=''>посиланням</a>
                     </p>
                 </div>
             </div>

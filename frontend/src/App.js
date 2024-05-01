@@ -31,7 +31,7 @@ function App() {
           <Route path="/auth/login" element={<LoginPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/addevent" element={<AddEventPage />} />
-          <Route path="/event" element={<EventPage />} />
+          <Route path="/event/:id" element={<EventPage />} />
           <Route path='/search' element={<SearchResultsPage />} />
         </Routes>
       </BrowserRouter>

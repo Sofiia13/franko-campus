@@ -7,6 +7,7 @@ const generateToken = (user) => {
     return jwt.sign(user, `${process.env.TOKEN_SECRET}`, {
         expiresIn: "7d",
     });
+    
 }
 
 const verifyToken = (req, res, next) => {
@@ -45,4 +46,16 @@ const authCheck = (req, res, next) => {
   }
 
 
-module.exports = { generateToken, verifyToken, authCheck, conventionalAuthCheck };
+
+
+
+function returnUserId(req){
+    const accessToken = req.cookies["access-token"];
+    if (!accessToken) {
+        return null;
+    }
+    const decoded = jwt.verify(accessToken, process.env.TOKEN_SECRET);
+    return decoded.id;
+};
+
+module.exports = { generateToken, verifyToken, authCheck, returnUserId, conventionalAuthCheck};
