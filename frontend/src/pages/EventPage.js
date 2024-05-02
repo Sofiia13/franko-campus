@@ -15,8 +15,8 @@ function EventPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const credentials = await axios.get("http://localhost:3001/events/supabase-credentials" )          //запит для отримання даних для доступу до supabase
-                const supabase = await createClient(credentials.data.SUPABASE_URL, credentials.data.SUPABASE_KEY);  
+                const credentials = await axios.get("http://localhost:3001/events/supabase-credentials")          //запит для отримання даних для доступу до supabase
+                const supabase = await createClient(credentials.data.SUPABASE_URL, credentials.data.SUPABASE_KEY);
 
                 const response = await axios.get(
                     `http://localhost:3001/events/event/${id}`
@@ -28,13 +28,13 @@ function EventPage() {
                     .storage
                     .from('campus-bucket')
                     .download(`${response.data.images[0]}`);
-    
+
                 if (error) {
                     throw new Error('Error happened while downloading file');
                 }
 
                 const base64Image = URL.createObjectURL(data);          //перетворення отриманого файлу в base64
-                setEventPhoto(base64Image); 
+                setEventPhoto(base64Image);
 
             } catch (error) {
                 if (error.response && error.response.status === 404) {
@@ -54,13 +54,22 @@ function EventPage() {
                 const response = await axios.get(
                     `http://localhost:3001/events/check-signup-to-event/${id}`
                 );
-                setRegisteredToEvent(response.status !== 404);
+                if (response.status === 200) {
+                    setRegisteredToEvent(true);
+                    return
+                }
+                setRegisteredToEvent(false);
             } catch (error) {
-                console.log("Сталася помилка під час перевірки реєстрації на подію");
+                if (error.response && error.response.status === 404) {
+                    setRegisteredToEvent(false);
+                } else {
+                    console.log("Сталася помилка під час перевірки реєстрації на подію");
+                }
             }
         };
         checkIfRegistered();
     }, [id]);
+
 
     const signupToEvent = async () => {
         try {
@@ -111,7 +120,7 @@ function EventPage() {
                         </div>
                         {/* Я додав інформацію про формат-вартість-тип тут, адже тут воно виглядало найкраще з точки зору стилів
                         тому, його потрібно буде переписати і поставити на інше місце, мабуть */}
-                        
+
                         <p>Формат: {eventObject.format}</p>
                         <p>Вартість: {eventObject.cost}</p>
                         <p>Тип: {eventObject.type}</p>

@@ -285,6 +285,14 @@ const initialListOfEvents = async (req, res) => {
         .format(),
     }));
 
+    const images = await eventImages.findAll();
+
+    listJSON.forEach((event) => {
+      event.images = images
+        .filter((image) => image.event_id === event.id)
+        .map((image) => image.url);
+    });
+
     return res.json(listJSON);
   } catch (error) {
     console.error("Виникла помилка під час відображення списку подій:", error);
@@ -561,6 +569,14 @@ const filterSearchedEvents = async (req, res) => {
         (whereClause.cost ? event.cost === whereClause.cost : true) &&
         (whereClause.type ? event.type === whereClause.type : true)
       );
+    });
+
+    const images = await eventImages.findAll();
+
+    filteredData.forEach((event) => {
+      event.dataValues.images = images
+        .filter((image) => image.event_id === event.id)
+        .map((image) => image.url);
     });
 
     return res.status(200).json(filteredData);
