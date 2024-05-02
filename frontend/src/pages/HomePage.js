@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 
 const HomePage = () => {
 
     const { createClient } = require("@supabase/supabase-js");
-
     const [mainPhoto, setMainPhoto] = useState(null);
+
+    const [loggedIn, setLoggedIn] = useState(false);
 
 
     useEffect(() => {
@@ -32,11 +33,30 @@ const HomePage = () => {
     
         downloadImage();
     }, []);
-    
-    
+
+
+    useEffect(() => {
+        const checkLogin = async () => {
+            try {
+                const response = await axios.get('http://localhost:3001/auth/conventional-check-token'); 
+                if (response.status === 200) {
+                    setLoggedIn(true);
+                    return
+                }
+            } catch (error) {
+                setLoggedIn(false);
+            }
+        }
+        checkLogin();
+    }, [])
+   
 
     return (
         <body>
+            <div className='error-login'>
+                {!loggedIn && <div className="error-message">Схоже, що ви не залоговані. Увійдіть <a href="/auth/login">тут.</a></div>}
+            </div>
+
             <div className="main-card-img">
                 <img src={mainPhoto} className="main-img" alt="..." />
                 <div className="main-card-text">
