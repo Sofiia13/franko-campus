@@ -141,11 +141,15 @@ const getEvent = async (req, res) => {
         .json({ error: "Такої події не знайдено" });
     }
 
-    // const eventImagesList = await eventImages.findAll({
-    //   where: { event_id: id },
-    // });
+    const eventImagesList = await eventImages.findAll({
+      where: { event_id: id },
+    });
 
-    //const images = eventImagesList.map((eventImage) => eventImage.url);
+    let images = [];
+
+    if (eventImagesList) {
+      images = eventImagesList.map((image) => image.url);
+    }
 
     return res.status(200).json({
       ...existingEvent.toJSON(),
@@ -157,6 +161,7 @@ const getEvent = async (req, res) => {
         .tz(existingEvent.updatedAt, "UTC")
         .tz("Europe/Kiev")
         .format(),
+      images,
     });
 
   } catch (error) {
