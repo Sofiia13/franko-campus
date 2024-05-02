@@ -1,38 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import CardsGalleryComponent from '../components/CardsGalleryComponent'; 
 
 const HomePage = () => {
 
     const { createClient } = require("@supabase/supabase-js");
 
     const [mainPhoto, setMainPhoto] = useState(null);
+    const [events, setEvents] = useState([]);
 
 
     useEffect(() => {
-        const downloadImage = async () => {
+        const fetchData = async () => {
             try {
-                const response = await axios.get("http://localhost:3001/events/supabase-credentials" )          //запит для отримання даних для доступу до supabase
-                const supabase = await createClient(response.data.SUPABASE_URL, response.data.SUPABASE_KEY);    //"підключення" до supabase
+                const credentials = await axios.get("http://localhost:3001/events/supabase-credentials");
+                const supabase = await createClient(credentials.data.SUPABASE_URL, credentials.data.SUPABASE_KEY);
 
                 const { data, error } = await supabase
                     .storage
                     .from('campus-bucket')
                     .download('public/home-page-photo.png');
-    
+
                 if (error) {
                     throw new Error('Error happened while downloading file');
                 }
-    
-                const base64Image = URL.createObjectURL(data);          //перетворення отриманого файлу в base64
-                setMainPhoto(base64Image);                              //збереження base64 в стейт
+
+                const base64Image = URL.createObjectURL(data);
+                setMainPhoto(base64Image);
+
+                const eventsResponse = await axios.get("http://localhost:3001/events/events-list");
+                setEvents(eventsResponse.data);
             } catch (error) {
-                console.error('Error downloading image:', error);
+                console.error('Error:', error);
             }
         };
-    
-        downloadImage();
+
+        fetchData();
     }, []);
-    
     
 
     return (
@@ -47,41 +51,7 @@ const HomePage = () => {
 
             <section className="content">
                 <h2 className="section-title">Нещодавно опубліковані події</h2>
-                <div className="cards-gallery">
-                    <div className="card">
-                        <div className="card-img">
-                            <a href="">
-                                <img src="..." alt="..." />
-                            </a>
-                        </div>
-                        <div className="card-desc">
-                            <h4 className="card-title">Some card-title</h4>
-                            <p className="card-text"> some card-text some card-text</p>
-                        </div>
-                    </div>
-                    <div className="card">
-                        <div className="card-img">
-                            <a href="">
-                                <img src="..." alt="..." />
-                            </a>
-                        </div>
-                        <div className="card-desc">
-                            <h4 className="card-title">Some card-title</h4>
-                            <p className="card-text"> some card-text some card-text</p>
-                        </div>
-                    </div>
-                    <div className="card">
-                        <div className="card-img">
-                            <a href="">
-                                <img src="..." alt="..." />
-                            </a>
-                        </div>
-                        <div className="card-desc">
-                            <h4 className="card-title">Some card-title</h4>
-                            <p className="card-text"> some card-text some card-text</p>
-                        </div>
-                    </div>
-                </div>
+                <CardsGalleryComponent events={events} />
             </section>
         </body>
     );

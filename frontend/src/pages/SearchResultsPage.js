@@ -14,6 +14,7 @@ function SearchResultsPage() {
       try {
         const response = await axios.get(`http://localhost:3001/events/search-events/${searchingQuery}`);
         setEvents(response.data);
+        console.log(response.data)
       } catch (error) {
         alert("Сталась помилка під час пошуку.");
       }

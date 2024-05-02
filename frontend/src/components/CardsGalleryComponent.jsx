@@ -2,14 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 
-const Card = ({ eventId, imageSrc, title, description, organizer }) => (
+const Card = ({ eventId, imageSrc, name, description, organizer }) => (
   <Link to={`/event/${eventId}`} className="card-link"> 
     <div className="card">
       <div className="card-img">
-        <img src={imageSrc} alt={title} />
+        <img src={imageSrc} alt={name} />
       </div>
       <div className="card-desc">
-        <h4 className="card-title">{title}</h4>
+        <h4 className="card-title">{name}</h4>
         <p className="card-organizer">Організатор: {organizer}</p>
         <p className="card-text">{description}</p>
       </div>
@@ -25,7 +25,7 @@ const CardsGalleryComponent = ({ events }) => (
           key={event.id}
           eventId={event.id} 
           imageSrc={event.imageSrc}
-          title={event.title}
+          name={event.name}
           description={event.description}
           organizer={event.organizer} 
         />
