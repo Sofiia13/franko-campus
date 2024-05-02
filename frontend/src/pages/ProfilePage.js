@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import bookmark from '../img/bookmark.svg';
 import axios from 'axios';
+import { useNavigate  } from 'react-router-dom'; 
 
 function ProfilePage() {
+    const navigate = useNavigate();
 
     const [userData, setUserData] = useState({});
 
@@ -17,7 +19,7 @@ function ProfilePage() {
                 if (error.response && error.response.status === 404) {
                     alert("Користувача або дані про профіль не знайдено");
                 } if (error.response && error.response.status === 403) {
-                    alert("Користувач не авторизований");
+                    navigate("/auth/login")
                 } else {
                     alert("Сталася помилка під час отримання даних про користувача");
                 }
@@ -26,6 +28,15 @@ function ProfilePage() {
 
         fetchData();
     }, []);
+
+    const logout = async () => {
+        try {
+            await axios.get('http://localhost:3001/auth/logout');
+            navigate("/auth/login");
+        } catch (error) {
+            alert("Помилка при виході з облікового запису");
+        }
+    }
 
   return (
     <body>
@@ -56,6 +67,8 @@ function ProfilePage() {
                         <h3>Факультет:</h3>
                         <p>{userData.faculty === undefined ? "Не заповнено" : userData.faculty}</p>
                     </div>
+                    {/* Поки що я наклав на цю кнопку стиль submit-button, потрібно буде створити інший стиль */}
+                    <button className='submit-button' onClick={logout}>Вийти з облікового запису</button>
                 </div>
             </div>
             <div className='section-title'>

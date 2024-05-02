@@ -35,6 +35,19 @@ const authCheck = (req, res, next) => {
     }
   }
 
+  const conventionalAuthCheck = (req, res, next) => {
+    const token = req.cookies["access-token"];
+    if (!token) {
+      res.sendStatus(403);
+    }
+    else {
+      next();
+    }
+  }
+
+
+
+
 
 function returnUserId(req){
     const accessToken = req.cookies["access-token"];
@@ -45,4 +58,4 @@ function returnUserId(req){
     return decoded.id;
 };
 
-module.exports = { generateToken, verifyToken, authCheck, returnUserId };
+module.exports = { generateToken, verifyToken, authCheck, returnUserId, conventionalAuthCheck};
