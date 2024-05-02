@@ -55,4 +55,6 @@ router.get("/search-events/:key", eventsController.filterSearchedEvents);
 
 router.post("/:id/add-comment", eventsController.addComment);
 
+router.delete("/delete-comment", eventsController.deleteComment);
+
 module.exports = router;

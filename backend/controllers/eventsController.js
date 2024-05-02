@@ -530,11 +530,11 @@ const addComment = async (req, res) => {
   const text = req.body.text
   console.log(text);
 
-  try{
+  try {
     if (text.trim() === "") {
       return res.status(400).json({ error: "Необхідно заповнити всі поля." });
     }
-    
+
     const event = await events.findOne({ where: { id: eventId } });
     if (!event) {
       return res.status(404).json({ error: "No such event" });
@@ -549,13 +549,36 @@ const addComment = async (req, res) => {
     )
 
     return res.status(201).json({ success: true });
-    }
+  }
   catch (error) {
-    console.error(error); 
+    console.error(error);
     return res.status(500).json({ Error: error });
   }
 
 
+}
+
+const deleteComment = async (req, res) => {
+  const userId = returnUserId(req);
+  const commentId = req.body.id;
+  try {
+    const comment = await comments.findOne({ where: { id: commentId } });
+    if (!comment) {
+      return res.status(404).json({ error: "No such comment. Try refreshing page" });
+    }
+
+    if (comment.user_id !== userId) {
+      return res.status(403).json({ error: "You can't delete this comment", message: "I know what you are trying to do" });
+    }
+
+    await comments.destroy({ where: { id: commentId } });
+
+    return res.status(200).json({ success: true });
+  }
+  catch (error) {
+    console.error(error);
+    return res.status(500).json({ Error: error });
+  }
 }
 
 module.exports = {
@@ -574,5 +597,6 @@ module.exports = {
   getUsersForEvent,
   filterEvents,
   filterSearchedEvents,
-  addComment
+  addComment,
+  deleteComment
 };
