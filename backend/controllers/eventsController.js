@@ -519,86 +519,89 @@ const filterSearchedEvents = async (req, res) => {
   }
 };
 
-const rateEvent = async (req, res) =>{
+const rateEvent = async (req, res) => {
   const userId = returnUserId(req);
   const eventId = req.params.id;
-  const {rating} = req.body;
+  const { rating } = req.body;
 
   try {
-    if(!await events.findOne({where: {id: eventId}})){
-      return res.status(404).json({error: "Подію не знайдено"});
+    if (!(await events.findOne({ where: { id: eventId } }))) {
+      return res.status(404).json({ error: "Подію не знайдено" });
     }
 
-    if(await ratings.findOne({where: {user_id: userId , event_id: eventId}})){
-      return res.status(418).json({error: "Користувач вже оцінив подію"});
+    if (
+      await ratings.findOne({ where: { user_id: userId, event_id: eventId } })
+    ) {
+      return res.status(418).json({ error: "Користувач вже оцінив подію" });
     }
-    
+
     await ratings.create({
       user_id: userId,
       event_id: eventId,
-      rating: rating 
+      rating: rating,
     });
 
     return res.status(201).json("success:true");
-
   } catch (error) {
     console.log(`${error}`);
-    return res.status(500).json({error:"Внутрішня помилка сервера"});
+    return res.status(500).json({ error: "Внутрішня помилка сервера" });
   }
-  
 };
 
-const deleteRating = async (req, res) =>{
+const deleteRating = async (req, res) => {
   const userId = returnUserId(req);
   const eventId = req.params.id;
 
   try {
-    if(!await events.findOne({where: {id: eventId}})){
-      return res.status(404).json({error: "Подію не знайдено"});
+    if (!(await events.findOne({ where: { id: eventId } }))) {
+      return res.status(404).json({ error: "Подію не знайдено" });
     }
 
-    if(!await ratings.findOne({where: {user_id: userId , event_id: eventId}})){
-      return res.status(418).json({error: "Користувач не оцінював подію"});
+    if (
+      !(await ratings.findOne({
+        where: { user_id: userId, event_id: eventId },
+      }))
+    ) {
+      return res.status(418).json({ error: "Користувач не оцінював подію" });
     }
-    
-    await ratings.destroy({where: {
-      user_id: userId,
-      event_id: eventId
-    }});
+
+    await ratings.destroy({
+      where: {
+        user_id: userId,
+        event_id: eventId,
+      },
+    });
 
     return res.status(201).json("success:true");
-
   } catch (error) {
     console.log(`${error}`);
-    return res.status(500).json({error:"Внутрішня помилка сервера"});
+    return res.status(500).json({ error: "Внутрішня помилка сервера" });
   }
-  
 };
 
-const getEventRating = async (req, res) =>{
+const getEventRating = async (req, res) => {
   const eventId = req.params.id;
   try {
-    if(!await events.findOne({where: {id: eventId}})){
-      return res.status(400).json({error: "Подія з таким ID не існує"});
+    if (!(await events.findOne({ where: { id: eventId } }))) {
+      return res.status(400).json({ error: "Подія з таким ID не існує" });
     }
-    if(!await ratings.findOne({where: {event_id: eventId}})){
-      return res.status(200).json({average_rating: null, user_count: 0});
+    if (!(await ratings.findOne({ where: { event_id: eventId } }))) {
+      return res.status(200).json({ average_rating: null, user_count: 0 });
     }
 
     const result = await ratings.findAll({
       attributes: [
-        [sequelize.literal('ROUND(AVG(rating), 1)'), 'average_rating'],
-        [sequelize.fn('COUNT', sequelize.col('user_id')), 'user_count'] 
+        [sequelize.literal("ROUND(AVG(rating), 1)"), "average_rating"],
+        [sequelize.fn("COUNT", sequelize.col("user_id")), "user_count"],
       ],
       where: {
-        event_id: eventId
-      }
+        event_id: eventId,
+      },
     });
     return res.status(200).json(result[0].dataValues);
-    } catch (error) {
+  } catch (error) {
     console.log(error);
-    return res.status(500).json({error: `Помилка на сервері ${error}`});
-
+    return res.status(500).json({ error: `Помилка на сервері ${error}` });
   }
 };
 
