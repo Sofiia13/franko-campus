@@ -10,12 +10,8 @@ import AddEventPage from './pages/AddEventPage';
 import EventPage from './pages/EventPage';
 import SearchResultsPage from './pages/SearchResultsPage.js';
 
-
-import HeaderComponent from './components/HeaderComponent.jsx';
-
 import './App.css';
 
-import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
 
 function App() {
   return (
