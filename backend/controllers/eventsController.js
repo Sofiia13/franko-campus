@@ -5,6 +5,7 @@ const {
   users /* eventParticipant */,
   ratings
 } = require("../models");
+const sequelize = require('sequelize');
 const moment = require("moment-timezone");
 const fuzzysort = require("fuzzysort"); // library for searching with typos
 
@@ -575,7 +576,30 @@ const deleteRating = async (req, res) =>{
 };
 
 const getEventRating = async (req, res) =>{
-  
+  const eventId = req.params.id;
+  try {
+    if(!await events.findOne({where: {id: eventId}})){
+      return res.status(400).json({error: "Подія з таким ID не існує"});
+    }
+    if(!await ratings.findOne({where: {event_id: eventId}})){
+      return res.status(200).json({average_rating: null, user_count: 0});
+    }
+
+    const result = await ratings.findAll({
+      attributes: [
+        [sequelize.literal('ROUND(AVG(rating), 1)'), 'average_rating'],
+        [sequelize.fn('COUNT', sequelize.col('user_id')), 'user_count'] 
+      ],
+      where: {
+        event_id: eventId
+      }
+    });
+    return res.status(200).json(result[0].dataValues);
+    } catch (error) {
+    console.log(error);
+    return res.status(500).json({error: `Помилка на сервері ${error}`});
+
+  }
 };
 
 
