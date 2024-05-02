@@ -51,4 +51,8 @@ router.get("/filter-events", eventsController.filterEvents);
 
 router.get("/search-events/:key", eventsController.filterSearchedEvents);
 
+// # Comments
+
+router.post("/:id/add-comment", eventsController.addComment);
+
 module.exports = router;

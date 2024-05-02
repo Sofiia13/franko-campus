@@ -3,6 +3,7 @@ const {
   eventImages,
   eventParticipants,
   users /* eventParticipant */,
+  comments
 } = require("../models");
 
 const { noEmptyFields } = require("../services/formValidation");
@@ -29,6 +30,7 @@ const getSupabaseCredentials = async (req, res) => {
   return res.status(200).json({ SUPABASE_URL, SUPABASE_KEY });
 };
 
+// # Events
 
 const createEvent = async (req, res) => {
   try {
@@ -520,13 +522,40 @@ const filterSearchedEvents = async (req, res) => {
   }
 };
 
-// Comments section
+// # Comments
 
 const addComment = async (req, res) => {
   const userId = returnUserId(req);
   const eventId = req.params.id;
-  const { text } = req.body;
-  
+  const text = req.body.text
+  console.log(text);
+
+  try{
+    if (text.trim() === "") {
+      return res.status(400).json({ error: "Необхідно заповнити всі поля." });
+    }
+    
+    const event = await events.findOne({ where: { id: eventId } });
+    if (!event) {
+      return res.status(404).json({ error: "No such event" });
+    }
+
+    const newComment = await comments.create(
+      {
+        user_id: userId,
+        event_id: eventId,
+        text: text
+      }
+    )
+
+    return res.status(201).json({ success: true });
+    }
+  catch (error) {
+    console.error(error); 
+    return res.status(500).json({ Error: error });
+  }
+
+
 }
 
 module.exports = {
@@ -545,4 +574,5 @@ module.exports = {
   getUsersForEvent,
   filterEvents,
   filterSearchedEvents,
+  addComment
 };
