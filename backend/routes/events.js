@@ -43,6 +43,8 @@ router.get("/supabase-credentials", eventsController.getSupabaseCredentials);
 
 router.get("/event/:id", eventsController.getEvent);
 
+router.post("/bookmark-event/:id", eventsController.addEventToBookmarks);
+
 router.get("/check-signup-to-event/:id", eventsController.checkSignupToEvent)
 
 router.get("/events-list", eventsController.initialListOfEvents);
@@ -54,6 +56,8 @@ router.get("/event-list-for-user", eventsController.getEventsForUser);
 router.get("/user-list-for-event", eventsController.getUsersForEvent);
 
 router.get("/filter-events", eventsController.filterEvents);
+
+router.delete("/delete-bookmark/:id", eventsController.deleteEventFromBookmarks);
 
 router.get("/search-events/:key", eventsController.filterSearchedEvents);
 
