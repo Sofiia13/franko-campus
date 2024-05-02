@@ -13,8 +13,13 @@ import settings from '../img/settings.svg';
 
 import DropdownComponent from './DropdownComponent';
 
+import { useNavigate } from "react-router-dom";
+
 const HeaderComponent = () => {
+  let navigate = useNavigate();
+
   const [iconDescription, setIconDescription] = useState('');
+  const [searchInput, setSearchInput] = useState('');
 
   const handleMouseEnter = (description) => {
     setIconDescription(description);
@@ -22,6 +27,12 @@ const HeaderComponent = () => {
 
   const handleMouseLeave = () => {
     setIconDescription('');
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (!searchInput) return;
+    navigate(`/search/${searchInput}`);
   };
 
   const menuItems = (
@@ -62,8 +73,14 @@ const HeaderComponent = () => {
       </div>
 
       {/* Search */}
-      <form className="search" role="search">
-        <input className="search-input" type="search" placeholder="Пошук" />
+      <form className="search" role="search" onSubmit={handleSearchSubmit}>
+        <input 
+          className="search-input" 
+          type="search" 
+          placeholder="Пошук" 
+          value={searchInput} 
+          onChange={(e) => setSearchInput(e.target.value)}
+        />
         <button className="search-button" type="submit">
           <img className="search-img" src={search} alt="Пошук" />
         </button>

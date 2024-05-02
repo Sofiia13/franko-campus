@@ -27,6 +27,10 @@
     gap: 20px;
 }
 
+.event-name {
+    line-height:1.5;
+}
+
 .event-organizer {
     display: flex;
     flex-direction: row;

@@ -80,6 +80,13 @@ function AddEventPage() {
         type: document.querySelector('input[name="type"]:checked').value,
       };
 
+      console.log(images)
+
+      if (images.length > 1) {
+        alert('Завантаження кількох зображень не підтримується. Будь ласка, виберіть одне зображення.');
+        return;
+      }
+
       const eventResponse = await axios.post('http://localhost:3001/events/create-event', eventData, {
         headers: {
           'Content-Type': 'application/json',

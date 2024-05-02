@@ -1,36 +1,39 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-const Card = ({ imageSrc, title, description, link }) => (
-  <div className="card">
-    <div className="card-img">
-      <a href={link}>
-        <img src={imageSrc} alt={title} />
-      </a>
+
+const Card = ({ eventId, imageSrc, name, description, organizer }) => (
+  <Link to={`/event/${eventId}`} className="card-link"> 
+    <div className="card">
+      <div className="card-img">
+        <img src={imageSrc} alt={name} />
+      </div>
+      <div className="card-desc">
+        <h4 className="card-title">{name}</h4>
+        <p className="card-organizer">Організатор: {organizer}</p>
+        <p className="card-text">{description}</p>
+      </div>
     </div>
-    <div className="card-desc">
-      <h4 className="card-title">{title}</h4>
-      <p className="card-text">{description}</p>
-    </div>
-  </div>
+  </Link>
 );
 
 const CardsGalleryComponent = ({ events }) => (
-    <div className="cards-gallery">
-      {events ? (
-        events.map((event, index) => (
-          <Card
-            key={index}
-            imageSrc={event.imageSrc}
-            title={event.title}
-            description={event.description}
-            link={event.link}
-          />
-        ))
-      ) : (
-        <p>Немає результатів для відображення.</p> // повідомлення, коли немає подій
-      )}
-    </div>
-  );
-  
+  <div className="cards-gallery">
+    {events ? (
+      events.map((event) => (
+        <Card
+          key={event.id}
+          eventId={event.id} 
+          imageSrc={event.imageSrc}
+          name={event.name}
+          description={event.description}
+          organizer={event.organizer} 
+        />
+      ))
+    ) : (
+      <p>Немає результатів для відображення.</p>
+    )}
+  </div>
+);
 
 export default CardsGalleryComponent;

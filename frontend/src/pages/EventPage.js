@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import axios from 'axios';
 
@@ -8,18 +8,39 @@ function EventPage() {
     const [registeredToEvent, setRegisteredToEvent] = useState(false);
     let { id } = useParams();
 
+
+    const { createClient } = require("@supabase/supabase-js");
+    const [eventPhoto, setEventPhoto] = useState(null);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
+                const credentials = await axios.get("http://localhost:3001/events/supabase-credentials" )          //запит для отримання даних для доступу до supabase
+                const supabase = await createClient(credentials.data.SUPABASE_URL, credentials.data.SUPABASE_KEY);  
+
                 const response = await axios.get(
                     `http://localhost:3001/events/event/${id}`
                 );
+
                 setEventObject(response.data);
+
+                const { data, error } = await supabase
+                    .storage
+                    .from('campus-bucket')
+                    .download(`${response.data.images[0]}`);
+    
+                if (error) {
+                    throw new Error('Error happened while downloading file');
+                }
+
+                const base64Image = URL.createObjectURL(data);          //перетворення отриманого файлу в base64
+                setEventPhoto(base64Image); 
+
             } catch (error) {
                 if (error.response && error.response.status === 404) {
                     alert("Подія не знайдена");
                 } else {
-                    alert("Сталася помилка під час отримання даних про подію");
+                    alert("Сталася помилка під час отримання даних про подію або його зображення");
                 }
             }
         };
@@ -78,16 +99,22 @@ function EventPage() {
             <section className="content">
                 <div className='event-content'>
                     <div className='event-photo'>
-                        <img src="..." alt="event photo" />
+                        <img src={eventPhoto} alt="event photo" />
                     </div>
                     <div className='event-info'>
                         <h2 className="event-name">{eventObject.name}</h2>
                         <div className='event-organizer'>
-                            <div className='event-organizer-photo'>
+                            {/* <div className='event-organizer-photo'>
                                 <img src="..." alt="organizer photo" />
-                            </div>
-                            <h3>{eventObject.organizer}</h3>
+                            </div> */}
+                            <h3>Організатор: {eventObject.organizer}</h3>
                         </div>
+                        {/* Я додав інформацію про формат-вартість-тип тут, адже тут воно виглядало найкраще з точки зору стилів
+                        тому, його потрібно буде переписати і поставити на інше місце, мабуть */}
+                        
+                        <p>Формат: {eventObject.format}</p>
+                        <p>Вартість: {eventObject.cost}</p>
+                        <p>Тип: {eventObject.type}</p>
                     </div>
                 </div>
                 <div className='section-title'>
