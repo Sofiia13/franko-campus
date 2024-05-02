@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import HeaderComponent from './components/HeaderComponent';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
@@ -14,8 +13,6 @@ import SearchResultsPage from './pages/SearchResultsPage.js';
 import HeaderComponent from './components/HeaderComponent.jsx';
 
 import './App.css';
-
-import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
 
 function App() {
   return (
