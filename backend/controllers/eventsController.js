@@ -4,6 +4,9 @@ const {
   eventParticipants,
   users /* eventParticipant */,
 } = require("../models");
+
+const { noEmptyFields } = require("../services/formValidation");
+
 const moment = require("moment-timezone");
 const fuzzysort = require("fuzzysort"); // library for searching with typos
 
@@ -25,7 +28,7 @@ const { json } = require("sequelize");
 const getSupabaseCredentials = async (req, res) => {
   return res.status(200).json({ SUPABASE_URL, SUPABASE_KEY });
 };
-  
+
 
 const createEvent = async (req, res) => {
   try {
@@ -87,9 +90,8 @@ const uploadImage = async (req, res) => {
     }
 
     const promises = Object.values(files).map(async (file) => {
-      const fileName = `${file.originalname.split(".")[0]}-${Date.now()}.${
-        file.originalname.split(".")[1]
-      }`;
+      const fileName = `${file.originalname.split(".")[0]}-${Date.now()}.${file.originalname.split(".")[1]
+        }`;
       fs.renameSync(file.path, `uploads/${fileName}`);
 
       const rawData = fs.readFileSync(`uploads/${fileName}`);
@@ -315,7 +317,7 @@ const extendedListOfEvents = async (req, res) => {
 };
 
 const signupToEvent = async (req, res) => {
-  const  userId  = returnUserId(req)
+  const userId = returnUserId(req)
   const eventId = req.params.id;
   console.log(userId, eventId)
   try {
@@ -361,11 +363,12 @@ const checkSignupToEvent = async (req, res) => {
     return res.status(200).json({ success: true });
   } catch (error) {
     return res.status(500).json({ Error: error });
-  }};
+  }
+};
 
 
 const cancelEventRegistration = async (req, res) => {
-  const userId  = returnUserId(req)
+  const userId = returnUserId(req)
   const eventId = req.params.id;
   const existingParticipant = await eventParticipants.findOne({
     where: { user_id: userId, event_id: eventId },
@@ -516,6 +519,15 @@ const filterSearchedEvents = async (req, res) => {
     return res.status(500).json({ error: "Внутрішня помилка сервера." });
   }
 };
+
+// Comments section
+
+const addComment = async (req, res) => {
+  const userId = returnUserId(req);
+  const eventId = req.params.id;
+  const { text } = req.body;
+  
+}
 
 module.exports = {
   getSupabaseCredentials,

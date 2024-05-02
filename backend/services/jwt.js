@@ -41,6 +41,7 @@ function returnUserId(req){
     if (!accessToken) {
         return null;
     }
+    c
     const decoded = jwt.verify(accessToken, process.env.TOKEN_SECRET);
     return decoded.id;
 };
