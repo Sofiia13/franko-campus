@@ -598,6 +598,9 @@ const rateEvent = async (req, res) => {
 
 const deleteRating = async (req, res) => {
   const userId = returnUserId(req);
+  if(userId == null){
+    return res.status(404).json({error: "Користувач не увійшов в аккаунт"});
+  }
   const eventId = req.params.id;
 
   try {
