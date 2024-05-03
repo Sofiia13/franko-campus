@@ -4,6 +4,9 @@ const { returnUserId } = require('../services/jwt');
 
 const getProfileInfo = async(req, res) =>{
     const userId = returnUserId(req);
+    if(userId == null){
+        return res.status(404).json({error: "Користувач не увійшов в аккаунт"});
+    }
     try{
         if (userId === null) {
             return res.status(403).json({error: 'Користувач не авторизований'});
@@ -46,6 +49,11 @@ const getProfileInfo = async(req, res) =>{
 
 const editProfileInfo = async(req, res) =>{
     const userId = returnUserId(req);
+
+    if(userId == null){
+        return res.status(404).json({error: "Користувач не увійшов в аккаунт"});
+    }
+
     const newUserData = req.body;
     const updateData = {};
     try{
@@ -82,6 +90,11 @@ const editProfileInfo = async(req, res) =>{
 
 const deleteUser = async(req, res) =>{
     const userId = returnUserId(req);
+
+    if(userId == null){
+        return res.status(404).json({error: "Користувач не увійшов в аккаунт"});
+    }
+
     const {reqPassword} = req.body;
 
     const user = await users.findByPk(userId);

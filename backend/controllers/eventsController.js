@@ -319,7 +319,12 @@ const extendedListOfEvents = async (req, res) => {
 };
 
 const signupToEvent = async (req, res) => {
-  const  userId  = returnUserId(req)
+  const  userId  = returnUserId(req);
+
+  if(userId == null){
+    return res.status(404).json({error: "Користувач не увійшов в аккаунт"});
+  }
+
   const eventId = req.params.id;
   console.log(userId, eventId)
   try {
@@ -353,6 +358,11 @@ const signupToEvent = async (req, res) => {
 
 const checkSignupToEvent = async (req, res) => {
   const userId = returnUserId(req);
+
+  if(userId == null){
+    return res.status(404).json({error: "Користувач не увійшов в аккаунт"});
+  }
+
   const eventId = req.params.id;
   try {
     if (!(await eventParticipants.findOne({ where: { user_id: userId, event_id: eventId } }))) {
@@ -365,7 +375,12 @@ const checkSignupToEvent = async (req, res) => {
 
 
 const cancelEventRegistration = async (req, res) => {
-  const userId  = returnUserId(req)
+  const userId  = returnUserId(req);
+
+  if(userId == null){
+    return res.status(404).json({error: "Користувач не увійшов в аккаунт"});
+  }
+
   const eventId = req.params.id;
   const existingParticipant = await eventParticipants.findOne({
     where: { user_id: userId, event_id: eventId },
@@ -390,7 +405,16 @@ const cancelEventRegistration = async (req, res) => {
 
 const getEventsForUser = async (req, res) => {
   const { limit } = req.query;
-  const userId = returnUserId();
+  const userId = returnUserId(req);
+
+  if(userId == null){
+    return res.status(404).json({error: "Користувач не увійшов в аккаунт"});
+  }
+
+  if(userId == null){
+    return res.status(404).json({error: "Користувач не увійшов в аккаунт"});
+  }
+
   try {
     if (!(await users.findOne({ where: { id: userId } }))) {
       return res.status(400).json({ error: "Некоректний ID користувача" });
@@ -477,6 +501,11 @@ const filterEvents = async (req, res) => {
 
 const addEventToBookmarks = async (req, res) =>{
     const userId = returnUserId(req);
+
+    if(userId == null){
+      return res.status(404).json({error: "Користувач не увійшов в аккаунт"});
+    }
+
     const eventId = req.params.id;
     try {
       if(!await events.findOne({where: {id: eventId}})){
@@ -501,6 +530,11 @@ const addEventToBookmarks = async (req, res) =>{
 
 const deleteEventFromBookmarks = async (req, res) =>{
   const userId = returnUserId(req);
+
+  if(userId == null){
+    return res.status(404).json({error: "Користувач не увійшов в аккаунт"});
+  }
+
   const eventId = req.params.id;
   try {
     if(!await events.findOne({where: {id: eventId}})){
@@ -569,6 +603,7 @@ const filterSearchedEvents = async (req, res) => {
 
 const rateEvent = async (req, res) => {
   const userId = returnUserId(req);
+
   if(userId == null){
     return res.status(404).json({error: "Користувач не увійшов в аккаунт"});
   }
@@ -602,9 +637,11 @@ const rateEvent = async (req, res) => {
 
 const deleteRating = async (req, res) => {
   const userId = returnUserId(req);
+
   if(userId == null){
     return res.status(404).json({error: "Користувач не увійшов в аккаунт"});
   }
+
   const eventId = req.params.id;
 
   try {
