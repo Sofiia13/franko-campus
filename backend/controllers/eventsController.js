@@ -569,6 +569,10 @@ const filterSearchedEvents = async (req, res) => {
 
 const rateEvent = async (req, res) => {
   const userId = returnUserId(req);
+  if(userId == null){
+    return res.status(404).json({error: "Користувач не увійшов в аккаунт"});
+  }
+  
   const eventId = req.params.id;
   const { rating } = req.body;
 
