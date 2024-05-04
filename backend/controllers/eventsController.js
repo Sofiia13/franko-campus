@@ -2,12 +2,15 @@ const {
   events,
   eventImages,
   eventParticipants,
-  users /* eventParticipant */,
+  users,
+  userBookmarks,
+  ratings,
   comments
 } = require("../models");
 
 const { noEmptyFields } = require("../services/formValidation");
 
+const sequelize = require('sequelize');
 const moment = require("moment-timezone");
 const fuzzysort = require("fuzzysort"); // library for searching with typos
 
@@ -22,6 +25,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const fs = require("fs");
 const { json } = require("sequelize");
+const userBookmarksModel = require("../models/userBookmarksModel");
 
 
 // реєстрація нової події
@@ -145,11 +149,15 @@ const getEvent = async (req, res) => {
         .json({ error: "Такої події не знайдено" });
     }
 
-    // const eventImagesList = await eventImages.findAll({
-    //   where: { event_id: id },
-    // });
+    const eventImagesList = await eventImages.findAll({
+      where: { event_id: id },
+    });
 
-    //const images = eventImagesList.map((eventImage) => eventImage.url);
+    let images = [];
+
+    if (eventImagesList) {
+      images = eventImagesList.map((image) => image.url);
+    }
 
     return res.status(200).json({
       ...existingEvent.toJSON(),
@@ -161,6 +169,7 @@ const getEvent = async (req, res) => {
         .tz(existingEvent.updatedAt, "UTC")
         .tz("Europe/Kiev")
         .format(),
+      images,
     });
 
   } catch (error) {
@@ -319,7 +328,12 @@ const extendedListOfEvents = async (req, res) => {
 };
 
 const signupToEvent = async (req, res) => {
-  const userId = returnUserId(req)
+  const  userId  = returnUserId(req);
+
+  if(userId == null){
+    return res.status(404).json({error: "Користувач не увійшов в аккаунт"});
+  }
+
   const eventId = req.params.id;
   console.log(userId, eventId)
   try {
@@ -344,11 +358,7 @@ const signupToEvent = async (req, res) => {
       event_id: eventId,
       user_id: userId,
     });
-    /*     await eventParticipant.create({
-      event_id: eventId,
-      user_id: userId
-    });
- */
+
     return res.status(201).json({ success: true });
   } catch (error) {
     return res.status(500).json({ Error: error });
@@ -357,6 +367,11 @@ const signupToEvent = async (req, res) => {
 
 const checkSignupToEvent = async (req, res) => {
   const userId = returnUserId(req);
+
+  if(userId == null){
+    return res.status(404).json({error: "Користувач не увійшов в аккаунт"});
+  }
+
   const eventId = req.params.id;
   try {
     if (!(await eventParticipants.findOne({ where: { user_id: userId, event_id: eventId } }))) {
@@ -395,7 +410,16 @@ const cancelEventRegistration = async (req, res) => {
 
 const getEventsForUser = async (req, res) => {
   const { limit } = req.query;
-  const { userId } = req.body;
+  const userId = returnUserId(req);
+
+  if(userId == null){
+    return res.status(404).json({error: "Користувач не увійшов в аккаунт"});
+  }
+
+  if(userId == null){
+    return res.status(404).json({error: "Користувач не увійшов в аккаунт"});
+  }
+
   try {
     if (!(await users.findOne({ where: { id: userId } }))) {
       return res.status(400).json({ error: "Некоректний ID користувача" });
@@ -480,6 +504,66 @@ const filterEvents = async (req, res) => {
   }
 };
 
+const addEventToBookmarks = async (req, res) =>{
+    const userId = returnUserId(req);
+
+    if(userId == null){
+      return res.status(404).json({error: "Користувач не увійшов в аккаунт"});
+    }
+
+    const eventId = req.params.id;
+    try {
+      if(!await events.findOne({where: {id: eventId}})){
+        return res.status(404).json({error: "Події з таким ID немає"});
+    }
+
+      if(await userBookmarks.findOne({where:{user_id: userId, event_id: eventId}})){
+        return res.status(400).json({error: "Подія вже в закладках"});
+      }
+
+    await userBookmarks.create({
+        event_id: eventId,
+        user_id: userId
+    });
+
+    return res.status(201).json({success: true});
+
+    } catch (error) {
+      return res.status(500).json({error: "Помилка на сервері"});
+    }
+};
+
+const deleteEventFromBookmarks = async (req, res) =>{
+  const userId = returnUserId(req);
+
+  if(userId == null){
+    return res.status(404).json({error: "Користувач не увійшов в аккаунт"});
+  }
+
+  const eventId = req.params.id;
+  try {
+    if(!await events.findOne({where: {id: eventId}})){
+      return res.status(404).json({error: "Події з таким ID немає"});
+  }
+
+    if(!await userBookmarks.findOne({where: {event_id: eventId, user_id: userId}})){
+      return res.status(404).json({error: "Подія не в закладках"});
+    }
+
+  await userBookmarks.destroy({where: {
+      event_id: eventId,
+      user_id: userId
+  }});
+
+  return res.status(204).json({success: true});
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({error: "Помилка на сервері"});
+  }
+};
+
+
 const filterSearchedEvents = async (req, res) => {
   try {
     let searchingQuery = req.params.key;
@@ -521,6 +605,104 @@ const filterSearchedEvents = async (req, res) => {
     return res.status(500).json({ error: "Внутрішня помилка сервера." });
   }
 };
+
+const rateEvent = async (req, res) => {
+  const userId = returnUserId(req);
+
+  if(userId == null){
+    return res.status(404).json({error: "Користувач не увійшов в аккаунт"});
+  }
+  
+  const eventId = req.params.id;
+  const { rating } = req.body;
+
+  try {
+    if (!(await events.findOne({ where: { id: eventId } }))) {
+      return res.status(404).json({ error: "Подію не знайдено" });
+    }
+
+    if (
+      await ratings.findOne({ where: { user_id: userId, event_id: eventId } })
+    ) {
+      return res.status(418).json({ error: "Користувач вже оцінив подію" });
+    }
+
+    await ratings.create({
+      user_id: userId,
+      event_id: eventId,
+      rating: rating,
+    });
+
+    return res.status(201).json("success:true");
+  } catch (error) {
+    console.log(`${error}`);
+    return res.status(500).json({ error: "Внутрішня помилка сервера" });
+  }
+};
+
+const deleteRating = async (req, res) => {
+  const userId = returnUserId(req);
+
+  if(userId == null){
+    return res.status(404).json({error: "Користувач не увійшов в аккаунт"});
+  }
+
+  const eventId = req.params.id;
+
+  try {
+    if (!(await events.findOne({ where: { id: eventId } }))) {
+      return res.status(404).json({ error: "Подію не знайдено" });
+    }
+
+    if (
+      !(await ratings.findOne({
+        where: { user_id: userId, event_id: eventId },
+      }))
+    ) {
+      return res.status(418).json({ error: "Користувач не оцінював подію" });
+    }
+
+    await ratings.destroy({
+      where: {
+        user_id: userId,
+        event_id: eventId,
+      },
+    });
+
+    return res.status(201).json("success:true");
+  } catch (error) {
+    console.log(`${error}`);
+    return res.status(500).json({ error: "Внутрішня помилка сервера" });
+  }
+};
+
+const getEventRating = async (req, res) => {
+  const eventId = req.params.id;
+  try {
+    if (!(await events.findOne({ where: { id: eventId } }))) {
+      return res.status(400).json({ error: "Подія з таким ID не існує" });
+    }
+    if (!(await ratings.findOne({ where: { event_id: eventId } }))) {
+      return res.status(200).json({ average_rating: null, user_count: 0 });
+    }
+
+    const result = await ratings.findAll({
+      attributes: [
+        [sequelize.literal("ROUND(AVG(rating), 1)"), "average_rating"],
+        [sequelize.fn("COUNT", sequelize.col("user_id")), "user_count"],
+      ],
+      where: {
+        event_id: eventId,
+      },
+    });
+    return res.status(200).json(result[0].dataValues);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: `Помилка на сервері ${error}` });
+  }
+};
+
+
 
 // # Comments
 
@@ -608,7 +790,12 @@ module.exports = {
   getEventsForUser,
   getUsersForEvent,
   filterEvents,
+  addEventToBookmarks,
+  deleteEventFromBookmarks,
   filterSearchedEvents,
+  rateEvent,
+  deleteRating,
+  getEventRating,
   addComment,
   deleteComment,
   retrieveComments

@@ -1,16 +1,20 @@
 const express = require("express");
 const router = express.Router();
 const authController = require("../controllers/authController");
-const { authCheck } = require("../services/jwt");
+const { authCheck, conventionalAuthCheck } = require("../services/jwt");
+
 
 router.use((req, res, next) => {
-    if (req.path == "/logout") {
+    if (req.path == "/logout" || req.path == "/" || req.path == "/conventional-check-token") {
         return next();
     }
     authCheck(req, res, next);
 });
 
+
 router.get("/check-token", authCheck, authController.checkToken);
+
+router.get("/conventional-check-token", conventionalAuthCheck, authController.checkToken);
 
 router.post("/register", authController.register);
 
