@@ -766,7 +766,22 @@ const deleteComment = async (req, res) => {
 const retrieveComments = async(req, res) => { // !!! Might need to be redone for retrieving in specific order !!!
   const eventId = req.params.id;
   try {
-    const commentsList = await comments.findAll({ where: { event_id: eventId }, limit: 7 });
+    const commentsList = await comments.findAll({
+      where: { event_id: eventId },
+      limit: 7,
+      include: [{
+        model: users,
+        as: 'user',
+        attributes: ['username'],
+        required: true,
+        on: sequelize.literal('comments.user_id = "user".id')
+      }],
+      raw: true 
+    });
+    
+    
+      
+    
     return res.status(200).json(commentsList);
   }
   catch (error) {
