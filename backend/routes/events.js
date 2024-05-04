@@ -57,4 +57,6 @@ router.post("/:id/add-comment", eventsController.addComment);
 
 router.delete("/delete-comment", eventsController.deleteComment);
 
+router.get("/:id/retrieve-comments", eventsController.retrieveComments);
+
 module.exports = router;

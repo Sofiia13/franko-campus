@@ -573,12 +573,24 @@ const deleteComment = async (req, res) => {
 
     await comments.destroy({ where: { id: commentId } });
 
-    return res.status(200).json({ success: true });
+    return res.status(200).json({ success: true }); 
   }
   catch (error) {
     console.error(error);
     return res.status(500).json({ Error: error });
   }
+}
+
+const retrieveComments = async(req, res) => { // !!! Might need to be redone for retrieving in specific order !!!
+  const eventId = req.params.id;
+  try {
+    const commentsList = await comments.findAll({ where: { event_id: eventId }, limit: 7 });
+    return res.status(200).json(commentsList);
+  }
+  catch (error) {
+    console.error(error);
+    return res.status(500).json({ Error: error });
+   }
 }
 
 module.exports = {
@@ -598,5 +610,6 @@ module.exports = {
   filterEvents,
   filterSearchedEvents,
   addComment,
-  deleteComment
+  deleteComment,
+  retrieveComments
 };
