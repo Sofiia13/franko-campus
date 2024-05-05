@@ -4,7 +4,8 @@
   "description": "very strong project",
   "main": "index.js",
   "scripts": {
-    "apitest": "cd backend && nodemon app.js"
+    "apitest": "cd backend && nodemon app.js",
+    "clienttest": "cd frontend && npm start"
   },
   "keywords": [],
   "author": "",

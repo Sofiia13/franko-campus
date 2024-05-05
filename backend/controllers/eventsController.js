@@ -539,7 +539,8 @@ const deleteEventFromBookmarks = async (req, res) =>{
 const filterSearchedEvents = async (req, res) => {
   try {
     let searchingQuery = req.params.key;
-    const eventData = req.body;
+
+    let eventData = req.query;
     const whereClause = {};
 
     const allEvents = await events.findAll({
