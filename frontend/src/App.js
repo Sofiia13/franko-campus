@@ -9,9 +9,6 @@ import AddEventPage from './pages/AddEventPage';
 import EventPage from './pages/EventPage';
 import SearchResultsPage from './pages/SearchResultsPage.js';
 
-
-import HeaderComponent from './components/HeaderComponent.jsx';
-
 import './App.css';
 
 function App() {
