@@ -17,15 +17,13 @@ const eventsController = require("../controllers/eventsController");
 
 
 //передавати на фронтенд дані про supabase не є безпечним, але це поки що зроблено для тесту.
-router.get("/supabase-credentials", eventsController.getSupabaseCredentials);
+
 
 router.post("/create-event", eventsController.createEvent);
 
-router.get("/event/:id", eventsController.getEvent);
+router.delete("/delete-event/:id", eventsController.deleteEvent);
 
-router.post("/delete-event/:id", eventsController.deleteEvent);
-
-router.post("/edit-event/:id", eventsController.editEvent);
+router.patch("/edit-event/:id", eventsController.editEvent);
 
 router.post(
   "/upload-image/:id",
@@ -36,6 +34,14 @@ router.post(
 router.post("/cancel-event-reg/:id", eventsController.cancelEventRegistration);
 
 router.post("/signup-to-event/:id", eventsController.signupToEvent);
+
+router.post("/rate-event/:id", eventsController.rateEvent);
+
+router.delete("/delete-event-rating/:id", eventsController.deleteRating);
+
+router.get("/supabase-credentials", eventsController.getSupabaseCredentials);
+
+router.get("/event/:id", eventsController.getEvent);
 
 router.post("/bookmark-event/:id", eventsController.addEventToBookmarks);
 
@@ -54,5 +60,15 @@ router.get("/filter-events", eventsController.filterEvents);
 router.delete("/delete-bookmark/:id", eventsController.deleteEventFromBookmarks);
 
 router.get("/search-events/:key", eventsController.filterSearchedEvents);
+
+// # Comments
+
+router.post("/:id/add-comment", eventsController.addComment);
+
+router.delete("/delete-comment", eventsController.deleteComment);
+
+router.get("/:id/retrieve-comments", eventsController.retrieveComments);
+
+router.get("/get-event-rating/:id", eventsController.getEventRating);
 
 module.exports = router;
