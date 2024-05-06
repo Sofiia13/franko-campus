@@ -72,6 +72,7 @@ const HomePage = () => {
                 <h2 className="section-title">Нещодавно опубліковані події</h2>
                 <CardsGalleryComponent events={events} />
             </section>
+            
         </body>
     );
 };
