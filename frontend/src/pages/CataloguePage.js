@@ -8,6 +8,8 @@ const CataloguePage = () => {
 
     const [events, setEvents] = useState([]);
 
+    const [eventsShown, setEventsShown] = useState(0);
+
     const fetchData = async (extended) => {
         try {
             const credentials = await axios.get("http://localhost:3001/events/supabase-credentials");
@@ -16,9 +18,12 @@ const CataloguePage = () => {
             let eventsResponse;
 
             if (extended) {
-                eventsResponse = await axios.get(`http://localhost:3001/events/events-list-extended?offset=${events.length}`);
+                eventsResponse = await axios.get(`http://localhost:3001/events/events-list-extended?offset=${eventsShown}`);
+                setEventsShown(eventsResponse.data.length + eventsShown);
             } else {
                 eventsResponse = await axios.get("http://localhost:3001/events/events-list");
+                setEventsShown(eventsResponse.data.length);
+
             }
 
             const updatedEvents = await Promise.all(eventsResponse.data.map(async (event) => {
