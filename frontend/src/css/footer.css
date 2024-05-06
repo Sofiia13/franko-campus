@@ -2,14 +2,14 @@
 .footer {
   background: linear-gradient(180deg, #0071d9 0%, #00b2ff 100%);
   border-radius: 16px 16px 0px 0px;
-  color: white;
+  border: 0;
+  color: #fff;
   position: relative;
   bottom: 0;
   padding: 18px;
   box-sizing: border-box;
   width: 100%;
   margin-bottom: -15px;
-  
 }
 
 .col{
@@ -17,4 +17,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.email-link {
+  color: #fff;
 }

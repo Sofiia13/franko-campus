@@ -8,7 +8,7 @@ const FooterComponent = () => {
           <div className="col">
             <ul className="list-unstyled"><h2>Контакти:</h2>
               <li>
-                <a href="mailto:frankocampus@gmail.com">
+                <a className="email-link" href="mailto:frankocampus@gmail.com">
                   frankocampus@gmail.com
                 </a>
               </li>
