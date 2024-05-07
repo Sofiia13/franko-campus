@@ -6,6 +6,7 @@ const {
   profiles,
   userBookmarks,
   ratings,
+  comments,
 } = require("../models");
 const sequelize = require("sequelize");
 const moment = require("moment-timezone");
@@ -28,24 +29,6 @@ const userBookmarksModel = require("../models/userBookmarksModel");
 
 const getSupabaseCredentials = async (req, res) => {
   return res.status(200).json({ SUPABASE_URL, SUPABASE_KEY });
-};
-
-const findOrganizer = async (req, res) => {
-  try {
-    const userId = returnUserId(req);
-    let userInfo = await profiles.findOne({ where: { user_id: userId } });
-    // console.log(userInfo);
-    if (userInfo) {
-      const fullName = `${userInfo.first_name} ${userInfo.last_name}`;
-      return fullName;
-    } else if (!userInfo) {
-      userInfo = await users.findOne({ where: { id: userId } });
-      return userInfo.username;
-    }
-  } catch (error) {
-    console.error("Виникла помилка під час пошуку організатора:", error);
-    return res.status(500).json({ error: "Внутрішня помилка сервера." });
-  }
 };
 
 const createEvent = async (req, res) => {
@@ -395,6 +378,11 @@ const checkSignupToEvent = async (req, res) => {
 
 const cancelEventRegistration = async (req, res) => {
   const userId = returnUserId(req);
+
+  if (userId == null) {
+    return res.status(404).json({ error: "Користувач не увійшов в аккаунт" });
+  }
+
   const eventId = req.params.id;
   const existingParticipant = await eventParticipants.findOne({
     where: { user_id: userId, event_id: eventId },
