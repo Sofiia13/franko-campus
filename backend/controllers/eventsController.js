@@ -31,6 +31,24 @@ const getSupabaseCredentials = async (req, res) => {
   return res.status(200).json({ SUPABASE_URL, SUPABASE_KEY });
 };
 
+const findOrganizer = async (req, res) => {
+  try {
+    const userId = returnUserId(req);
+    let userInfo = await profiles.findOne({ where: { user_id: userId } });
+    // console.log(userInfo);
+    if (userInfo) {
+      const fullName = `${userInfo.first_name} ${userInfo.last_name}`;
+      return fullName;
+    } else if (!userInfo) {
+      userInfo = await users.findOne({ where: { id: userId } });
+      return userInfo.username;
+    }
+  } catch (error) {
+    console.error("Виникла помилка під час пошуку організатора:", error);
+    return res.status(500).json({ error: "Внутрішня помилка сервера." });
+  }
+};
+
 const createEvent = async (req, res) => {
   try {
     const newEventData = req.body;
