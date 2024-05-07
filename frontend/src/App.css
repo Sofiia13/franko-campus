@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@200..700&display=swap');
 
 @import url(css/header.css);
-@import url(css/footer.css);
 @import url(css/form.css);
 @import url(css/cards.css);
 @import url(css/profile.css);
@@ -17,16 +16,6 @@ body {
     color: #2C2C2C;
     background-color: #fff;
     font-family: "Montserrat", sans-serif;
-}
-
-.App{
-    display: flex;  
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-.content-wrap{
-    flex: 1;
 }
 
 @media (max-width: 600px) {

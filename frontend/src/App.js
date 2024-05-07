@@ -12,8 +12,8 @@ import EventPage from "./pages/EventPage";
 import SearchResultsPage from "./pages/SearchResultsPage.js";
 import CataloguePage from './pages/CataloguePage.js';
 
+import './App.css';
 
-import "./App.css";
 
 function App() {
   return (
