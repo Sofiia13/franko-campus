@@ -4,6 +4,8 @@
   "description": "very strong project",
   "main": "index.js",
   "scripts": {
+    "apitest": "cd backend && nodemon app.js",
+    "clienttest": "cd frontend && npm start",
     "test-server": "mocha tests/test-server.js",
     "apitest": "cd backend && nodemon app.js"
   },

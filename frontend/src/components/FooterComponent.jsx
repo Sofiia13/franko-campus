@@ -21,7 +21,7 @@ const FooterComponent = () => {
         </div>
         <div className="row">
         <p className="col-sm">
-            &copy;{new Date().getFullYear()} LVIV | Franko Campus | Усі права захищено | Політика конфіденційності 
+            &copy;{new Date().getFullYear()} LVIV | Franko Campus | Усі права захищено | <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley" className="never_give_you_up-link">Політика конфіденційності</a> 
           </p>
         </div>
       </div>
