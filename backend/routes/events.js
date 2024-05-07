@@ -61,6 +61,14 @@ router.delete("/delete-bookmark/:id", eventsController.deleteEventFromBookmarks)
 
 router.get("/search-events/:key", eventsController.filterSearchedEvents);
 
+// # Comments
+
+router.post("/:id/add-comment", eventsController.addComment);
+
+router.delete("/delete-comment", eventsController.deleteComment);
+
+router.get("/:id/retrieve-comments", eventsController.retrieveComments);
+
 router.get("/get-event-rating/:id", eventsController.getEventRating);
 
 module.exports = router;
