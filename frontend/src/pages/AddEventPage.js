@@ -3,9 +3,12 @@ import { useState, useRef } from 'react'
 import axios from 'axios'
 import TextareaAutosize from 'react-textarea-autosize'
 import FormRadioComponent from '../components/FormRadioComponent';
-
+import { useNavigate} from 'react-router-dom'
+ 
 
 function AddEventPage() {
+  const navigate = useNavigate();
+
   const [eventName, setEventName] = useState('');
   const [eventDesc, setEventDesc] = useState('');
   const [images, setImages] = useState([]);
@@ -107,6 +110,7 @@ function AddEventPage() {
       });
 
       alert('Подію успішно створено!');
+      navigate(`/event/${event_id}`);
 
     } catch (error) {
       console.error('Error creating or uploading event:', error);
