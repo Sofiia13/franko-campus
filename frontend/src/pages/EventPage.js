@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import axios from 'axios';
+import CommentSectionComponent from '../components/CommentSectionCompotent';
 
 function EventPage() {
     let navigate = useNavigate();
     const [eventObject, setEventObject] = useState({});
     const [registeredToEvent, setRegisteredToEvent] = useState(false);
+    
+    const [comments, setComments] = useState([]); // стан для коментарів
+    const [isAuthenticated, setIsAuthenticated] = useState(true); /* щось для перевірки аутентифікації, у вас наче шось для цього вже є але я хз тому тут буде так, замінете якщо що */
+    
     let { id } = useParams();
 
 
@@ -103,6 +108,31 @@ function EventPage() {
         }
     };
 
+    useEffect(() => {
+        const fetchComments = async () => {
+          try {
+            const response = await axios.get(`http://localhost:3001/events/event/${id}/comments`); // напевно такий у вас шлях, поміняєте
+            setComments(response.data); // Встановлюємо отримані коментарі
+          } catch (error) {
+            console.error("Помилка під час отримання коментарів:", error);
+          }
+        };
+    
+        fetchComments();
+    }, [id]); // Виконувати, коли змінюється id події
+
+    const submitComment = async (newCommentText) => {
+        try {
+          const response = await axios.post(`http://localhost:3001/events/event/${id}/comments`, { text: newCommentText });
+          const newComment = response.data; // Передбачається, що сервер повертає цей коментар
+          setComments((prevComments) => [...prevComments, newComment]); // Додаємо новий коментар до списку
+        } catch (error) {
+          console.error("Помилка під час додавання коментаря:", error);
+        }
+      };
+      
+    
+    
     return (
         <body>
             <section className="content">
@@ -139,12 +169,9 @@ function EventPage() {
                         {registeredToEvent === false ? 'Записатися на подію' : 'Скасувати реєстрацію'}
                     </button>
                 </div>
-                <div className='section-title'>
-                    {/*<h2 className="section-title">Коментарі</h2>*/}
-                </div>
-                <div className='comments'>
-                    <div className='comment-input'></div>
-                    <div className='comment'></div>
+                <div>
+                    <h2 className="section-title">Коментарі</h2>
+                    <CommentSectionComponent comments={comments} isAuthenticated={isAuthenticated} onSubmitComment={submitComment}/>
                 </div>
             </section>
         </body>
