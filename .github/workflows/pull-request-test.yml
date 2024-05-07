@@ -1,4 +1,4 @@
-name: server-build-test
+name: pull-request-test
 on: 
   pull_request:
     
@@ -16,7 +16,7 @@ jobs:
 
       - run: npm install
 
-  test-server:
+  server:
     needs: build
     runs-on: ubuntu-latest
     steps:
