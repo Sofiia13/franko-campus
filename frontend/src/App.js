@@ -10,6 +10,8 @@ import ProfilePage from "./pages/ProfilePage";
 import AddEventPage from "./pages/AddEventPage";
 import EventPage from "./pages/EventPage";
 import SearchResultsPage from "./pages/SearchResultsPage.js";
+import CataloguePage from './pages/CataloguePage.js';
+
 
 import "./App.css";
 
@@ -30,6 +32,7 @@ function App() {
             <Route path="/addevent" element={<AddEventPage />} />
             <Route path="/event/:id" element={<EventPage />} />
             <Route path="/search/:query" element={<SearchResultsPage />} />
+            <Route path="/catalogue" element={<CataloguePage />} />
           </Routes>
           
         </div>

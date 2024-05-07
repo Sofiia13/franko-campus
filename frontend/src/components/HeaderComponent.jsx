@@ -95,7 +95,7 @@ const HeaderComponent = () => {
         </div>
         
         <div className='icon' onMouseEnter={() => handleMouseEnter('Каталог подій')} onMouseLeave={handleMouseLeave}>
-          <a className="icon-link" href="#">
+          <a className="icon-link" href="/catalogue">
             <img className="icon-img" src={catalog} alt="Каталог подій" />
           </a>
         </div>

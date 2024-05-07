@@ -276,7 +276,7 @@ const initialListOfEvents = async (req, res) => {
     const existingEvents = await events.findAll({
       order: [["createdAt", "DESC"]],
       offset: 0, // Початковий зсув - починаємо з першого запису
-      limit: 10,
+      limit: 9,
     });
 
     const listJSON = existingEvents.map((existingEvent) => ({
@@ -290,6 +290,14 @@ const initialListOfEvents = async (req, res) => {
         .tz("Europe/Kiev")
         .format(),
     }));
+
+    const images = await eventImages.findAll();
+
+    listJSON.forEach((event) => {
+      event.images = images
+        .filter((image) => image.event_id === event.id)
+        .map((image) => image.url);
+    });
 
     return res.json(listJSON);
   } catch (error) {
@@ -305,7 +313,7 @@ const extendedListOfEvents = async (req, res) => {
     const existingEvents = await events.findAll({
       order: [["createdAt", "DESC"]],
       offset: parseInt(offset),
-      limit: 20,
+      limit: 27,
     });
 
     const listJSON = existingEvents.map((existingEvent) => ({
@@ -319,6 +327,15 @@ const extendedListOfEvents = async (req, res) => {
         .tz("Europe/Kiev")
         .format(),
     }));
+
+    const images = await eventImages.findAll();
+
+    listJSON.forEach((event) => {
+      event.images = images
+        .filter((image) => image.event_id === event.id)
+        .map((image) => image.url);
+    });
+
 
     return res.json(listJSON);
   } catch (error) {
@@ -598,6 +615,15 @@ const filterSearchedEvents = async (req, res) => {
         (whereClause.type ? event.type === whereClause.type : true)
       );
     });
+
+    const images = await eventImages.findAll();
+
+    filteredData.forEach((event) => {
+      event.dataValues.images = images
+        .filter((image) => image.event_id === event.id)
+        .map((image) => image.url);
+    });
+
 
     return res.status(200).json(filteredData);
   } catch (error) {

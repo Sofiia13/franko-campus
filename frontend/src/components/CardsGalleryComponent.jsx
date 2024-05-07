@@ -19,7 +19,7 @@ const Card = ({ eventId, imageSrc, name, description, organizer }) => (
 
 const CardsGalleryComponent = ({ events }) => (
   <div className="cards-gallery">
-    {events ? (
+    {events && events.length > 0 ? (
       events.map((event) => (
         <Card
           key={event.id}
