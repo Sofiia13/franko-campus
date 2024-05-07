@@ -1,4 +1,4 @@
-name: server-build-test
+name: pull-request-test
 on: 
   pull_request:
     
