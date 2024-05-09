@@ -63,4 +63,6 @@ router.get("/search-events/:key", eventsController.filterSearchedEvents);
 
 router.get("/get-event-rating/:id", eventsController.getEventRating);
 
+router.get("by-user/:id", eventsController.eventsCreatedByUser);
+
 module.exports = router;

@@ -112,9 +112,8 @@ const uploadImage = async (req, res) => {
     }
 
     const promises = Object.values(files).map(async (file) => {
-      const fileName = `${file.originalname.split(".")[0]}-${Date.now()}.${
-        file.originalname.split(".")[1]
-      }`;
+      const fileName = `${file.originalname.split(".")[0]}-${Date.now()}.${file.originalname.split(".")[1]
+        }`;
       fs.renameSync(file.path, `uploads/${fileName}`);
 
       const rawData = fs.readFileSync(`uploads/${fileName}`);
@@ -281,6 +280,8 @@ const editEvent = async (req, res) => {
   }
 };
 
+// ## Retrieve events
+
 const initialListOfEvents = async (req, res) => {
   try {
     const existingEvents = await events.findAll({
@@ -354,6 +355,40 @@ const extendedListOfEvents = async (req, res) => {
   }
 };
 
+const eventsCreatedByUser = async (req, res) => {
+  try {
+    const userId = returnUserId(req);
+
+    const existingEvents = await events.findAll({
+      where: { organizer: userId },
+    });
+
+    const listJSON = existingEvents.map((existingEvent) => ({
+      ...existingEvent.toJSON(),
+      createdAt: moment
+        .tz(existingEvent.createdAt, "UTC")
+        .tz("Europe/Kiev")
+        .format(),
+      updatedAt: moment
+        .tz(existingEvent.updatedAt, "UTC")
+        .tz("Europe/Kiev")
+        .format(),
+    }));
+
+    const images = await eventImages.findAll();
+
+    listJSON.forEach((event) => {
+      event.images = images
+        .filter((image) => image.event_id === event.id)
+        .map((image) => image.url);
+    });
+
+    return res.json(listJSON);
+  } catch {
+    console.error("Виникла помилка під час відображення списку подій:", error);
+    return res.status(500).json({ error: "Внутрішня помилка сервера." });
+  }
+}
 const signupToEvent = async (req, res) => {
   const userId = returnUserId(req);
   const eventId = req.params.id;
@@ -765,4 +800,5 @@ module.exports = {
   rateEvent,
   deleteRating,
   getEventRating,
+  eventsCreatedByUser
 };
