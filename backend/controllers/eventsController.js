@@ -53,6 +53,12 @@ const createEvent = async (req, res) => {
   try {
     const newEventData = req.body;
 
+    const userId = returnUserId(req);
+
+    if (userId == null) {
+      return res.status(404).json({ error: "Користувач не увійшов в аккаунт" });
+    }
+
     const organizer = await findOrganizer(req, res);
     // console.log(organizer);
 
@@ -78,6 +84,7 @@ const createEvent = async (req, res) => {
     const createdEvent = await events.create({
       name: newEventData.name,
       organizer: organizer,
+      organizer_id: userId,
       description: newEventData.description,
       date: newEventData.date,
       time: newEventData.time,
@@ -391,6 +398,11 @@ const eventsCreatedByUser = async (req, res) => {
 }
 const signupToEvent = async (req, res) => {
   const userId = returnUserId(req);
+
+  if (userId == null) {
+    return res.status(404).json({ error: "Користувач не увійшов в аккаунт" });
+  }
+
   const eventId = req.params.id;
   console.log(userId, eventId);
   try {
