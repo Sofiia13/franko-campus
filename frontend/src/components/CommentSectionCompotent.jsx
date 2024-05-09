@@ -33,7 +33,7 @@ const CommentSectionComponent = ({ comments, isAuthenticated, onSubmitComment}) 
           <button className='btn-secondary' onClick={handleCommentSubmit}>Коментувати</button>
         </div>
         ) : (
-            <p>Ви маєте бути авторизованим щоб залишити коментар.</p>
+            <p>Авторизуйтесь, щоб залишити коментар.</p>
         )}
 
         {comments.length > 0 ? (

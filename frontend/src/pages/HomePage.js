@@ -51,12 +51,7 @@ const HomePage = () => {
                 console.error('Error:', error);
             }
         };
-    
-        fetchData();
-    }, []);
-    
 
-    useEffect(() => {
         const checkLogin = async () => {
             try {
                 const response = await axios.get('http://localhost:3001/auth/conventional-check-token'); 
@@ -68,8 +63,12 @@ const HomePage = () => {
                 setLoggedIn(false);
             }
         }
+    
+        fetchData();
         checkLogin();
-    }, [])
+    }, []);
+    
+
 
     return (
         <body>
