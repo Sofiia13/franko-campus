@@ -364,10 +364,12 @@ const extendedListOfEvents = async (req, res) => {
 
 const eventsCreatedByUser = async (req, res) => {
   try {
-    const userId = returnUserId(req);
+    const userId = req.params.id;
 
     const existingEvents = await events.findAll({
-      where: { organizer: userId },
+      where: { organizer_id: userId},
+      order: [["createdAt", "DESC"]],
+      limit: 9
     });
 
     const listJSON = existingEvents.map((existingEvent) => ({
@@ -389,8 +391,9 @@ const eventsCreatedByUser = async (req, res) => {
         .filter((image) => image.event_id === event.id)
         .map((image) => image.url);
     });
-
+    console.log("hell yeah")
     return res.json(listJSON);
+
   } catch {
     console.error("Виникла помилка під час відображення списку подій:", error);
     return res.status(500).json({ error: "Внутрішня помилка сервера." });
