@@ -65,4 +65,6 @@ router.get("/get-event-rating/:id", eventsController.getEventRating);
 
 router.get("/by-user/:id", eventsController.eventsCreatedByUser);
 
+router.get("/bookmarked/:id", eventsController.eventsBookmarkedByUser);
+
 module.exports = router;

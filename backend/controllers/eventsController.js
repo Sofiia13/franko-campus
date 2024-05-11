@@ -9,6 +9,8 @@ const {
   comments,
 } = require("../models");
 const sequelize = require("sequelize");
+const Op = sequelize.Op;
+
 const moment = require("moment-timezone");
 const fuzzysort = require("fuzzysort"); // library for searching with typos
 
@@ -366,6 +368,10 @@ const eventsCreatedByUser = async (req, res) => {
   try {
     const userId = req.params.id;
 
+    if(!await users.findOne({where:{id: userId}})){
+      return res.status(404).json({error: "Користувача не знайдено"})
+    };
+
     const existingEvents = await events.findAll({
       where: { organizer_id: userId},
       order: [["createdAt", "DESC"]],
@@ -399,6 +405,49 @@ const eventsCreatedByUser = async (req, res) => {
     return res.status(500).json({ error: "Внутрішня помилка сервера." });
   }
 }
+
+const eventsBookmarkedByUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    
+    if(!await users.findOne({where:{id: userId}})){
+      return res.status(404).json({error: "Користувача не знайдено"})
+    };
+
+    const bookmarkedEvents = (await userBookmarks.findAll({
+      where: { user_id: userId},
+      attributes: ['event_id'],
+      limit: 9
+    })).map(event => event.event_id);
+
+  
+
+    const result = await events.findAll({
+      where: {
+        id: {
+          [Op.in]: bookmarkedEvents
+        }
+      },
+      attributes: ['id', 'name', 'organizer_id', 'description']
+    });
+
+    const images = await eventImages.findAll();
+
+    const listJSON = result.map((event) => ({
+      ...event.toJSON(),
+      images: images
+        .filter((image) => image.event_id === event.id)
+        .map((image) => image.url)
+    }));
+
+    return res.status(200).json(listJSON);
+
+  } catch (error){
+    console.error("Виникла помилка під час відображення списку подій:", error);
+    return res.status(500).json({ error: "Внутрішня помилка сервера." });
+  }
+}
+
 const signupToEvent = async (req, res) => {
   const userId = returnUserId(req);
 
@@ -588,6 +637,11 @@ const filterEvents = async (req, res) => {
 
 const addEventToBookmarks = async (req, res) => {
   const userId = returnUserId(req);
+
+  if (userId == null) {
+    return res.status(404).json({ error: "Користувач не увійшов в аккаунт" });
+  }
+
   const eventId = req.params.id;
   try {
     if (!(await events.findOne({ where: { id: eventId } }))) {
@@ -815,5 +869,6 @@ module.exports = {
   rateEvent,
   deleteRating,
   getEventRating,
-  eventsCreatedByUser
+  eventsCreatedByUser,
+  eventsBookmarkedByUser
 };
