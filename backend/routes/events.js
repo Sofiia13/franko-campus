@@ -21,9 +21,12 @@ const eventsController = require("../controllers/eventsController");
 
 router.get("/supabase-credentials", eventsController.getSupabaseCredentials);
 
+
 // # Event
 
 router.get("/event/:id", eventsController.getEvent);
+
+router.get("/by-user/:id", eventsController.eventsCreatedByUser);
 
 router.post("/create-event", eventsController.createEvent);
 
@@ -82,5 +85,7 @@ router.get("/is-comment-owner/:id", eventsController.isCommentOwner);
 router.post("/bookmark-event/:id", eventsController.addEventToBookmarks);
 
 router.delete("/delete-bookmark/:id", eventsController.deleteEventFromBookmarks);
+
+
 
 module.exports = router;

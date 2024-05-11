@@ -30,6 +30,10 @@ module.exports = (sequelize, DataTypes) => {
   );
 
         users.associate = (models) => {
+            users.hasMany(models.events, {
+                foreignKey: 'organizer_id', 
+                onDelete: 'CASCADE', 
+            }),
             users.hasMany(models.verificationCodes, {
                 foreignKey: 'user_id', 
                 onDelete: 'CASCADE', 

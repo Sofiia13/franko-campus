@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
+        organizer_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
         description: {
             type: DataTypes.TEXT,
             allowNull: false,
@@ -55,6 +59,10 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     events.associate = (models) => {
+        events.belongsTo(models.users, {
+            foreignKey: 'organizer_id',
+            onDelete: 'CASCADE',
+        }),
         events.hasMany(models.eventImages, {
             foreignKey: 'event_id',
             onDelete: 'CASCADE',

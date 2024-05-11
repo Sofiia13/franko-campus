@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import logo from '../img/logo.svg';
 import search from '../img/search.svg';
 import mode from '../img/mode.svg';
+import addevent from '../img/addevent.svg';
 import catalog from '../img/catalog.svg';
 import profile from '../img/profile.svg';
 import menu from '../img/menu.svg';
@@ -86,10 +87,10 @@ const HeaderComponent = () => {
 
       {/* Icons */}
       <div className='icons-bar'>
-        <div className='icon' onMouseEnter={() => handleMouseEnter('Змінити тему сайту')} onMouseLeave={handleMouseLeave}>
-          <button className="icon-button">
-            <img className="icon-img" src={mode} alt="Змінити тему сайту" />
-          </button>
+        <div className='icon' onMouseEnter={() => handleMouseEnter('Додати подію')} onMouseLeave={handleMouseLeave}>
+          <a className="icon-link" href="/addevent">
+            <img className="icon-img" src={addevent} alt="Додати подію" />
+          </a>
         </div>
         
         <div className='icon' onMouseEnter={() => handleMouseEnter('Каталог подій')} onMouseLeave={handleMouseLeave}>
