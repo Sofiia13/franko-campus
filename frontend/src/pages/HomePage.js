@@ -16,28 +16,45 @@ const HomePage = () => {
             try {
                 const credentials = await axios.get("http://localhost:3001/events/supabase-credentials");
                 const supabase = await createClient(credentials.data.SUPABASE_URL, credentials.data.SUPABASE_KEY);
-
+    
                 const { data, error } = await supabase
                     .storage
                     .from('campus-bucket')
                     .download('public/home-page-photo.png');
-
+    
                 if (error) {
                     throw new Error('Error happened while downloading file');
                 }
-
+    
                 const base64Image = URL.createObjectURL(data);
                 setMainPhoto(base64Image);
-
+    
                 const eventsResponse = await axios.get("http://localhost:3001/events/events-list");
-                setEvents(eventsResponse.data);
+    
+                const updatedEvents = await Promise.all(eventsResponse.data.map(async (event) => {
+                    const { data, error } = await supabase
+                        .storage
+                        .from('campus-bucket')
+                        .download(`${event.images[0]}`);
+    
+                    if (error) {
+                        event.imageSrc = null;
+                        return event;
+                    }
+    
+                    event.imageSrc = URL.createObjectURL(data);
+                    return event;
+                }));
+    
+                setEvents(updatedEvents);
             } catch (error) {
                 console.error('Error:', error);
             }
         };
-
+    
         fetchData();
     }, []);
+    
 
     useEffect(() => {
         const checkLogin = async () => {
@@ -72,7 +89,6 @@ const HomePage = () => {
                 <h2 className="section-title">Нещодавно опубліковані події</h2>
                 <CardsGalleryComponent events={events} />
             </section>
-            
         </body>
     );
 };

@@ -1,4 +1,4 @@
-const { users, verificationCodes } = require("../models");
+const { users, verificationCodes, profiles } = require("../models");
 const { generateToken, authCheck } = require("../services/jwt");
 
 const bcrypt = require("bcrypt");
@@ -20,15 +20,18 @@ const register = async (req, res) => {
     const whitespaceSym = /\s/;
 
     if (
-      !reqUsername.trim() || whitespaceSym.test(reqUsername) ||
-      !reqPassword.trim() || whitespaceSym.test(reqPassword) ||
-      !reqEmail.trim() || whitespaceSym.test(reqEmail) ||
+      !reqUsername.trim() ||
+      whitespaceSym.test(reqUsername) ||
+      !reqPassword.trim() ||
+      whitespaceSym.test(reqPassword) ||
+      !reqEmail.trim() ||
+      whitespaceSym.test(reqEmail) ||
       !reqUniversity.trim()
     ) {
-      return res.status(400).json({ error: "Заповни всі поля або прибери пробіли з полів" });
+      return res
+        .status(400)
+        .json({ error: "Заповни всі поля або прибери пробіли з полів" });
     }
-
-
 
     const existingUser = await users.findOne({
       where: { username: reqUsername.trim() },
@@ -67,7 +70,11 @@ const register = async (req, res) => {
 
     await storeActivationCode(createdUser.id, activationCode);
 
-    sendActivationEmail(createdUser.email, createdUser.username, activationCode);
+    sendActivationEmail(
+      createdUser.email,
+      createdUser.username,
+      activationCode
+    );
 
     return res.status(200).json({ success: true });
     //після успішного виконання цього запиту користувача потрібно перекинути на сторінку "валідація"
@@ -86,8 +93,10 @@ const validate = async (req, res) => {
     const whitespaceSym = /\s/;
 
     if (
-      !reqUsername.trim() || whitespaceSym.test(reqUsername) ||
-      !reqCode.trim() || whitespaceSym.test(reqCode)
+      !reqUsername.trim() ||
+      whitespaceSym.test(reqUsername) ||
+      !reqCode.trim() ||
+      whitespaceSym.test(reqCode)
     ) {
       return res.status(400).json({ error: "Заповни всі поля" });
     }
@@ -144,8 +153,10 @@ const login = async (req, res) => {
     const whitespaceSym = /\s/;
 
     if (
-      !reqUsername.trim() || whitespaceSym.test(reqUsername) ||
-      !reqPassword.trim() || whitespaceSym.test(reqPassword)
+      !reqUsername.trim() ||
+      whitespaceSym.test(reqUsername) ||
+      !reqPassword.trim() ||
+      whitespaceSym.test(reqPassword)
     ) {
       return res.status(400).json({ error: "Заповни всі поля" });
     }
@@ -155,11 +166,11 @@ const login = async (req, res) => {
     });
 
     if (!user) {
-        return res.status(404).json({ error: "Такого користувача не існує." });
+      return res.status(404).json({ error: "Такого користувача не існує." });
     }
 
     if (user.is_verified == false) {
-        return res.status(401).json({ error: "Користувач не верифікований." });
+      return res.status(401).json({ error: "Користувач не верифікований." });
     }
 
     const passwordMatch = await bcrypt.compare(
@@ -168,9 +179,9 @@ const login = async (req, res) => {
     );
 
     if (!passwordMatch) {
-        return res
-            .status(400)
-            .json({ error: "Неправильне ім'я користувача або пароль." });
+      return res
+        .status(400)
+        .json({ error: "Неправильне ім'я користувача або пароль." });
     }
 
     const accessToken = generateToken(user);
@@ -179,9 +190,9 @@ const login = async (req, res) => {
 
     return res
       .cookie("access-token", accessToken, {
-          httpOnly: true,
-          sameSite: "strict",
-          expires: expiresDate // передаємо об'єкт дати
+        httpOnly: true,
+        sameSite: "strict",
+        expires: expiresDate, // передаємо об'єкт дати
       })
       .status(200)
       .json({ success: true });
@@ -197,8 +208,6 @@ const logout = async (req, res) => {
   res.clearCookie("access-token");
   return res.status(204).json({ success: true });
 };
-
-
 
 // profiles.sync({ force: true });
 const profileInfo = async (req, res) => {
@@ -233,9 +242,12 @@ const profileInfo = async (req, res) => {
     const whitespaceSym = /\s/;
 
     if (
-      !reqFirstName.trim() || whitespaceSym.test(reqFirstName) ||
-      !reqLastName.trim() || whitespaceSym.test(reqLastName) ||
-      !reqStatus.trim() || whitespaceSym.test(reqStatus)
+      !reqFirstName.trim() ||
+      whitespaceSym.test(reqFirstName) ||
+      !reqLastName.trim() ||
+      whitespaceSym.test(reqLastName) ||
+      !reqStatus.trim() ||
+      whitespaceSym.test(reqStatus)
     ) {
       return res.status(400).json({ error: "Заповни всі поля" });
     }
@@ -254,11 +266,11 @@ const profileInfo = async (req, res) => {
   }
 };
 
-module.exports = { 
-  checkToken, 
-  register, 
-  validate, 
-  login, 
-  profileInfo, 
-  logout 
+module.exports = {
+  checkToken,
+  register,
+  validate,
+  login,
+  profileInfo,
+  logout,
 };
