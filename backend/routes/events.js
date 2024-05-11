@@ -71,7 +71,7 @@ router.delete("/delete-event-rating/:id", eventsController.deleteRating);
 
 router.post("/add-comment/:id", eventsController.addComment);
 
-router.delete("/delete-comment", eventsController.deleteComment);
+router.delete("/delete-comment/:id", eventsController.deleteComment);
 
 router.get("/retrieve-comments/:id", eventsController.retrieveComments);
 

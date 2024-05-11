@@ -183,7 +183,7 @@ function EventPage() {
                 </div>
                 <div>
                     <h2 className="section-title">Коментарі</h2>
-                    <CommentSectionComponent comments={comments} isAuthenticated={loggedIn} onSubmitComment={submitComment} />
+                    <CommentSectionComponent comments={comments} setComments={setComments} isAuthenticated={loggedIn} onSubmitComment={submitComment}/>
                 </div>
             </section>
         </body>

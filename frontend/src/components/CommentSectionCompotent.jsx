@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import TextareaAutosize from 'react-textarea-autosize'
 import CommentComponent from './CommentComponent';
 
-const CommentSectionComponent = ({ comments, isAuthenticated, onSubmitComment}) => {
+const CommentSectionComponent = ({ comments, setComments, isAuthenticated, onSubmitComment}) => {
     const [newComment, setNewComment] = useState('');
 
     const handleInputChange = (e) => {
@@ -38,7 +38,7 @@ const CommentSectionComponent = ({ comments, isAuthenticated, onSubmitComment}) 
 
         {comments.length > 0 ? (
         comments.map((comment) => (
-          <CommentComponent key={comment.id} comment={comment} />
+          <CommentComponent key={comment.id} comment={comment} setComments={setComments} />
         ))
       ) : (
         <p>Ще немає коментарів. Будьте першими!</p>
@@ -58,6 +58,7 @@ CommentSectionComponent.propTypes = {
       text: PropTypes.string.isRequired,
     })
   ).isRequired,
+  setComments: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
   onSubmitComment: PropTypes.func.isRequired,
 };

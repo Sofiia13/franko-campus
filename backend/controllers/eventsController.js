@@ -785,7 +785,7 @@ const addComment = async (req, res) => {
 
 const deleteComment = async (req, res) => {
   const userId = returnUserId(req);
-  const commentId = req.body.id;
+  const commentId = req.params.id;
   try {
     const comment = await comments.findOne({ where: { id: commentId } });
     if (!comment) {
@@ -817,26 +817,24 @@ const retrieveComments = async(req, res) => {
       include: [{
         model: users,
         as: 'user',
-        attributes: ['username'], // Alias the username field directly
+        attributes: ['username'], 
         required: true,
         on: sequelize.literal('comments.user_id = "user".id')
       }],
       raw: true 
     });
 
-    const userFullName = await profiles.findOne({
-      where: { user_id: returnUserId(req) }
-    });
-
-    const modifiedCommentsList = commentsList.map(comment => {
-      comment['username'] = comment['user.username'];
-      if (userFullName != null) {
-        comment['firstName'] = userFullName.first_name;
-        comment['lastName'] = userFullName.last_name;
+    const modifiedCommentsList = await Promise.all(commentsList.map(async comment => {
+      const fullName = await profiles.findOne({ where: { user_id: comment.user_id } });
+      if (fullName) {
+        comment['firstName'] = fullName.first_name;
+        comment['lastName'] = fullName.last_name;
       }
+      comment['username'] = comment['user.username'];
+
       delete comment['user.username'];
       return comment;
-    });
+    }));
 
     return res.status(200).json(modifiedCommentsList);
   }

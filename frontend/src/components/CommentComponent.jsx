@@ -1,16 +1,24 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import '../css/comment.css';
-import useIconDescription from './useIconDescription'; 
+import useIconDescription from './useIconDescription';
+import axios from 'axios'; 
 
-const CommentComponent = ({ comment,  onDelete }) => {
+const CommentComponent = ({ comment, setComments }) => {
     const { id, username, firstName, lastName, text } = comment;
     const { iconDescription, handleMouseEnter, handleMouseLeave } = useIconDescription();
     const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
     
-    const handleDelete = () => {
-        if (onDelete) {
-          onDelete(id); // передаємо ID коментаря
+    const handleDelete = async () => {
+        try {
+            const response = await axios.delete(`http://localhost:3001/events/delete-comment/${id}`);
+            if (response.status === 200) {
+                setComments((prevComments) => prevComments.filter((c) => c.id !== id));
+            } else {
+                alert('Помилка під час видалення коментаря');
+            }
+        } catch (error) {
+            console.error("Помилка під час видалення коментаря:", error);
         }
       };
     
