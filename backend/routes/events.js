@@ -75,6 +75,8 @@ router.delete("/delete-comment/:id", eventsController.deleteComment);
 
 router.get("/retrieve-comments/:id", eventsController.retrieveComments);
 
+router.get("/is-comment-owner/:id", eventsController.isCommentOwner);
+
 // # Bookmarks
 
 router.post("/bookmark-event/:id", eventsController.addEventToBookmarks);

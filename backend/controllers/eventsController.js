@@ -844,6 +844,27 @@ const retrieveComments = async(req, res) => {
    }
 }
 
+const isCommentOwner = async (req, res) => {
+  const userId = returnUserId(req);
+  const commentId = req.params.id;
+  try {
+    const comment = await comments.findOne({ where: { id: commentId } });
+    if (!comment) {
+      return res.status(404).json({ error: "Коментар не знайдено" });
+    }
+
+    if (comment.user_id === userId) {
+      return res.status(200).json({ is_owner: true });
+    }
+
+    return res.status(403).json({ is_owner: false });
+  }
+  catch (error) {
+    console.error(error);
+    return res.status(500).json({ Error: error });
+  }
+}
+
 
 
 module.exports = {
@@ -869,5 +890,6 @@ module.exports = {
   getEventRating,
   addComment,
   deleteComment,
-  retrieveComments
+  retrieveComments,
+  isCommentOwner
 };

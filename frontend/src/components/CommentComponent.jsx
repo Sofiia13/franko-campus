@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import '../css/comment.css';
 import useIconDescription from './useIconDescription';
@@ -8,6 +8,21 @@ const CommentComponent = ({ comment, setComments }) => {
     const { id, username, firstName, lastName, text } = comment;
     const { iconDescription, handleMouseEnter, handleMouseLeave } = useIconDescription();
     const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+    const [isCommentOwner, setIsCommentOwner] = useState(false);
+
+    const checkIfCommentOwner = async () => {
+        try {
+            const commentOwnershipeResponse = await axios.get(`http://localhost:3001/events/is-comment-owner/${id}`);
+            setIsCommentOwner(!commentOwnershipeResponse.data.isCommentOwner);
+        } catch (error) {
+            console.error("Помилка під час перевірки власності коментаря:", error);
+        }
+    };
+
+    useEffect(() => {
+        checkIfCommentOwner();
+    }, []);
+
     
     const handleDelete = async () => {
         try {
@@ -42,14 +57,14 @@ const CommentComponent = ({ comment, setComments }) => {
                     )}
                 </div>
                 {/* ось тут кнопочка видалити коментар */}
-                <span 
+                {isCommentOwner && <span 
                     className='delete' 
                     onClick={handleDelete}
                     onMouseEnter={() => handleMouseEnter('Видалити коментар')} 
                     onMouseLeave={handleMouseLeave}
                 >
                     &times;
-                </span>
+                </span>}
             </div>
             <p>{text}</p>
             
