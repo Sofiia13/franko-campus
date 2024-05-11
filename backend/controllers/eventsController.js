@@ -427,8 +427,10 @@ const eventsBookmarkedByUser = async (req, res) => {
         id: {
           [Op.in]: bookmarkedEvents
         }
+        
       },
-      attributes: ['id', 'name', 'organizer_id', 'description']
+      attributes: ['id', 'name', 'organizer_id', 'description'],
+      order: [["createdAt", "DESC"]]
     });
 
     const images = await eventImages.findAll();
