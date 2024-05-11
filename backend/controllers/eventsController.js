@@ -394,7 +394,7 @@ const eventsCreatedByUser = async (req, res) => {
     console.log("hell yeah")
     return res.json(listJSON);
 
-  } catch {
+  } catch (error){
     console.error("Виникла помилка під час відображення списку подій:", error);
     return res.status(500).json({ error: "Внутрішня помилка сервера." });
   }
