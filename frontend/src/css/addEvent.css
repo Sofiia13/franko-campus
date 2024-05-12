@@ -153,6 +153,7 @@
 .delete {
     z-index: 999;
     color: #00B2FF;
+    cursor: pointer;
 }
 
 /*---------------*/

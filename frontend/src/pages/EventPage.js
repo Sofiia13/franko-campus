@@ -7,15 +7,16 @@ function EventPage() {
     let navigate = useNavigate();
     const [eventObject, setEventObject] = useState({});
     const [registeredToEvent, setRegisteredToEvent] = useState(false);
-    
+
     const [comments, setComments] = useState([]); // стан для коментарів
-    const [isAuthenticated, setIsAuthenticated] = useState(true); /* щось для перевірки аутентифікації, у вас наче шось для цього вже є але я хз тому тут буде так, замінете якщо що */
-    
+    const [loggedIn, setLoggedIn] = useState(false); /* щось для перевірки аутентифікації, у вас наче шось для цього вже є але я хз тому тут буде так, замінете якщо що */
+
     let { id } = useParams();
 
 
     const { createClient } = require("@supabase/supabase-js");
     const [eventPhoto, setEventPhoto] = useState(null);
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -50,10 +51,6 @@ function EventPage() {
             }
         };
 
-        fetchData();
-    }, [id, navigate]);
-
-    useEffect(() => {
         const checkIfRegistered = async () => {
             try {
                 const response = await axios.get(
@@ -72,9 +69,34 @@ function EventPage() {
                 }
             }
         };
+
+        const checkLogin = async () => {
+            try {
+                const response = await axios.get('http://localhost:3001/auth/conventional-check-token');
+                if (response.status === 200) {
+                    setLoggedIn(true);
+                    return
+                }
+            } catch (error) {
+                setLoggedIn(false);
+            }
+        }
+
+        fetchData();
         checkIfRegistered();
+        fetchComments();
+        checkLogin();
     }, [id]);
 
+
+    const fetchComments = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3001/events/retrieve-comments/${id}`); // напевно такий у вас шлях, поміняєте
+            setComments(response.data); // Встановлюємо отримані коментарі
+        } catch (error) {
+            console.error("Помилка під час отримання коментарів:", error);
+        }
+    };
 
     const signupToEvent = async () => {
         try {
@@ -108,31 +130,21 @@ function EventPage() {
         }
     };
 
-    useEffect(() => {
-        const fetchComments = async () => {
-          try {
-            const response = await axios.get(`http://localhost:3001/events/event/${id}/comments`); // напевно такий у вас шлях, поміняєте
-            setComments(response.data); // Встановлюємо отримані коментарі
-          } catch (error) {
-            console.error("Помилка під час отримання коментарів:", error);
-          }
-        };
-    
-        fetchComments();
-    }, [id]); // Виконувати, коли змінюється id події
 
     const submitComment = async (newCommentText) => {
         try {
-          const response = await axios.post(`http://localhost:3001/events/event/${id}/comments`, { text: newCommentText });
-          const newComment = response.data; // Передбачається, що сервер повертає цей коментар
-          setComments((prevComments) => [...prevComments, newComment]); // Додаємо новий коментар до списку
+            const response = await axios.post(`http://localhost:3001/events/add-comment/${id}`, { text: newCommentText });
+            if (response.status != 201) {
+                alert("Сталася помилка під час додавання коментаря");
+            }
+            fetchComments();
         } catch (error) {
-          console.error("Помилка під час додавання коментаря:", error);
+            console.error("Помилка під час додавання коментаря:", error);
         }
-      };
-      
-    
-    
+    };
+
+
+
     return (
         <body>
             <section className="content">
@@ -171,7 +183,7 @@ function EventPage() {
                 </div>
                 <div>
                     <h2 className="section-title">Коментарі</h2>
-                    <CommentSectionComponent comments={comments} isAuthenticated={isAuthenticated} onSubmitComment={submitComment}/>
+                    <CommentSectionComponent comments={comments} setComments={setComments} isAuthenticated={loggedIn} onSubmitComment={submitComment}/>
                 </div>
             </section>
         </body>

@@ -8,6 +8,9 @@ const {
   ratings,
   comments,
 } = require("../models");
+
+const { noEmptyFields } = require("../services/formValidation");
+
 const sequelize = require("sequelize");
 const moment = require("moment-timezone");
 const fuzzysort = require("fuzzysort"); // library for searching with typos
@@ -794,6 +797,126 @@ const getEventRating = async (req, res) => {
   }
 };
 
+// # Comments
+
+const addComment = async (req, res) => {
+  const userId = returnUserId(req);
+  const eventId = req.params.id;
+  const text = req.body.text
+  console.log(text);
+
+  try {
+    if (text.trim() === "") {
+      return res.status(400).json({ error: "Необхідно заповнити всі поля." });
+    }
+
+    const event = await events.findOne({ where: { id: eventId } });
+    if (!event) {
+      return res.status(404).json({ error: "No such event" });
+    }
+
+    await comments.create(
+      {
+        user_id: userId,
+        event_id: eventId,
+        text: text
+      }
+    )
+
+    return res.status(201).json({ success: true });
+  }
+  catch (error) {
+    console.error(error);
+    return res.status(500).json({ Error: error });
+  }
+
+
+}
+
+const deleteComment = async (req, res) => {
+  const userId = returnUserId(req);
+  const commentId = req.params.id;
+  try {
+    const comment = await comments.findOne({ where: { id: commentId } });
+    if (!comment) {
+      return res.status(404).json({ error: "No such comment. Try refreshing page" });
+    }
+
+    if (comment.user_id !== userId) {
+      return res.status(403).json({ error: "You can't delete this comment", message: "I know what you are trying to do" });
+    }
+
+    await comments.destroy({ where: { id: commentId } });
+
+    return res.status(200).json({ success: true }); 
+  }
+  catch (error) {
+    console.error(error);
+    return res.status(500).json({ Error: error });
+  }
+}
+
+const retrieveComments = async(req, res) => {
+  const eventId = req.params.id;
+  try {
+    const commentsList = await comments.findAll({
+      where: { event_id: eventId },
+      //збільшив ліміт, адже у фронтенді не можна 
+      //перегортувати коментарі або показати більше
+      limit: 30,
+      include: [{
+        model: users,
+        as: 'user',
+        attributes: ['username'], 
+        required: true,
+        on: sequelize.literal('comments.user_id = "user".id')
+      }],
+      raw: true 
+    });
+
+    const modifiedCommentsList = await Promise.all(commentsList.map(async comment => {
+      const fullName = await profiles.findOne({ where: { user_id: comment.user_id } });
+      if (fullName) {
+        comment['firstName'] = fullName.first_name;
+        comment['lastName'] = fullName.last_name;
+      }
+      comment['username'] = comment['user.username'];
+
+      delete comment['user.username'];
+      return comment;
+    }));
+
+    return res.status(200).json(modifiedCommentsList);
+  }
+  catch (error) {
+    console.error(error);
+    return res.status(500).json({ Error: error });
+   }
+}
+
+const isCommentOwner = async (req, res) => {
+  const userId = returnUserId(req);
+  const commentId = req.params.id;
+  try {
+    const comment = await comments.findOne({ where: { id: commentId } });
+    if (!comment) {
+      return res.status(404).json({ error: "Коментар не знайдено" });
+    }
+
+    if (comment.user_id === userId) {
+      return res.status(200).json({ is_owner: true });
+    }
+
+    return res.status(403).json({ is_owner: false });
+  }
+  catch (error) {
+    console.error(error);
+    return res.status(500).json({ Error: error });
+  }
+}
+
+
+
 module.exports = {
   getSupabaseCredentials,
   createEvent,
@@ -815,5 +938,9 @@ module.exports = {
   rateEvent,
   deleteRating,
   getEventRating,
+  addComment,
+  deleteComment,
+  retrieveComments,
+  isCommentOwner,
   eventsCreatedByUser
 };

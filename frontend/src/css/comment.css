@@ -18,8 +18,20 @@
   }
 
 .comment {
-    margin: 8px;
-    padding: 8px;
+    margin-bottom: 14px;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px 0.5px rgba(0, 0, 0, 0.1);
+}
+
+.comment-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.comment-header .delete {
+  font-size: 24px;
 }
 
 .comment-name {
@@ -29,5 +41,5 @@
 .subtext {
     font-weight: normal;
     color: #A0A0A0;
-
 }
+
