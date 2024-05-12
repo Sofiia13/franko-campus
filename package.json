@@ -7,7 +7,8 @@
     "apitest": "cd backend && nodemon app.js",
     "clienttest": "cd frontend && npm start",
     "test-server": "mocha tests/test-server.js",
-    "start": "concurrently \"npm run apitest\" \"cd frontend && npm start\""
+    "start": "concurrently \"npm run apitest\" \"cd frontend && npm start\"",
+    "install-all": "concurrently \"cd backend && npm install\" \"cd frontend && npm install\""
     
   },
   "keywords": [],
