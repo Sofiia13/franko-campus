@@ -1,0 +1,17 @@
+.search-content {    
+    max-width: 944px;
+    margin-left: auto;
+    margin-right: auto; 
+    margin-top: 36px;
+}
+
+.search-filter{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    align-items: center;
+}
+
+.search-results {
+
+}

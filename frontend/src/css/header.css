@@ -1,0 +1,139 @@
+/* Header */
+.header {
+    background: linear-gradient(180deg, #0071D9 0%, #00B2FF 100%);
+    border-radius: 0px 0px 16px 16px;
+    border: 0;
+    line-height: 0em;
+    padding: 18px;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    align-items: center;
+    justify-content:space-around;
+    margin: -8px;
+}
+/* Logo text and icon */
+.logo {
+    float: left;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    position:relative;
+}
+a {
+    text-decoration: none;
+}
+.logo-img {
+    width: 44px;
+    height: 36px;
+    margin-right: 8px;
+}
+.logo-text {
+    color: #fff;
+}
+/* Search */
+.search {
+    position:relative;
+    display: inline-block; 
+    align-items: center;
+}
+.search-input {
+    font-size: 16px;
+    border-radius: 16px;
+    background-color: #ffffff48;
+    padding: 12px;
+    border: 1px solid transparent;
+}
+.search-input:focus-visible {
+    outline: none;
+  }
+.search-button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    margin: 8px;
+}
+
+/* Icons bar */
+.icons-bar {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    align-items: center;
+    justify-content: space-around;
+}
+.icon {
+    margin: 10px;
+}
+.icon-button {
+    border-width: 0px;
+    background: none;
+    cursor: pointer;
+}
+/*dropdown menu*/
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  padding: 8px;
+  border-radius: 8px;
+  left: 0px;
+}
+
+.dropdown-content.show {
+  display: block;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    
+}
+
+.dropdown-list-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-list-item:hover {
+    background-color: #eaeef1;
+}
+
+@media (max-width: 900px) {
+    .search {
+        display: none;
+    }
+}
+@media (max-width: 600px) {
+    .header {
+        border-radius: 0px 0px 8px 8px;
+        padding: 9px;
+        align-items: flex-start;
+    }
+    .logo-img {
+        width: 30px;
+        height: 25px;
+        margin-right: 4px;
+    }
+    .logo-text {
+        color: #fff;
+        font-size: 14px;
+    }
+    .icons-bar {
+        align-items: flex-start;
+    }
+    .icon-img {
+        width: 20px;
+        height: 20px;
+    }
+    .icon {
+        margin: 2px;
+    }
+}

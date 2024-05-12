@@ -1,0 +1,25 @@
+.icon-description {
+    position: fixed;
+    background-color: #ffffff; /* колір фону */
+    border: 1px solid #ccc; /* рамка */
+    padding: 14px; /* відступи */
+    border-radius: 5px; /* закругленість куточків */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* тінь */
+    z-index: 1000; /* забезпечити, що він буде поверх інших елементів */
+    text-align: center;
+    white-space: nowrap; 
+    font-size: 14px;
+    line-height: 0em;
+}
+
+.tooltip {
+    position: fixed;  /* Абсолютне позиціонування, щоб можна було переміщати її */
+    background-color: rgba(0, 0, 0, 0.7);  /* Темний фон для контрасту */
+    color: white;  /* Білий текст */
+    padding: 5px;  /* Відступи для читабельності */
+    border-radius: 5px;  /* Округлення кутів */
+    z-index: 1000;  /* Високий z-index, щоб бути над іншими елементами */
+    font-size: 12px;  /* Зменшений шрифт */
+    white-space: nowrap;  /* Відображати в один рядок */
+  }
+  

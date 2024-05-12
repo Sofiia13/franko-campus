@@ -1,0 +1,45 @@
+.btn-secondary {
+    color: #fff;
+    font-size: 16px;
+    border-radius: 12px;
+    border-width: 0px;
+    background: linear-gradient(180deg, #0071D9 0%, #00B2FF 100%);
+    object-fit: auto;
+    object-position: center;
+    width: auto;
+    padding: 8px 20px;
+    align-self: center;
+    max-width: 100%;
+    margin-bottom: 20px;
+    transition: width 0.3s ease, font-size 0.3s ease;
+  }
+  .btn-secondary:hover {
+    box-shadow: 0 6px 10px 0 rgba(0,0,0,0.14), 0 10px 36px 0 rgba(0,0,0,0.10);
+  }
+
+.comment {
+    margin-bottom: 14px;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px 0.5px rgba(0, 0, 0, 0.1);
+}
+
+.comment-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.comment-header .delete {
+  font-size: 24px;
+}
+
+.comment-name {
+    line-height: 0.5em;
+}
+
+.subtext {
+    font-weight: normal;
+    color: #A0A0A0;
+}
+

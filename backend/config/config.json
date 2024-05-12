@@ -1,23 +1,35 @@
 {
-    "development": {
-      "username": "postgres.tmgzyqbynitvxdqmbyoz",
-      "password": "pftr8374tyue",
-      "database": "postgres",
-      "host": "aws-0-eu-central-1.pooler.supabase.com",
-      "dialect": "postgres"
+  "development": {
+    "username": "postgres.tmgzyqbynitvxdqmbyoz",
+    "password": "pftr8374tyue",
+    "database": "postgres",
+    "host": "aws-0-eu-central-1.pooler.supabase.com",
+    "dialect": "postgres",
+    "dialectOptions": {
+      "useUTC": false
     },
-    "test": {
-      "username": "postgres",
-      "password": "pftr8374tyue",
-      "database": "postgres",
-      "host": "aws-0-eu-central-1.pooler.supabase.com",
-      "dialect": "postgres"
+    "timezone": "+02:00"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "pftr8374tyue",
+    "database": "postgres",
+    "host": "aws-0-eu-central-1.pooler.supabase.com",
+    "dialect": "postgres",
+    "dialectOptions": {
+      "useUTC": false
     },
-    "production": {
-      "username": "postgres.tmgzyqbynitvxdqmbyoz",
-      "password": "pftr8374tyue",
-      "database": "postgres",
-      "host": "aws-0-eu-central-1.pooler.supabase.com",
-      "dialect": "postgres"
-    }
+    "timezone": "+02:00"
+  },
+  "production": {
+    "username": "postgres.tmgzyqbynitvxdqmbyoz",
+    "password": "pftr8374tyue",
+    "database": "postgres",
+    "host": "aws-0-eu-central-1.pooler.supabase.com",
+    "dialect": "postgres",
+    "dialectOptions": {
+      "useUTC": false
+    },
+    "timezone": "+02:00"
   }
+}
