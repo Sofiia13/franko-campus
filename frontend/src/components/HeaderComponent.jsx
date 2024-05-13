@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import logo from '../img/logo.svg';
 import search from '../img/search.svg';
 import mode from '../img/mode.svg';
+import addevent from '../img/addevent.svg';
 import catalog from '../img/catalog.svg';
 import profile from '../img/profile.svg';
 import menu from '../img/menu.svg';
@@ -12,22 +13,20 @@ import notifications from '../img/notifications.svg';
 import settings from '../img/settings.svg';
 
 import DropdownComponent from './DropdownComponent';
+import useIconDescription from './useIconDescription'; 
 
 import { useNavigate } from "react-router-dom";
 
 const HeaderComponent = () => {
   let navigate = useNavigate();
 
-  const [iconDescription, setIconDescription] = useState('');
   const [searchInput, setSearchInput] = useState('');
-
-  const handleMouseEnter = (description) => {
-    setIconDescription(description);
-  };
-
-  const handleMouseLeave = () => {
-    setIconDescription('');
-  };
+  const { iconDescription, handleMouseEnter, handleMouseLeave } = useIconDescription();
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+    
+    const handleMouseMove = (event) => {
+        setTooltipPosition({ x: event.clientX, y: event.clientY });
+    };
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -61,7 +60,7 @@ const HeaderComponent = () => {
   );
 
   return (
-    <header className="header">
+    <header className="header" onMouseMove={handleMouseMove}>
       {/* Logo */}
       <div className='logo'>
         <a href="/">
@@ -88,10 +87,10 @@ const HeaderComponent = () => {
 
       {/* Icons */}
       <div className='icons-bar'>
-        <div className='icon' onMouseEnter={() => handleMouseEnter('Змінити тему сайту')} onMouseLeave={handleMouseLeave}>
-          <button className="icon-button">
-            <img className="icon-img" src={mode} alt="Змінити тему сайту" />
-          </button>
+        <div className='icon' onMouseEnter={() => handleMouseEnter('Додати подію')} onMouseLeave={handleMouseLeave}>
+          <a className="icon-link" href="/addevent">
+            <img className="icon-img" src={addevent} alt="Додати подію" />
+          </a>
         </div>
         
         <div className='icon' onMouseEnter={() => handleMouseEnter('Каталог подій')} onMouseLeave={handleMouseLeave}>
@@ -108,9 +107,15 @@ const HeaderComponent = () => {
 
         {/* Icon Description on Hover */}
         {iconDescription && (
-          <div className="icon-description">
-            {iconDescription}
-          </div>
+            <div
+                className="icon-description"
+                style={{
+                top: tooltipPosition.y + 30, 
+                left: tooltipPosition.x - 100,
+                }}
+            >
+                {iconDescription}
+            </div>
         )}
 
         {/* Dropdown Menu */}

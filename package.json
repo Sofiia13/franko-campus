@@ -6,7 +6,10 @@
   "scripts": {
     "apitest": "cd backend && nodemon app.js",
     "clienttest": "cd frontend && npm start",
-    "test-server": "mocha tests/test-server.js"
+    "test-server": "mocha tests/test-server.js",
+    "start": "concurrently \"npm run apitest\" \"cd frontend && npm start\"",
+    "install-all": "concurrently \"cd backend && npm install\" \"cd frontend && npm install\""
+    
   },
   "keywords": [],
   "author": "",
@@ -16,6 +19,7 @@
     "bcrypt": "^5.1.1",
     "bootstrap": "^5.3.3",
     "child-process": "^1.0.2",
+    "concurrently": "^8.2.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
