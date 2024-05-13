@@ -994,7 +994,7 @@ module.exports = {
   rateEvent,
   deleteRating,
   getEventRating,
-  eventsBookmarkedByUser
+  eventsBookmarkedByUser,
   addComment,
   deleteComment,
   retrieveComments,
