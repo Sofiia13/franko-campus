@@ -88,4 +88,6 @@ router.delete("/delete-bookmark/:id", eventsController.deleteEventFromBookmarks)
 
 
 
+router.get("/bookmarked/:id", eventsController.eventsBookmarkedByUser);
+
 module.exports = router;
