@@ -91,7 +91,7 @@ const LoginPage = () => {
             <div className="form-area">
                 <h3 className="login-title">Увійти <br /> у Franko Campus</h3>
                 <form className='form-content' onSubmit={handleSubmit}>
-                    <input className="input-wrapper" type="text" id="username" name="reqUsername" placeholder="Ваш юзернейм чи пошта (поки лише юзернейм)" value={formData.reqUsername} onChange={handleChange} required />
+                    <input className="input-wrapper" type="text" id="username" name="reqUsername" placeholder="Ваш юзернейм" value={formData.reqUsername} onChange={handleChange} required />
                     <input className="input-wrapper" type="password" id="password" name="reqPassword" placeholder="Ваш пароль" value={formData.reqPassword} onChange={handleChange} required />
                     <div className='error-general'>
                       {errorMessages.general && <div className="error-message">{errorMessages.general}</div>}
