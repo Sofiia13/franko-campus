@@ -21,7 +21,7 @@ function ProfilePage() {
                 } if (error.response && error.response.status === 403) {
                     navigate("/auth/login")
                 } else {
-                    alert("Сталася помилка під час отримання даних про користувача");
+                    console.log("Сталася помилка під час отримання даних про користувача");
                 }
             }
         };
@@ -69,6 +69,7 @@ function ProfilePage() {
                     </div>
                     {/* Поки що я наклав на цю кнопку стиль submit-button, потрібно буде створити інший стиль */}
                     <button className='submit-button' onClick={logout}>Вийти з облікового запису</button>
+                    <button className='submit-button' onClick={() => navigate("/editprofile")}>Редагувати профіль</button>
                 </div>
             </div>
             <div className='section-title'>

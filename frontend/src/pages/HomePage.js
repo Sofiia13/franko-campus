@@ -73,7 +73,7 @@ const HomePage = () => {
     return (
         <body>
             <div className='error-login'>
-                {!loggedIn && <div className="error-message">Схоже, що ви не залоговані. Увійдіть <a href="/auth/login">тут.</a></div>}
+                {!loggedIn && <div className="error-message">Схоже, що ви не залоговані. <a href="/auth/login">Увійдіть</a> або <a href="/auth/signup">зареєструйтесь</a> тут.</div>}
             </div>
 
             <div className="main-card-img">

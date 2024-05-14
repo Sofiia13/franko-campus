@@ -4,9 +4,7 @@ const { returnUserId } = require('../services/jwt');
 
 const getProfileInfo = async(req, res) =>{
     const userId = returnUserId(req);
-    if(userId == null){
-        return res.status(404).json({error: "Користувач не увійшов в аккаунт"});
-    }
+
     try{
         if (userId === null) {
             return res.status(403).json({error: 'Користувач не авторизований'});
@@ -21,7 +19,6 @@ const getProfileInfo = async(req, res) =>{
         const userData = {
             username : user.username,
             university : user.university,
-            /* faculty : user.faculty */
         }
         return res.status(200).send(userData);
      }
@@ -62,8 +59,15 @@ const editProfileInfo = async(req, res) =>{
             where: {user_id: userId}
         });
     
-        if(!user || !userProfile){
-            return res.status(404).json({error : "Профіль не знайдено"});
+        if(!userProfile){
+            await profiles.create({
+                user_id: userId,
+                first_name: newUserData.first_name,
+                last_name: newUserData.last_name,
+                status: newUserData.status
+            });
+            return res.status(200).json(newUserData);
+           
          }
 
          for (const key in newUserData) {
