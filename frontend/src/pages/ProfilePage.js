@@ -21,7 +21,7 @@ function ProfilePage() {
                 } if (error.response && error.response.status === 403) {
                     navigate("/auth/login")
                 } else {
-                    alert("Сталася помилка під час отримання даних про користувача");
+                    console.log("Сталася помилка під час отримання даних про користувача");
                 }
             }
         };
@@ -46,29 +46,30 @@ function ProfilePage() {
                     <img src="..." alt="..." />
                 </div>
                 <div className='user-info'>
-                    <h2 className="user-name">{userData.username === undefined ? "Отримання даних..." : userData.username}</h2>
+                    <h2 className="user-name">{userData.username === null ? "Отримання даних..." : userData.username}</h2>
                     <div className='user-text'>
                         <h3>Ім'я:</h3>
-                        <p>{userData.first_name === undefined ? "Не заповнено" : userData.first_name}</p>
+                        <p>{userData.first_name === null ? "Не заповнено" : userData.first_name}</p>
                     </div>
                     <div className='user-text'>
                         <h3>Прізвище:</h3>
-                        <p>{userData.last_name === undefined ? "Не заповнено" : userData.last_name}</p>
+                        <p>{userData.last_name === null ? "Не заповнено" : userData.last_name}</p>
                     </div>
                     <div className='user-text'>
                         <h3>Статус:</h3>
-                        <p>{userData.status === undefined ? "Не заповнено" : userData.status}</p>
+                        <p>{userData.status === null ? "Не заповнено" : userData.status}</p>
                     </div>
                     <div className='user-text'>
                         <h3>Університет:</h3>
-                        <p>{userData.university === undefined ? "Не заповнено" : userData.university}</p>
+                        <p>{userData.university === null ? "Не заповнено" : userData.university}</p>
                     </div>
                     <div className='user-text'>
                         <h3>Факультет:</h3>
-                        <p>{userData.faculty === undefined ? "Не заповнено" : userData.faculty}</p>
+                        <p>{userData.faculty === null ? "Не заповнено" : userData.faculty}</p>
                     </div>
                     {/* Поки що я наклав на цю кнопку стиль submit-button, потрібно буде створити інший стиль */}
                     <button className='submit-button' onClick={logout}>Вийти з облікового запису</button>
+                    <button className='submit-button' onClick={() => navigate("/editprofile")}>Редагувати профіль</button>
                 </div>
             </div>
             <div className='section-title'>

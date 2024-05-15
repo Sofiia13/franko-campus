@@ -12,6 +12,8 @@ const {
 const { noEmptyFields } = require("../services/formValidation");
 
 const sequelize = require("sequelize");
+const Op = sequelize.Op;
+
 const moment = require("moment-timezone");
 const fuzzysort = require("fuzzysort"); // library for searching with typos
 
@@ -38,14 +40,25 @@ const findOrganizer = async (req, res) => {
   try {
     const userId = returnUserId(req);
     let userInfo = await profiles.findOne({ where: { user_id: userId } });
-    // console.log(userInfo);
-    if (userInfo) {
-      const fullName = `${userInfo.first_name} ${userInfo.last_name}`;
-      return fullName;
-    } else if (!userInfo) {
+
+    //оскільки БД притерпіла змін, довелось змінити функцію
+    //
+
+    //якщо немає профілю, то повертаємо username
+    if (!userInfo) { 
       userInfo = await users.findOne({ where: { id: userId } });
       return userInfo.username;
     }
+
+    //якщо в імені або прізвищі є null, то повертаємо username
+    //бо якщо є null, це означає, що користувач не заповнив профіль
+    if (userInfo.first_name === null || userInfo.last_name === null) {
+      userInfo = await users.findOne({ where: { id: userId } });
+      return userInfo.username;
+    }  
+
+    return `${userInfo.first_name} ${userInfo.last_name}`;
+
   } catch (error) {
     console.error("Виникла помилка під час пошуку організатора:", error);
     return res.status(500).json({ error: "Внутрішня помилка сервера." });
@@ -369,6 +382,10 @@ const eventsCreatedByUser = async (req, res) => {
   try {
     const userId = req.params.id;
 
+    if(!await users.findOne({where:{id: userId}})){
+      return res.status(404).json({error: "Користувача не знайдено"})
+    };
+
     const existingEvents = await events.findAll({
       where: { organizer_id: userId},
       order: [["createdAt", "DESC"]],
@@ -402,6 +419,51 @@ const eventsCreatedByUser = async (req, res) => {
     return res.status(500).json({ error: "Внутрішня помилка сервера." });
   }
 }
+
+const eventsBookmarkedByUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    
+    if(!await users.findOne({where:{id: userId}})){
+      return res.status(404).json({error: "Користувача не знайдено"})
+    };
+
+    const bookmarkedEvents = (await userBookmarks.findAll({
+      where: { user_id: userId},
+      attributes: ['event_id'],
+      limit: 9
+    })).map(event => event.event_id);
+
+  
+
+    const result = await events.findAll({
+      where: {
+        id: {
+          [Op.in]: bookmarkedEvents
+        }
+        
+      },
+      attributes: ['id', 'name', 'organizer_id', 'description'],
+      order: [["createdAt", "DESC"]]
+    });
+
+    const images = await eventImages.findAll();
+
+    const listJSON = result.map((event) => ({
+      ...event.toJSON(),
+      images: images
+        .filter((image) => image.event_id === event.id)
+        .map((image) => image.url)
+    }));
+
+    return res.status(200).json(listJSON);
+
+  } catch (error){
+    console.error("Виникла помилка під час відображення списку подій:", error);
+    return res.status(500).json({ error: "Внутрішня помилка сервера." });
+  }
+}
+
 const signupToEvent = async (req, res) => {
   const userId = returnUserId(req);
 
@@ -591,6 +653,11 @@ const filterEvents = async (req, res) => {
 
 const addEventToBookmarks = async (req, res) => {
   const userId = returnUserId(req);
+
+  if (userId == null) {
+    return res.status(404).json({ error: "Користувач не увійшов в аккаунт" });
+  }
+
   const eventId = req.params.id;
   try {
     if (!(await events.findOne({ where: { id: eventId } }))) {
@@ -938,6 +1005,7 @@ module.exports = {
   rateEvent,
   deleteRating,
   getEventRating,
+  eventsBookmarkedByUser,
   addComment,
   deleteComment,
   retrieveComments,

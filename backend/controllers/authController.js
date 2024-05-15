@@ -60,6 +60,10 @@ const register = async (req, res) => {
       where: { username: reqUsername.trim() },
     });
 
+    await profiles.create({
+      user_id: createdUser.id,
+    });
+
     if (!createdUser) {
       return res
         .status(500)
